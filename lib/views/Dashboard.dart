@@ -1530,6 +1530,7 @@ class DashboardPageState extends State<DashboardPage> {
                         if(kIsWeb){
                           download(Stream.fromIterable(data), '$pdffilename.pdf');
                         } else {
+                          //download(Stream.fromIterable(data), '$pdffilename.pdf');  ceci marche mais le doc ne se trouve pas dans le rep downloads
                           final Directory? downloadsDir = await getDownloadsDirectory();
                           final File file = File('${downloadsDir?.path}\\$pdffilename.pdf');
                           await file.writeAsBytes(data);
