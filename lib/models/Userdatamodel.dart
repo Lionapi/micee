@@ -109,7 +109,7 @@ class Userdatamodel {
 
   // connexion
   Future<dynamic> connect(String log, String mdp) async {
-    final response = await http.post(Uri.parse("http://localhost:8080/api/connect_userdata.php"), //Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': '{http}'})
+    final response = await http.post(Uri.parse("http://localhost:81/api/connect_userdata.php"), //Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': '{http}'})
       //headers: <String, String> {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json; charset=UTF-8",},
       body: jsonEncode(<String, String> { "Login": log, "Motdepasse": Rc.encryptAESQr(mdp, 'MiCee', '01122024') }),
     );
@@ -132,7 +132,7 @@ class Userdatamodel {
 
   // create userdata
   Future<dynamic> createUser(String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://localhost:8080/api/create_userdata.php"),
+    final response = await http.post(Uri.parse("http://localhost:81/api/create_userdata.php"),
       body: jsonEncode(<String, String> { "name": name, "xmlcontent": xlmcontent }),
     );
     if (response.statusCode == 200) {
@@ -148,7 +148,7 @@ class Userdatamodel {
 
   // get all usersdata
   Future<List<Utilisateur>> getAllUsers() async {
-    final response = await http.get(Uri.parse("http://localhost:8080/api/read_userdata.php"));
+    final response = await http.get(Uri.parse("http://localhost:81/api/read_userdata.php"));
     final List<Map<String, dynamic>> users = []; useroption = [];
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['records'].length > 0){
@@ -171,7 +171,7 @@ class Userdatamodel {
 
   // get one userdata
   Future<Utilisateur> getOneUser(int id) async {
-    final response = await http.post(Uri.parse("http://localhost:8080/api/read_one_userdata.php"),
+    final response = await http.post(Uri.parse("http://localhost:81/api/read_one_userdata.php"),
       body: jsonEncode(<String, int> { "id": id, }),
     );
     final List<Map<String, dynamic>> user = [];
@@ -192,7 +192,7 @@ class Userdatamodel {
 
   // update userdata
   Future<dynamic> updateUser(int id, String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://localhost:8080/api/update_userdata.php"),
+    final response = await http.post(Uri.parse("http://localhost:81/api/update_userdata.php"),
       body: jsonEncode(<String, dynamic> { "id": id, "name": name, "xmlcontent": xlmcontent }),
     );
     if (response.statusCode == 200) {
@@ -208,7 +208,7 @@ class Userdatamodel {
 
   // delete userdata
   Future<dynamic>deleteUser(int id) async {
-    final response = await http.post(Uri.parse("http://localhost:8080/api/delete_userdata.php"),
+    final response = await http.post(Uri.parse("http://localhost:81/api/delete_userdata.php"),
       body: jsonEncode(<String, dynamic> { "id": id }),
     );
     if (response.statusCode == 200) {
