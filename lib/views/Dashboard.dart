@@ -60,7 +60,7 @@ class DashboardPageState extends State<DashboardPage> {
   late List<Utilisateur> sfudata, sfddata;
   String? selectedValue; final List<String> selectoption = <String>['Entreprise', 'Particulier'], pdffile = [];
   FilePickerResult? filePickerResult;
-  late int id, rel, iddoc; late double hsd; late dynamic docts;
+  late int id, rel, iddoc, pc, pn; late double hsd; late dynamic docts;
   late bool en, prt;
 
   final Sessiondata = GetStorage();
@@ -1497,61 +1497,68 @@ class DashboardPageState extends State<DashboardPage> {
 
     // Custom pdfviewer
     AlertDialog pdfviewer (Color bg, Color c, String titre, Uint8List data, String pdffilename) {
+      pc = pn = 0;
       return AlertDialog(
         //title: Text(titre, style: const TextStyle(color: MyApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
         //actions: [ MaterialButton(color: MyApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
         //actionsAlignment: MainAxisAlignment.center,
         backgroundColor: bg,
-        content: SizedBox(
-          height: 897, width: 710,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Big Text
-                Text(titre, style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+        content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          return SizedBox(
+            height: 897, width: 710,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Big Text
+                  Text(titre, style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
 
-                const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+                  const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
 
-                Row(mainAxisAlignment: MainAxisAlignment.center, 
-                  children: [
-                    Text("${pdfc.pageCount}  Pages", style: MainApp.styleall.copyWith(),), const SizedBox(width: 10.0,),
-                    IconButton(onPressed: (){ pdfc.previousPage(); }, icon: const Icon(Icons.arrow_left_sharp), color: MainApp.textwr, tooltip: "Précédent",
-                      splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
-                    Text("${pdfc.pageNumber} / ${pdfc.pageCount}", style: MainApp.styleall.copyWith(),), const SizedBox(width: 1.5,),
-                    IconButton(onPressed: (){ pdfc.nextPage(); }, icon: const Icon(Icons.arrow_right_sharp), color: MainApp.textwr, tooltip: "Suivant",
-                      splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 10.0,),
-                    IconButton(onPressed: (){ pdfc.zoomLevel += 1; }, icon: const Icon(Icons.zoom_in), color: MainApp.textwr, tooltip: "Zoom +",
-                      splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
-                    IconButton(onPressed: (){ pdfc.zoomLevel -= 1; }, icon: const Icon(Icons.zoom_out), color: MainApp.textwr, tooltip: "Zoom -",
-                      splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 10.0,),
-                    IconButton(onPressed: () async { 
-                        if(kIsWeb){
-                          download(Stream.fromIterable(data), '$pdffilename.pdf');
-                        } else {
-                          //download(Stream.fromIterable(data), '$pdffilename.pdf');  ceci marche mais le doc ne se trouve pas dans le rep downloads
-                          final Directory? downloadsDir = await getDownloadsDirectory();
-                          final File file = File('${downloadsDir?.path}\\$pdffilename.pdf');
-                          await file.writeAsBytes(data);
-                          // ignore: use_build_context_synchronously
-                          showDialog(context: context, builder: (context){
-                            Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                            return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, ' ${downloadsDir?.path}\\$pdffilename.pdf prêt.');
-                          });
-                        }
-                      }, icon: const Icon(Icons.file_download_outlined), color: MainApp.textwr, tooltip: "Télécharger",
-                      splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,)
-                  ], 
-                ), const SizedBox(height: 5.0,),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, 
+                    children: [
+                      Text("$pc  Pages", style: MainApp.styleall.copyWith(),), const SizedBox(width: 10.0,),
+                      IconButton(onPressed: (){ pdfc.previousPage(); setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); }, 
+                        icon: const Icon(Icons.arrow_left_sharp), color: MainApp.textwr, tooltip: "Précédent",
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
+                      Text("$pn / $pc", style: MainApp.styleall.copyWith(),), const SizedBox(width: 1.5,),
+                      IconButton(onPressed: (){ pdfc.nextPage(); setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); }, 
+                        icon: const Icon(Icons.arrow_right_sharp), color: MainApp.textwr, tooltip: "Suivant",
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 10.0,),
+                      IconButton(onPressed: (){ pdfc.zoomLevel += 1; }, icon: const Icon(Icons.zoom_in), color: MainApp.textwr, tooltip: "Zoom +",
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
+                      IconButton(onPressed: (){ pdfc.zoomLevel -= 1; }, icon: const Icon(Icons.zoom_out), color: MainApp.textwr, tooltip: "Zoom -",
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 10.0,),
+                      IconButton(onPressed: () async { 
+                          if(kIsWeb){
+                            download(Stream.fromIterable(data), '$pdffilename.pdf');
+                          } else {
+                            //download(Stream.fromIterable(data), '$pdffilename.pdf');  ceci marche mais le doc ne se trouve pas dans le rep downloads
+                            final Directory? downloadsDir = await getDownloadsDirectory();
+                            final File file = File('${downloadsDir?.path}\\$pdffilename.pdf');
+                            await file.writeAsBytes(data);
+                            // ignore: use_build_context_synchronously
+                            showDialog(context: context, builder: (context){
+                              Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
+                              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, ' ${downloadsDir?.path}\\$pdffilename.pdf prêt.');
+                            });
+                          }
+                        }, icon: const Icon(Icons.file_download_outlined), color: MainApp.textwr, tooltip: "Télécharger",
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,)
+                    ], 
+                  ), const SizedBox(height: 5.0,),
 
-                SizedBox(height: 712, child: SfPdfViewer.memory(data, controller: pdfc,),), const SizedBox(height: 20.0,),
-                
-                const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
-              ]
+                  SizedBox(height: 712, child: SfPdfViewer.memory(data, controller: pdfc, onDocumentLoaded:(details) { setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); },
+                    onPageChanged: (details) { setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); },
+                  ),), const SizedBox(height: 20.0,),
+                  
+                  const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+                ]
+              ),
             ),
-          ),
-        ),
+          );
+        }),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
       );
     }
