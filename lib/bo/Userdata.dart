@@ -8,14 +8,14 @@ class Utilisateur {
   final int Admin; 
   final String Ste, Fonction, Siret; 
   final String Psr, Precaire, Classique;
-  final DateTime Datenaiss, Livetime, Creation; 
+  final DateTime Datenaiss, Livetime, Creation, Modification; 
   final int Is2kfactor, IdRef;
   final dynamic docs; // documents
 
   // constructeur
   Utilisateur({this.id, required this.name, required this.IdUser, required this.Nom, required this.Prenom, required this.Login, required this.Motdepasse,
     required this.Adresse, required this.Tel, required this.Email, required this.Admin, required this.Ste, required this.Fonction, required this.Siret, 
-    required this.Psr, required this.Precaire, required this.Classique, required this.Datenaiss, required this.Livetime, required this.Creation, 
+    required this.Psr, required this.Precaire, required this.Classique, required this.Datenaiss, required this.Livetime, required this.Creation, required this.Modification,
     required this.Is2kfactor, required this.IdRef, this.docs
   });
 
@@ -26,14 +26,14 @@ class Utilisateur {
     Login = map['Login'], Motdepasse = map['Motdepasse'], Adresse = map['Adresse'], Tel = map['Tel'], Email = map['Email'], 
     Admin = int.parse(map['Admin']), Ste = map['Ste'], Fonction = map['Fonction'], Siret = map['Siret'], Psr = map['Psr'], 
     Precaire = map['Precaire'], Classique = map['Classique'], Datenaiss = DateTime.parse(map['Datenaiss']), Livetime = DateTime.parse(map['Livetime']), 
-    Creation = DateTime.parse(map['Creation']), Is2kfactor = int.parse(map['Is2kfactor']), IdRef = int.parse(map['IdRef']), docs = map['docs'];
+    Creation = DateTime.parse(map['Creation']), Modification = DateTime.parse(map['Modification']), Is2kfactor = int.parse(map['Is2kfactor']), IdRef = int.parse(map['IdRef']), docs = map['docs'];
 
   // fonction
   Map<String, dynamic> toMap() {
     return {
       "id": id, "name": name, "IdUser": IdUser, "Nom": Nom, "Prenom": Prenom, "Login": Login, "Motdepasse": Motdepasse, "Adresse": Adresse, "Tel": Tel, 
       "Email": Email, "Admin": Admin, "Ste": Ste, "Fonction": Fonction, "Siret": Siret, "Psr": Psr, "Precaire": Precaire, "Classique": Classique, 
-      "Datenaiss": Datenaiss, "Livetime": Livetime, "Creation": Creation, "Is2kfactor": Is2kfactor, "IdRef": IdRef, "docs": docs 
+      "Datenaiss": Datenaiss, "Livetime": Livetime, "Creation": Creation, "Modification":Modification, "Is2kfactor": Is2kfactor, "IdRef": IdRef, "docs": docs 
     };
   }
 
@@ -42,7 +42,7 @@ class Utilisateur {
     return '''Utilisateur { 
       id: $id, name: $name, IdUser: $IdUser, Nom: $Nom, Prenom: $Prenom, Login: $Login, Motdepasse: $Motdepasse, Adresse: $Adresse, Tel: $Tel, 
       Email: $Email, Admin: $Admin, Ste: $Ste, Fonction: $Fonction, Siret: $Siret, Psr: $Psr, Precaire: $Precaire, Classique: $Classique, 
-      Datenaiss: $Datenaiss, Livetime: $Livetime, Creation: $Creation, Is2kfactor: $Is2kfactor, IdRef: $IdRef, docs: $docs; 
+      Datenaiss: $Datenaiss, Livetime: $Livetime, Creation: $Creation, Modification: $Modification, Is2kfactor: $Is2kfactor, IdRef: $IdRef, docs: $docs; 
     ''';
   }
 }

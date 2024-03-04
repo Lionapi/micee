@@ -62,6 +62,7 @@ class DashboardPageState extends State<DashboardPage> {
   FilePickerResult? filePickerResult;
   late int id, rel, iddoc, pc, pn; late double hsd; late dynamic docts;
   late bool en, prt;
+  late DateTime lt, cre; 
 
   final Sessiondata = GetStorage();
 
@@ -547,7 +548,7 @@ class DashboardPageState extends State<DashboardPage> {
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), 0, ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
-                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, 
+                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, 
                           int.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur ajouté."){
                               setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
@@ -642,7 +643,7 @@ class DashboardPageState extends State<DashboardPage> {
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), 0, ste, fct, sir, psr, pre, cla, 
                           docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', '\\r\\n'), DateTime.parse(_hbdController.text), 
-                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
+                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(lt)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(cre)), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, 
                           int.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur modifié."){
@@ -1109,8 +1110,9 @@ class DashboardPageState extends State<DashboardPage> {
                               UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n') + 
                                 UserModel.docforxmldata(val.docs.length + 1, "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
-                                _comadController.text, double.parse(_primeController.text), _synController.text), 
-                                DateTime.parse(val.Datenaiss.toString()), DateTime.parse(val.Livetime.toString()), DateTime.parse(val.Creation.toString()), 0, val.IdRef)).then((value){
+                                _comadController.text, double.parse(_primeController.text), _synController.text), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -1220,8 +1222,9 @@ class DashboardPageState extends State<DashboardPage> {
                               val.docs[iddoc - 1] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
                               UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
-                                val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(val.Datenaiss.toString()), 
-                                DateTime.parse(val.Livetime.toString()), DateTime.parse(val.Creation.toString()), 0, val.IdRef)).then((value){
+                                val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -1321,8 +1324,9 @@ class DashboardPageState extends State<DashboardPage> {
             }
             UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.docs.length == 0 ? 0 : val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
               val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
-              datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(val.Datenaiss.toString()), 
-              DateTime.parse(val.Livetime.toString()), DateTime.parse(val.Creation.toString()), 0, val.IdRef)).then((value){
+              datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+              DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
+              DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
                 if(value == "Utilisateur modifié."){
                   setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                   Navigator.of(context, rootNavigator: true).pop();
@@ -2060,7 +2064,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                     id = val.id!; docts = val.docs!; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
                                                                     _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
                                                                     destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
-                                                                    _loginController.text = val.Login; _passwordController.text = ""; _cpasswordController.text = "";
+                                                                    _loginController.text = val.Login; _passwordController.text = ""; _cpasswordController.text = ""; lt = val.Livetime; cre = val.Creation;
                                                                     if(val.Ste != '0'){  
                                                                       _nomsteController.text = val.Ste; _fctsteController.text = val.Fonction; _siretsteController.text = val.Siret;
                                                                       _psrController.text = ""; _preController.text = ""; _claController.text = "";

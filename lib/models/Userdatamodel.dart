@@ -14,7 +14,7 @@ class Userdatamodel {
   List<String> useroption = [];
 
   String formaterxmldata(int id, String nom, String prenom, String login, String mdp, String ad, String tel, String mail,
-    int admin, String ste, String fct, String sir, String psr, String pre, String cla, String dd, DateTime dn, DateTime lt, DateTime cre, int is2k, int idr) {
+    int admin, String ste, String fct, String sir, String psr, String pre, String cla, String dd, DateTime dn, DateTime lt, DateTime cre, DateTime mdf, int is2k, int idr) {
     return "<?xml version='1.0' encoding='UTF-8'?>\\r\\n"
       "<utilisateur>\\r\\n"
         "<IdUser>$id</IdUser>\\r\\n<Nom>$nom</Nom>\\r\\n<Prenom>$prenom</Prenom>\\r\\n<Login>$login</Login>\\r\\n<Motdepasse>${Rc.encryptAESQr(mdp, 'MiCee', '01122024')}</Motdepasse>\\r\\n<Adresse>$ad</Adresse>\\r\\n<Tel>$tel</Tel>\\r\\n<Email>$mail</Email>\\r\\n"
@@ -26,7 +26,7 @@ class Userdatamodel {
         "<Dossiers>\\r\\n"
           "$dd"
         "</Dossiers>\\r\\n"
-        "<Datenaiss>$dn</Datenaiss>\\r\\n<Livetime>$lt</Livetime>\\r\\n<Creation>$cre</Creation>\\r\\n<Is2kfactor>$is2k</Is2kfactor>\\r\\n<IdRef>$idr</IdRef>\\r\\n"
+        "<Datenaiss>$dn</Datenaiss>\\r\\n<Livetime>$lt</Livetime>\\r\\n<Creation>$cre</Creation>\\r\\n<Modification>$mdf</Modification>\\r\\n<Is2kfactor>$is2k</Is2kfactor>\\r\\n<IdRef>$idr</IdRef>\\r\\n"
       "</utilisateur>";
   }
 
@@ -68,6 +68,7 @@ class Userdatamodel {
       ud.addEntries({"Datenaiss": u.findElements("Datenaiss").first.innerText}.entries);
       ud.addEntries({"Livetime": u.findElements("Livetime").first.innerText}.entries);
       ud.addEntries({"Creation": u.findElements("Creation").first.innerText}.entries);
+      ud.addEntries({"Modification": u.findElements("Modification").first.innerText}.entries);
       ud.addEntries({"Is2kfactor": u.findElements("Is2kfactor").first.innerText}.entries);
       ud.addEntries({"IdRef": u.findElements("IdRef").first.innerText}.entries);
     }
