@@ -21,6 +21,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:download/download.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:simple_grid/simple_grid.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -1569,170 +1570,180 @@ class DashboardPageState extends State<DashboardPage> {
 
     // headerboxes
     final headerbox = <Widget>[
-      Container(width: 320, height: 150,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-        child: Card( 
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-          child: Column( 
-            children: [ 
-              const SizedBox(height: 5.0,), Text('Nouveau(x) client(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-              const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-              SizedBox(height: 84, child: FutureBuilder(
-                future: ncdata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> nc) {
-                  if(nc.hasData) {
-                    if(nc.data!.isNotEmpty) { int z = 0;
-                      return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
-                        itemCount: nc.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
-                          List<Widget> array = <Widget>[];
-                          if(nc.data?[index].IdUser == 0){
-                            z++;
-                            array.add(const Divider(color: MainApp.dark,));
-                            array.add(
-                              Row(mainAxisAlignment: MainAxisAlignment.center, 
-                                children: [
-                                  const Icon(Icons.person, size: 12.5, color: MainApp.textwr,),
-                                  Text(' ${nc.data?[index].Nom} / ${nc.data?[index].Email} / +${nc.data?[index].Tel.split("countryCode: ")[1].split(",")[0]}'
-                                    ' ${nc.data?[index].Tel.split("nsn: ")[1].substring(0, nc.data![index].Tel.split("nsn: ")[1].length - 1)}', 
-                                    style: MainApp.styleall.copyWith(fontSize: 12.5,),),
-                                ]
+      SpGrid(width: MediaQuery.of(context).size.width - 265, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
+        crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.center,
+        children: [
+          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
+            child: Container(height: 150, 
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+              child: Card( 
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                child: Column( 
+                  children: [ 
+                    const SizedBox(height: 5.0,), Text('Nouveau(x) client(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                    const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                    SizedBox(height: 84, child: FutureBuilder(
+                      future: ncdata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> nc) {
+                        if(nc.hasData) {
+                          if(nc.data!.isNotEmpty) { int z = 0;
+                            return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
+                              itemCount: nc.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
+                                List<Widget> array = <Widget>[];
+                                if(nc.data?[index].IdUser == 0){
+                                  z++;
+                                  array.add(const Divider(color: MainApp.dark,));
+                                  array.add(
+                                    Row(mainAxisAlignment: MainAxisAlignment.center, 
+                                      children: [
+                                        const Icon(Icons.person, size: 12.5, color: MainApp.textwr,),
+                                        Text(' ${nc.data?[index].Nom} / ${nc.data?[index].Email} / +${nc.data?[index].Tel.split("countryCode: ")[1].split(",")[0]}'
+                                          ' ${nc.data?[index].Tel.split("nsn: ")[1].substring(0, nc.data![index].Tel.split("nsn: ")[1].length - 1)}', 
+                                          style: MainApp.styleall.copyWith(fontSize: 12.5,),),
+                                      ]
+                                    ),
+                                  );
+                                }
+                                if(nc.data!.length - 1 == index){
+                                  if(z > 0) array.add(const Divider(color: MainApp.dark,));
+                                }
+                                return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
+                              },
+                            );
+                          }else{
+                            return Center(
+                              child: Text("Aucun(e)s client(e)s trouvé(e)s", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             );
                           }
-                          if(nc.data!.length - 1 == index){
-                            if(z > 0) array.add(const Divider(color: MainApp.dark,));
-                          }
-                          return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
-                        },
-                      );
-                    }else{
-                      return Center(
-                        child: Text("Aucun(e)s client(e)s trouvé(e)s", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                  }else{
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                })
+                        }else{
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      })
+                    ),
+                    const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                  ]
+                ),
               ),
-              const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-            ]
+            ),
           ),
-        ),
-      ),
-      const SizedBox(width: 5, height: 5,),
-      Container(width: 320, height: 150,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-        child: Card( 
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-          child: Column(
-            children: [
-              const SizedBox(height: 5.0,), Text('Dossier(s) en cours', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-              const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-              SizedBox(height: 84, child: FutureBuilder(
-                future: nddata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> nd) {
-                  if(nd.hasData) {
-                    if(nd.data!.isNotEmpty) { int z = 0;
-                      return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
-                        itemCount: nd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
-                          List<Widget> array = <Widget>[];
-                          if(nd.data?[index].IdUser != 0 && nd.data?[index].docs!.length > 0){
-                            for(var i = 0; i < nd.data?[index].docs!.length; i++){ 
-                              if(nd.data?[index].docs[i]['StatutDoc']['Decision'] == '0'){
-                                z++;
-                                array.add(const Divider(color: MainApp.dark,));
-                                array.add(
-                                  Row(mainAxisAlignment: MainAxisAlignment.center, 
-                                    children: [
-                                      const Icon(Icons.folder_rounded, size: 12.5, color: MainApp.textwr,),
-                                      Text(nd.data?[index].Ste != '0' ? 
-                                      ' ${nd.data?[index].Ste} (${nd.data![index].docs!.length}) / ${nd.data![index].docs![i]['Msg'].split(" ~ ")[0]}' : ' ${nd.data?[index].Psr} (${nd.data![index].docs!.length}) / ${nd.data![index].docs![i]['Msg'].split(" ~ ")[0]}', 
-                                      style: MainApp.styleall.copyWith(fontSize: 12.5,),),
-                                    ],
-                                  ),
-                                );
-                              }
-                            }
+          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
+            child: Container(height: 150,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+              child: Card( 
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 5.0,), Text('Dossier(s) en cours', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                    const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                    SizedBox(height: 84, child: FutureBuilder(
+                      future: nddata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> nd) {
+                        if(nd.hasData) {
+                          if(nd.data!.isNotEmpty) { int z = 0;
+                            return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
+                              itemCount: nd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
+                                List<Widget> array = <Widget>[];
+                                if(nd.data?[index].IdUser != 0 && nd.data?[index].docs!.length > 0){
+                                  for(var i = 0; i < nd.data?[index].docs!.length; i++){ 
+                                    if(nd.data?[index].docs[i]['StatutDoc']['Decision'] == '0'){
+                                      z++;
+                                      array.add(const Divider(color: MainApp.dark,));
+                                      array.add(
+                                        Row(mainAxisAlignment: MainAxisAlignment.center, 
+                                          children: [
+                                            const Icon(Icons.folder_rounded, size: 12.5, color: MainApp.textwr,),
+                                            Text(nd.data?[index].Ste != '0' ? 
+                                            ' ${nd.data?[index].Ste} (${nd.data![index].docs!.length}) / ${nd.data![index].docs![i]['Msg'].split(" ~ ")[0]}' : ' ${nd.data?[index].Psr} (${nd.data![index].docs!.length}) / ${nd.data![index].docs![i]['Msg'].split(" ~ ")[0]}', 
+                                            style: MainApp.styleall.copyWith(fontSize: 12.5,),),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                                if(nd.data!.length - 1 == index){
+                                  if(z > 0) array.add(const Divider(color: MainApp.dark,));
+                                }
+                                return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
+                              }, 
+                            );
+                          }else{
+                            return Center(
+                              child: Text("Aucun(s) dossier(s) en cours trouvé(s)", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            );
                           }
-                          if(nd.data!.length - 1 == index){
-                            if(z > 0) array.add(const Divider(color: MainApp.dark,));
-                          }
-                          return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
-                        }, 
-                      );
-                    }else{
-                      return Center(
-                        child: Text("Aucun(s) dossier(s) en cours trouvé(s)", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                  }else{
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                })
+                        }else{
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      })
+                    ),
+                    const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                  ]
+                ),
               ),
-              const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-            ]
+            ),
           ),
-        ),
-      ),
-      const SizedBox(width: 5, height: 5,),
-      Container(width: 320, height: 150,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-        child: Card( 
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-          child: Column(
-            children: [
-              const SizedBox(height: 5.0,), Text('Dossier(s) terminé(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-              const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-              SizedBox(height: 84, child: FutureBuilder(
-                future: fddata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> fd) {
-                  if(fd.hasData) {
-                    if(fd.data!.isNotEmpty) { int z = 0;
-                      return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
-                        itemCount: fd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
-                          List<Widget> array = <Widget>[];
-                          if(fd.data?[index].IdUser != 0 && fd.data?[index].docs!.length > 0){
-                            for(var i = 0; i < fd.data?[index].docs!.length; i++){ 
-                              if(fd.data?[index].docs[i]['StatutDoc']['Decision'] == '1'){
-                                z++;
-                                array.add(const Divider(color: MainApp.dark,));
-                                array.add(
-                                  Row(mainAxisAlignment: MainAxisAlignment.center, 
-                                    children: [
-                                      const Icon(Icons.folder_zip_rounded, size: 12.5, color: MainApp.textwr,),
-                                      Text(fd.data?[index].Ste != '0' ? 
-                                      ' ${fd.data?[index].Ste} (${fd.data![index].docs!.length}) / ${fd.data![index].docs![i]['Msg'].split(" ~ ")[0]}' : ' ${fd.data?[index].Psr} (${fd.data![index].docs!.length}) / ${fd.data![index].docs![i]['Msg'].split(" ~ ")[0]}', 
-                                      style: MainApp.styleall.copyWith(fontSize: 12.5,),),
-                                    ],
-                                  ),
-                                );
-                              }
-                            }
+          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
+            child: Container(height: 150,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+              child: Card( 
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 5.0,), Text('Dossier(s) terminé(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                    const SizedBox(height: 2.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                    SizedBox(height: 84, child: FutureBuilder(
+                      future: fddata, builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> fd) {
+                        if(fd.hasData) {
+                          if(fd.data!.isNotEmpty) { int z = 0;
+                            return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
+                              itemCount: fd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
+                                List<Widget> array = <Widget>[];
+                                if(fd.data?[index].IdUser != 0 && fd.data?[index].docs!.length > 0){
+                                  for(var i = 0; i < fd.data?[index].docs!.length; i++){ 
+                                    if(fd.data?[index].docs[i]['StatutDoc']['Decision'] == '1'){
+                                      z++;
+                                      array.add(const Divider(color: MainApp.dark,));
+                                      array.add(
+                                        Row(mainAxisAlignment: MainAxisAlignment.center, 
+                                          children: [
+                                            const Icon(Icons.folder_zip_rounded, size: 12.5, color: MainApp.textwr,),
+                                            Text(fd.data?[index].Ste != '0' ? 
+                                            ' ${fd.data?[index].Ste} (${fd.data![index].docs!.length}) / ${fd.data![index].docs![i]['Msg'].split(" ~ ")[0]}' : ' ${fd.data?[index].Psr} (${fd.data![index].docs!.length}) / ${fd.data![index].docs![i]['Msg'].split(" ~ ")[0]}', 
+                                            style: MainApp.styleall.copyWith(fontSize: 12.5,),),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                                if(fd.data!.length - 1 == index){
+                                  if(z > 0) array.add(const Divider(color: MainApp.dark,));
+                                }
+                                return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
+                              }, 
+                            );
+                          }else{
+                            return Center(
+                              child: Text("Aucun(s) dossier(s) terminé(s) trouvé(s)", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            );
                           }
-                          if(fd.data!.length - 1 == index){
-                            if(z > 0) array.add(const Divider(color: MainApp.dark,));
-                          }
-                          return Column(mainAxisAlignment: MainAxisAlignment.center, children: array,);
-                        }, 
-                      );
-                    }else{
-                      return Center(
-                        child: Text("Aucun(s) dossier(s) terminé(s) trouvé(s)", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                  }else{
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                })
+                        }else{
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      })
+                    ),
+                    const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                  ]
+                ),
               ),
-            ]
+            ),
           ),
-        ),
+        ]
       ),
     ];
 
@@ -1988,6 +1999,142 @@ class DashboardPageState extends State<DashboardPage> {
                                     children: <Widget>[
                                       const SizedBox(height: 15.0,),
                                       Text('Dashboard', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
+                                        child: SizedBox(height: MediaQuery.of(context).size.height - 329.5, width: MediaQuery.of(context).size.width - 18,
+                                          child: FutureBuilder(
+                                            future: futuredata,
+                                            builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
+                                              if (datas.hasData) {
+                                                if(datas.data!.isNotEmpty) {
+                                                  int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0;
+                                                  for(var i = 0; i < datas.data!.length; i++){ 
+                                                    td += datas.data![i].docs!.length as int; 
+                                                    for(var y = 0; y < datas.data![i].docs!.length; y++){ 
+                                                      tp += double.parse(datas.data![i].docs![y]['Prime']); 
+                                                      if(datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ tdt += 1; }
+                                                    }
+                                                  }
+                                                  return ListView.builder(itemCount: 1, shrinkWrap: true,
+                                                    itemBuilder: (BuildContext context, int index) {
+                                                      return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
+                                                        crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.center,
+                                                        children: [
+                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                            child: Container(height: 81, 
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Total utilisateur(ise)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("$tu", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                            child: Container(height: 81, 
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Total dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("$td", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                            child: Container(height: 81, 
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Total prime(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("$tp €", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                            child: Container(height: 81, 
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Dossier(s) Terminé(s) / Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("$tdt / 5", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 6, md: 12, lg: 6, 
+                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Graph Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("Test", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 6, md: 12, lg: 6, 
+                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Graph Année', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: 20, child: Text("Test", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                }else{
+                                                  return Center(
+                                                    child: Text("Aucune(s) donnée(s) trouvée(s)", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                return const Center(child: CircularProgressIndicator());
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
                                     ]
                                   ),
                                 ),

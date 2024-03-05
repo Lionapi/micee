@@ -30,6 +30,7 @@ dependencies:
   file_picker: ^6.1.1
   syncfusion_flutter_pdfviewer: ^23.2.7
   download: ^1.0.0
+  simple_grid: ^0.1.4
 
 dev_dependencies:
   flutter_test:
