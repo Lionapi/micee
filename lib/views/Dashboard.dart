@@ -2122,9 +2122,9 @@ class DashboardPageState extends State<DashboardPage> {
                                                                             //behaviour: const ChartBehaviour(),
                                                                             backgroundDecorations: [
                                                                               HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
-                                                                                legendPosition: HorizontalLegendPosition.start),
+                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
                                                                               VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
-                                                                                valueFromIndex: (value) => axisval[value],)
+                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => axisval[value],)
                                                                             ]
                                                                           ),
                                                                         ),
@@ -2167,9 +2167,9 @@ class DashboardPageState extends State<DashboardPage> {
                                                                             //behaviour: const ChartBehaviour(),
                                                                             backgroundDecorations: [
                                                                               HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
-                                                                                legendPosition: HorizontalLegendPosition.start),
+                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
                                                                               VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
-                                                                                valueFromIndex: (value) => ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'][value],)
+                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'][value],)
                                                                             ]
                                                                           ),
                                                                         ),
