@@ -22,6 +22,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:download/download.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
+import 'package:charts_painter/chart.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -754,7 +755,7 @@ class DashboardPageState extends State<DashboardPage> {
         backgroundColor: bg,
         content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return SizedBox(
-            height: _statutController.text.trim().isNotEmpty ? 609 : 467, width: 450,
+            height: _statutController.text.trim().isNotEmpty ? 609 : 467, width: 450, 
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
               child: Form(
@@ -1510,7 +1511,7 @@ class DashboardPageState extends State<DashboardPage> {
         backgroundColor: bg,
         content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return SizedBox(
-            height: 897, width: 710,
+            height: 897, width: 710, 
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
               child: Column(
@@ -1875,7 +1876,7 @@ class DashboardPageState extends State<DashboardPage> {
                         ),
                         const Divider(indent: 8.0, endIndent: 8.0,),
                         Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 2.5),
-                          child: MediaQuery.of(context).size.width >= 650 ? DropdownButtonHideUnderline(
+                          child: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? DropdownButtonHideUnderline(
                             child: DropdownButton2<String>(
                               isExpanded: true, hint: const Row(children: [
                                 Icon(Icons.add_circle_sharp, color: Colors.white, size: 20,), SizedBox(width: 4,), 
@@ -2009,6 +2010,7 @@ class DashboardPageState extends State<DashboardPage> {
                                               if (datas.hasData) {
                                                 if(datas.data!.isNotEmpty) {
                                                   int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0;
+                                                  List<String> axisval = [];
                                                   for(var i = 0; i < datas.data!.length; i++){ 
                                                     td += datas.data![i].docs!.length as int; 
                                                     for(var y = 0; y < datas.data![i].docs!.length; y++){ 
@@ -2016,6 +2018,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                       if(datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ tdt += 1; }
                                                     }
                                                   }
+                                                  for(var i = 1; i <= DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month); i++){ axisval.add(i.toString()); }
                                                   return ListView.builder(itemCount: 1, shrinkWrap: true,
                                                     itemBuilder: (BuildContext context, int index) {
                                                       return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
@@ -2085,7 +2088,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                               ),
                                                             ),
                                                           ),
-                                                          SpGridItem(xs: 12, sm: 6, md: 12, lg: 6, 
+                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
                                                             child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
                                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                               child: Card( 
@@ -2093,15 +2096,46 @@ class DashboardPageState extends State<DashboardPage> {
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
                                                                   children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Graph Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 5.0,), Text('${MainApp.mois[DateTime.now().month - 1]}  ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("Test", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
+                                                                      child: Padding(padding: const EdgeInsets.all(10),
+                                                                        child: Chart(
+                                                                          state: ChartState<void>(
+                                                                            data: ChartData(
+                                                                              [ [3, 0, 1, 0, 0, 2, 4, 0, 0, 0, 
+                                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
+                                                                            ),
+                                                                            itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                              padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                              barItemBuilder: (itemBuilderData) {
+                                                                                return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                                  gradient: LinearGradient(
+                                                                                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                                    colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                                    stops: [0, 2], tileMode: TileMode.clamp,
+                                                                                  ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                                );
+                                                                              }
+                                                                            ),
+                                                                            //behaviour: const ChartBehaviour(),
+                                                                            backgroundDecorations: [
+                                                                              HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                                legendPosition: HorizontalLegendPosition.start),
+                                                                              VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                                valueFromIndex: (value) => axisval[value],)
+                                                                            ]
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                          SpGridItem(xs: 12, sm: 6, md: 12, lg: 6, 
+                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
                                                             child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
                                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                               child: Card( 
@@ -2109,9 +2143,38 @@ class DashboardPageState extends State<DashboardPage> {
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
                                                                   children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Graph Année', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 5.0,), Text('${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("Test", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
+                                                                      child: Padding(padding: const EdgeInsets.all(10),
+                                                                        child: Chart(
+                                                                          state: ChartState<void>(
+                                                                            data: ChartData(
+                                                                              [ [3, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
+                                                                            ),
+                                                                            itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                              padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                              barItemBuilder: (itemBuilderData) {
+                                                                                return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                                  gradient: LinearGradient(
+                                                                                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                                    colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                                    stops: [0, 2], tileMode: TileMode.clamp,
+                                                                                  ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                                );
+                                                                              }
+                                                                            ),
+                                                                            //behaviour: const ChartBehaviour(),
+                                                                            backgroundDecorations: [
+                                                                              HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                                legendPosition: HorizontalLegendPosition.start),
+                                                                              VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                                valueFromIndex: (value) => ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'][value],)
+                                                                            ]
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               ),
@@ -2199,7 +2262,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                           subtitle: Text('${users.data?[index].Adresse} / +${users.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${users.data?[index].Tel.split("nsn: ")[1].substring(0, users.data![index].Tel.split("nsn: ")[1].length - 1)}', 
                                                             style: MainApp.styleall.copyWith(fontSize: 11,),),
                                                           trailing: Row(mainAxisSize: MainAxisSize.min,
-                                                            children: MediaQuery.of(context).size.width >= 650 ? [
+                                                            children: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? [
                                                               FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
                                                                 shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
                                                                 onPressed: () {
@@ -2362,55 +2425,57 @@ class DashboardPageState extends State<DashboardPage> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          const SizedBox(width: 10,),
-                                                                          Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                                                                            children: [
-                                                                              FloatingActionButton(tooltip: 'Consulter', foregroundColor: MainApp.success, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                onPressed: () async {
-                                                                                  await showDialog(context: context, builder: (BuildContext context){
-                                                                                    return pdfviewer(Colors.white, MainApp.textwr, docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0], base64Decode(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]), 
-                                                                                      docsdata.data?[index].Ste != '0' ? "${docsdata.data?[index].Ste}_${docsdata.data?[index].docs![i]['IdDoc']}" : "${docsdata.data?[index].Psr}_${docsdata.data?[index].docs![i]['IdDoc']}");
-                                                                                  });
-                                                                                },
-                                                                                child: const Icon(AntDesign.eye_fill,),
-                                                                              ), const SizedBox(width: 10,),
-                                                                              FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                onPressed: () { 
-                                                                                  setState(() { hsd = 162; });
-                                                                                  UserModel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                    id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
-                                                                                    _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
-                                                                                    pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
-                                                                                    if(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == '0'){ _statutdocController.text = "En cours"; 
-                                                                                    } else if(docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == '0'){ _statutdocController.text = "Complément"; 
-                                                                                    } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '0'){ _statutdocController.text = "Instruction"; 
-                                                                                    } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '1'){ _statutdocController.text = "Décision"; }
-                                                                                    _anatechController.text = docsdata.data?[index].docs![i]['AnaTech']; _anaadController.text = docsdata.data?[index].docs![i]['AnaAdmin'];
-                                                                                    _comtechController.text = docsdata.data?[index].docs![i]['ComTech']; _comadController.text = docsdata.data?[index].docs![i]['ComAdmin'];
-                                                                                    _primeController.text = docsdata.data?[index].docs![i]['Prime']; _synController.text = docsdata.data?[index].docs![i]['Synthese'];
-                                                                                  });
-                                                                                  showDialog(context: context, builder: (BuildContext context){
-                                                                                    return folderform(Colors.white, MainApp.warning, 'MODIF DOSSIER', editFolderBtn);
-                                                                                  });
-                                                                                },
-                                                                                child: const Icon(Icons.edit,),
-                                                                              ), const SizedBox(width: 10,),
-                                                                              FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                onPressed: () {
-                                                                                  setState(() { });
-                                                                                  UserModel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                    id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
-                                                                                    showDialog(context: context, builder: (context){
-                                                                                      return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');
+                                                                          Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, child: const SizedBox(width: 10,), ),
+                                                                          Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, 
+                                                                            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                FloatingActionButton(tooltip: 'Consulter', foregroundColor: MainApp.success, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                  onPressed: () async {
+                                                                                    await showDialog(context: context, builder: (BuildContext context){
+                                                                                      return pdfviewer(Colors.white, MainApp.textwr, docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0], base64Decode(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]), 
+                                                                                        docsdata.data?[index].Ste != '0' ? "${docsdata.data?[index].Ste}_${docsdata.data?[index].docs![i]['IdDoc']}" : "${docsdata.data?[index].Psr}_${docsdata.data?[index].docs![i]['IdDoc']}");
                                                                                     });
-                                                                                  });
-                                                                                },
-                                                                                child: const Icon(Icons.delete,),
-                                                                              ),
-                                                                            ]
+                                                                                  },
+                                                                                  child: const Icon(AntDesign.eye_fill,),
+                                                                                ), const SizedBox(width: 10,),
+                                                                                FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                  onPressed: () { 
+                                                                                    setState(() { hsd = 162; });
+                                                                                    UserModel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                      id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
+                                                                                      _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
+                                                                                      pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
+                                                                                      if(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == '0'){ _statutdocController.text = "En cours"; 
+                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == '0'){ _statutdocController.text = "Complément"; 
+                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '0'){ _statutdocController.text = "Instruction"; 
+                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '1'){ _statutdocController.text = "Décision"; }
+                                                                                      _anatechController.text = docsdata.data?[index].docs![i]['AnaTech']; _anaadController.text = docsdata.data?[index].docs![i]['AnaAdmin'];
+                                                                                      _comtechController.text = docsdata.data?[index].docs![i]['ComTech']; _comadController.text = docsdata.data?[index].docs![i]['ComAdmin'];
+                                                                                      _primeController.text = docsdata.data?[index].docs![i]['Prime']; _synController.text = docsdata.data?[index].docs![i]['Synthese'];
+                                                                                    });
+                                                                                    showDialog(context: context, builder: (BuildContext context){
+                                                                                      return folderform(Colors.white, MainApp.warning, 'MODIF DOSSIER', editFolderBtn);
+                                                                                    });
+                                                                                  },
+                                                                                  child: const Icon(Icons.edit,),
+                                                                                ), const SizedBox(width: 10,),
+                                                                                FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                  onPressed: () {
+                                                                                    setState(() { });
+                                                                                    UserModel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                      id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
+                                                                                      showDialog(context: context, builder: (context){
+                                                                                        return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');
+                                                                                      });
+                                                                                    });
+                                                                                  },
+                                                                                  child: const Icon(Icons.delete,),
+                                                                                ),
+                                                                              ]
+                                                                            ),
                                                                           ),
                                                                         ],
                                                                       ),
