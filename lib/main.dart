@@ -59,6 +59,8 @@ class MainApp extends StatelessWidget {
 
   // mois
   static const List<String> mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']; 
+  // jours
+  static const List<String> day = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
   @override
   Widget build(BuildContext context) {

@@ -2018,7 +2018,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                       if(datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ tdt += 1; }
                                                     }
                                                   }
-                                                  for(var i = 1; i <= DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month); i++){ axisval.add(i.toString()); }
+                                                  for(var i = 1; i<=5; i++){ axisval.add("${MainApp.day[i-1]}   ${DateFormat('dd').format(DateTime.now().subtract(Duration(days: 7 - i)))}"); }
                                                   return ListView.builder(itemCount: 1, shrinkWrap: true,
                                                     itemBuilder: (BuildContext context, int index) {
                                                       return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
@@ -2103,9 +2103,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                         child: Chart(
                                                                           state: ChartState<void>(
                                                                             data: ChartData(
-                                                                              [ [3, 0, 1, 0, 0, 2, 4, 0, 0, 0, 
-                                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
+                                                                              [ [3, 0, 1, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
                                                                             ),
                                                                             itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
                                                                               padding: const EdgeInsets.only(left: 10, right: 10),
