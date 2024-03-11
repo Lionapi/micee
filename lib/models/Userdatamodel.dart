@@ -30,7 +30,7 @@ class Userdatamodel {
       "</utilisateur>";
   }
 
-  String docforxmldata(int docid, String msg, int en, int cp, int ins, int dec, String at, String aa, String ct, String ca, double pr, String sy) {
+  String docforxmldata(int docid, String msg, int en, int cp, int ins, int dec, String at, String aa, String ct, String ca, double pr, String sy, DateTime cre, DateTime mdf) {
     datadoc = '';
     datadoc +=  "<Doc>\\r\\n"
                   "<IdDoc>$docid</IdDoc>\\r\\n<Msg>$msg</Msg>\\r\\n"
@@ -38,6 +38,7 @@ class Userdatamodel {
                     "<Encours>$en</Encours>\\r\\n<Complement>$cp</Complement>\\r\\n<Instruction>$ins</Instruction>\\r\\n<Decision>$dec</Decision>\\r\\n"
                   "</StatutDoc>\\r\\n"
                   "<AnaTech>$at</AnaTech>\\r\\n<AnaAdmin>$aa</AnaAdmin>\\r\\n<ComTech>$ct</ComTech>\\r\\n<ComAdmin>$ca</ComAdmin>\\r\\n<Prime>$pr</Prime>\\r\\n<Synthese>$sy</Synthese>\\r\\n"
+                  "<Creation>$cre</Creation>\\r\\n<Modification>$mdf</Modification>\\r\\n"
                 "</Doc>\\r\\n";
     return datadoc;
   }

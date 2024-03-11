@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +24,7 @@ import 'package:download/download.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
 import 'package:charts_painter/chart.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -64,7 +66,7 @@ class DashboardPageState extends State<DashboardPage> {
   FilePickerResult? filePickerResult;
   late int id, rel, iddoc, pc, pn; late double hsd; late dynamic docts;
   late bool en, prt;
-  late DateTime lt, cre; 
+  late DateTime cre, lt, cred; 
 
   final Sessiondata = GetStorage();
 
@@ -1112,9 +1114,10 @@ class DashboardPageState extends State<DashboardPage> {
                               UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n') + 
                                 UserModel.docforxmldata(val.docs.length + 1, "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
-                                _comadController.text, double.parse(_primeController.text), _synController.text), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+                                _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()))), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
-                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), 0, val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -1219,14 +1222,14 @@ class DashboardPageState extends State<DashboardPage> {
                             await UserModel.getOneUser(id).then((val) {
                               datadoc = "<?xml version='1.0' encoding='UTF-8'?>\\r\\n"
                                 "${UserModel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
-                                _comadController.text, double.parse(_primeController.text), _synController.text)}";
+                                _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
                               datadoc = datadoc.substring(0, datadoc.length - 4);
                               val.docs[iddoc - 1] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
                               UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
                                 val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
-                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), 0, val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -2009,16 +2012,26 @@ class DashboardPageState extends State<DashboardPage> {
                                             builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
                                               if (datas.hasData) {
                                                 if(datas.data!.isNotEmpty) {
-                                                  int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0;
-                                                  List<String> axisval = [];
+                                                  int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0, ec = 0, cc = 0, it = 0, de = 0;
+                                                  Map <String, double> statutdoc = {}; List<String> axisval = []; List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                                                   for(var i = 0; i < datas.data!.length; i++){ 
-                                                    td += datas.data![i].docs!.length as int; 
+                                                    td += datas.data![i].docs!.length as int; print(datas.data![i].Creation);
                                                     for(var y = 0; y < datas.data![i].docs!.length; y++){ 
                                                       tp += double.parse(datas.data![i].docs![y]['Prime']); 
-                                                      if(datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ tdt += 1; }
+                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '0' && 
+                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ ec += 1; }
+                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ cc += 1; }
+                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ it += 1; }
+                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
                                                     }
                                                   }
-                                                  for(var i = 1; i<=5; i++){ axisval.add("${MainApp.day[i-1]}   ${DateFormat('dd').format(DateTime.now().subtract(Duration(days: 7 - i)))}"); }
+                                                  statutdoc = {"En cours": ec, "Complement": cc, "Instruction": it, "Decision": de};
+                                                  for(var i = 1; i<=7; i++){ 
+                                                    axisval.add("${MainApp.sday[i-1]} ${DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)))}"); 
+                                                  }
                                                   return ListView.builder(itemCount: 1, shrinkWrap: true,
                                                     itemBuilder: (BuildContext context, int index) {
                                                       return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
@@ -2088,7 +2101,35 @@ class DashboardPageState extends State<DashboardPage> {
                                                               ),
                                                             ),
                                                           ),
-                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 3, 
+                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                              child: Card( 
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                child: Column(
+                                                                  children: [ 
+                                                                    const SizedBox(height: 5.0,), Text('Total dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
+                                                                      child: Padding(padding: const EdgeInsets.all(10),
+                                                                        child: PieChart(
+                                                                          dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), //animationDuration: const Duration(milliseconds: 800),
+                                                                          chartLegendSpacing: 32, colorList: const [MainApp.navcolor1, MainApp.navcolor3, MainApp.navcolor2, MainApp.textwr],
+                                                                          initialAngleInDegree: 0, chartType: ChartType.disc, centerText: "", 
+                                                                          legendOptions: LegendOptions(showLegendsInRow: true, showLegends: true, legendTextStyle: MainApp.styleall.copyWith(fontSize: 12,),
+                                                                            legendPosition: LegendPosition.bottom, legendShape: BoxShape.rectangle,
+                                                                          ),
+                                                                          chartValuesOptions: const ChartValuesOptions(showChartValueBackground: true, showChartValues: true, showChartValuesInPercentage: false),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 3, 
                                                             child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
                                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                               child: Card( 
@@ -2103,7 +2144,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                         child: Chart(
                                                                           state: ChartState<void>(
                                                                             data: ChartData(
-                                                                              [ [3, 0, 1, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
+                                                                              [ [3, 0, 1, 2, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
                                                                             ),
                                                                             itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
                                                                               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -2141,14 +2182,14 @@ class DashboardPageState extends State<DashboardPage> {
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
                                                                   children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 5.0,), Text('Dossiers de ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
                                                                     SizedBox(height: MediaQuery.of(context).size.height - 469, 
                                                                       child: Padding(padding: const EdgeInsets.all(10),
                                                                         child: Chart(
                                                                           state: ChartState<void>(
                                                                             data: ChartData(
-                                                                              [ [3, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
+                                                                              [ yeardata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
                                                                             ),
                                                                             itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
                                                                               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -2452,6 +2493,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                                       _anatechController.text = docsdata.data?[index].docs![i]['AnaTech']; _anaadController.text = docsdata.data?[index].docs![i]['AnaAdmin'];
                                                                                       _comtechController.text = docsdata.data?[index].docs![i]['ComTech']; _comadController.text = docsdata.data?[index].docs![i]['ComAdmin'];
                                                                                       _primeController.text = docsdata.data?[index].docs![i]['Prime']; _synController.text = docsdata.data?[index].docs![i]['Synthese'];
+                                                                                      cred = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(docsdata.data?[index].docs![i]['Creation'])));
                                                                                     });
                                                                                     showDialog(context: context, builder: (BuildContext context){
                                                                                       return folderform(Colors.white, MainApp.warning, 'MODIF DOSSIER', editFolderBtn);

@@ -37,6 +37,8 @@
 			<ComAdmin>0</ComAdmin>
 			<Prime>0</Prime>
 			<Synthese>...</Synthese>
+			<Creation>0000-00-00 00:00:00</Creation>
+			<Modification>0000-00-00 00:00:00</Modification>
 		</Doc>
 	</Dossiers>
 	<Datenaiss>0000-00-00 00:00:00</Datenaiss>
