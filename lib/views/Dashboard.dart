@@ -2016,31 +2016,22 @@ class DashboardPageState extends State<DashboardPage> {
                                                   Map <String, double> statutdoc = {}; List<String> axisval = []; List<int> monthdata = [0, 0, 0, 0, 0, 0, 0]; List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                                                   for(var i = 0; i < datas.data!.length; i++){ 
                                                     td += datas.data![i].docs!.length as int;
-                                                    for(var y = 0; y < datas.data![i].docs!.length; y++){ 
-                                                      tp += double.parse(datas.data![i].docs![y]['Prime']); 
-                                                      for(var z = 1; z<=7; z++){
-                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - z))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) ){ monthdata[z - 1] += 1; }
+                                                    for(var x = 0; x < datas.data![i].docs!.length; x++){ // statut
+                                                      tp += double.parse(datas.data![i].docs![x]['Prime']); 
+                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '0' && 
+                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ ec += 1; }
+                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ cc += 1; }
+                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ it += 1; }
+                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
+                                                      for(var y = 1; y<=7; y++){ // month
+                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ monthdata[y - 1] += 1; }
                                                       }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "01"){ yeardata[0] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "02"){ yeardata[1] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "03"){ yeardata[2] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "04"){ yeardata[3] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "05"){ yeardata[4] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "06"){ yeardata[5] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "07"){ yeardata[6] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "08"){ yeardata[7] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "09"){ yeardata[8] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "10"){ yeardata[9] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "11"){ yeardata[10] += 1; }
-                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "12"){ yeardata[11] += 1; }
-                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '0' && 
-                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ ec += 1; }
-                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ cc += 1; }
-                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ it += 1; }
-                                                      if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![y]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
+                                                      for(var z = 0; z<=12; z++){ // year
+                                                        if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == z + 1){ yeardata[z] += 1; }
+                                                      }
                                                     }
                                                   }
                                                   statutdoc = {"En cours": ec, "Complément": cc, "Instruction": it, "Décision": de};
