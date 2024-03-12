@@ -2013,11 +2013,26 @@ class DashboardPageState extends State<DashboardPage> {
                                               if (datas.hasData) {
                                                 if(datas.data!.isNotEmpty) {
                                                   int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0, ec = 0, cc = 0, it = 0, de = 0;
-                                                  Map <String, double> statutdoc = {}; List<String> axisval = []; List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                                  Map <String, double> statutdoc = {}; List<String> axisval = []; List<int> monthdata = [0, 0, 0, 0, 0, 0, 0]; List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                                                   for(var i = 0; i < datas.data!.length; i++){ 
-                                                    td += datas.data![i].docs!.length as int; print(datas.data![i].Creation);
+                                                    td += datas.data![i].docs!.length as int;
                                                     for(var y = 0; y < datas.data![i].docs!.length; y++){ 
                                                       tp += double.parse(datas.data![i].docs![y]['Prime']); 
+                                                      for(var z = 1; z<=7; z++){
+                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - z))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) ){ monthdata[z - 1] += 1; }
+                                                      }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "01"){ yeardata[0] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "02"){ yeardata[1] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "03"){ yeardata[2] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "04"){ yeardata[3] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "05"){ yeardata[4] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "06"){ yeardata[5] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "07"){ yeardata[6] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "08"){ yeardata[7] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "09"){ yeardata[8] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "10"){ yeardata[9] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "11"){ yeardata[10] += 1; }
+                                                      if(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![y]['Creation'])) == "12"){ yeardata[11] += 1; }
                                                       if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '0' && 
                                                         datas.data![i].docs![y]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '0'){ ec += 1; }
                                                       if(datas.data![i].docs![y]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![y]['StatutDoc']['Complement'] == '1' && 
@@ -2028,7 +2043,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                         datas.data![i].docs![y]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![y]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
                                                     }
                                                   }
-                                                  statutdoc = {"En cours": ec, "Complement": cc, "Instruction": it, "Decision": de};
+                                                  statutdoc = {"En cours": ec, "Complément": cc, "Instruction": it, "Décision": de};
                                                   for(var i = 1; i<=7; i++){ 
                                                     axisval.add("${MainApp.sday[i-1]} ${DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)))}"); 
                                                   }
@@ -2114,7 +2129,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                     SizedBox(height: MediaQuery.of(context).size.height - 469, 
                                                                       child: Padding(padding: const EdgeInsets.all(10),
                                                                         child: PieChart(
-                                                                          dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), //animationDuration: const Duration(milliseconds: 800),
+                                                                          dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), animationDuration: const Duration(milliseconds: 100),
                                                                           chartLegendSpacing: 32, colorList: const [MainApp.navcolor1, MainApp.navcolor3, MainApp.navcolor2, MainApp.textwr],
                                                                           initialAngleInDegree: 0, chartType: ChartType.disc, centerText: "", 
                                                                           legendOptions: LegendOptions(showLegendsInRow: true, showLegends: true, legendTextStyle: MainApp.styleall.copyWith(fontSize: 12,),
@@ -2143,9 +2158,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                       child: Padding(padding: const EdgeInsets.all(10),
                                                                         child: Chart(
                                                                           state: ChartState<void>(
-                                                                            data: ChartData(
-                                                                              [ [3, 0, 1, 2, 0, 0, 0].map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
-                                                                            ),
+                                                                            data: ChartData( [ monthdata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
                                                                             itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
                                                                               padding: const EdgeInsets.only(left: 10, right: 10),
                                                                               barItemBuilder: (itemBuilderData) {
@@ -2188,9 +2201,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                       child: Padding(padding: const EdgeInsets.all(10),
                                                                         child: Chart(
                                                                           state: ChartState<void>(
-                                                                            data: ChartData(
-                                                                              [ yeardata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], 
-                                                                            ),
+                                                                            data: ChartData( [ yeardata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
                                                                             itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
                                                                               padding: const EdgeInsets.only(left: 10, right: 10),
                                                                               barItemBuilder: (itemBuilderData) {
