@@ -2012,8 +2012,10 @@ class DashboardPageState extends State<DashboardPage> {
                                             builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
                                               if (datas.hasData) {
                                                 if(datas.data!.isNotEmpty) {
-                                                  int tu = datas.data!.length, td = 0, tdt = 0; double tp = 0, ec = 0, cc = 0, it = 0, de = 0;
-                                                  Map <String, double> statutdoc = {}; List<String> axisval = []; List<int> monthdata = [0, 0, 0, 0, 0, 0, 0]; List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                                  int tu = datas.data!.length, td = 0, tdt = 0, ld = int.parse(DateFormat('dd').format(DateTime(DateTime.now().year, DateTime.now().month+1, 0))); 
+                                                  double tp = 0, ec = 0, cc = 0, it = 0, de = 0; late SpGridItem sp, spw, spm, spy;
+                                                  Map <String, double> statutdoc = {}; List<String> axiswval = []; List<String> axismval = []; 
+                                                  List<int> weekdata = [0, 0, 0, 0, 0, 0, 0]; List<int> monthdata = List<int>.filled(ld, 0, growable: false); List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; 
                                                   for(var i = 0; i < datas.data!.length; i++){ 
                                                     td += datas.data![i].docs!.length as int;
                                                     for(var x = 0; x < datas.data![i].docs!.length; x++){ // statut
@@ -2026,18 +2028,189 @@ class DashboardPageState extends State<DashboardPage> {
                                                         datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ it += 1; }
                                                       if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
                                                         datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
-                                                      for(var y = 1; y<=7; y++){ // month
+                                                      for(var y = 1; y<=7; y++){ // week
+                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ weekdata[y - 1] += 1; }
+                                                      }
+                                                      for(var y = 1; y<=ld; y++){ // month
                                                         if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ monthdata[y - 1] += 1; }
                                                       }
-                                                      for(var z = 0; z<=12; z++){ // year
-                                                        if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == z + 1){ yeardata[z] += 1; }
+                                                      for(var y = 0; y<=12; y++){ // year
+                                                        if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == y + 1){ yeardata[y] += 1; }
                                                       }
                                                     }
                                                   }
                                                   statutdoc = {"En cours": ec, "Complément": cc, "Instruction": it, "Décision": de};
                                                   for(var i = 1; i<=7; i++){ 
-                                                    axisval.add("${MainApp.sday[i-1]} ${DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)))}"); 
+                                                    var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)));
+                                                    for(var item in MainApp.sday.entries){
+                                                      dateday = dateday.replaceAll(item.key, item.value);
+                                                    }  
+                                                    axiswval.add(dateday); 
                                                   }
+                                                  for(var i = 1; i<=ld; i++){ 
+                                                    var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: int.parse(DateFormat('dd').format(DateTime.now())) - i)));
+                                                    for(var item in MainApp.sday.entries){
+                                                      dateday = dateday.replaceAll("${item.key} ", "");
+                                                    }
+                                                    axismval.add(dateday); 
+                                                  }
+                                                  spw = SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                    child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                      child: Card( 
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                        child: Column(
+                                                          children: [ 
+                                                            ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                              title: Text('Semaine du ${axiswval[0]} au ${axiswval[6]} ${MainApp.mois[DateTime.now().month - 1]} ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                              trailing: Row(mainAxisSize: MainAxisSize.min, 
+                                                                children: [
+                                                                  TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                ],
+                                                              )
+                                                            ),
+                                                            const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                            SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                              child: Padding(padding: const EdgeInsets.all(10),
+                                                                child: Chart(
+                                                                  state: ChartState<void>(
+                                                                    data: ChartData( [ weekdata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
+                                                                    itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                      barItemBuilder: (itemBuilderData) {
+                                                                        return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                          gradient: LinearGradient(
+                                                                            begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                            colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                            stops: [0, 2], tileMode: TileMode.clamp,
+                                                                          ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                        );
+                                                                      }
+                                                                    ),
+                                                                    //behaviour: const ChartBehaviour(),
+                                                                    backgroundDecorations: [
+                                                                      HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
+                                                                      VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => axiswval[value],)
+                                                                    ]
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  spm = SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                    child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                      child: Card( 
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                        child: Column(
+                                                          children: [  
+                                                            ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                              title: Text('${MainApp.mois[DateTime.now().month - 1]}  ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                              trailing: Row(mainAxisSize: MainAxisSize.min, 
+                                                                children: [
+                                                                  TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                ],
+                                                              )
+                                                            ),
+                                                            const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                            SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                              child: Padding(padding: const EdgeInsets.all(10),
+                                                                child: Chart(
+                                                                  state: ChartState<void>(
+                                                                    data: ChartData( [ monthdata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
+                                                                    itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                      barItemBuilder: (itemBuilderData) {
+                                                                        return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                          gradient: LinearGradient(
+                                                                            begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                            colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                            stops: [0, 2], tileMode: TileMode.clamp,
+                                                                          ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                        );
+                                                                      }
+                                                                    ),
+                                                                    //behaviour: const ChartBehaviour(),
+                                                                    backgroundDecorations: [
+                                                                      HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
+                                                                      VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => axismval[value],)
+                                                                    ]
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  spy = SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                    child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                      child: Card( 
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                        child: Column(
+                                                          children: [ 
+                                                            ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                              title: Text('Dossiers de ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                              trailing: Row(mainAxisSize: MainAxisSize.min, 
+                                                                children: [
+                                                                  TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                  TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                ],
+                                                              )
+                                                            ),
+                                                            const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                            SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                              child: Padding(padding: const EdgeInsets.all(10),
+                                                                child: Chart(
+                                                                  state: ChartState<void>(
+                                                                    data: ChartData( [ yeardata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
+                                                                    itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                      barItemBuilder: (itemBuilderData) {
+                                                                        return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                          gradient: LinearGradient(
+                                                                            begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                            colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                            stops: [0, 2], tileMode: TileMode.clamp,
+                                                                          ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                        );
+                                                                      }
+                                                                    ),
+                                                                    //behaviour: const ChartBehaviour(),
+                                                                    backgroundDecorations: [
+                                                                      HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
+                                                                      VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                        legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'][value],)
+                                                                    ]
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  sp = spw;
                                                   return ListView.builder(itemCount: 1, shrinkWrap: true,
                                                     itemBuilder: (BuildContext context, int index) {
                                                       return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
@@ -2051,7 +2224,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
                                                                   children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Total utilisateur(ise)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 5.0,), Text("Nombre d'utilisateur(ise)", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
                                                                     SizedBox(height: 20, child: Text("$tu", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
                                                                   ],
@@ -2067,7 +2240,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
                                                                   children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Total dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                    const SizedBox(height: 5.0,), Text('Nombre de dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
                                                                     SizedBox(height: 20, child: Text("$td", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
                                                                   ],
@@ -2101,23 +2274,32 @@ class DashboardPageState extends State<DashboardPage> {
                                                                   children: [ 
                                                                     const SizedBox(height: 5.0,), Text('Dossier(s) Terminé(s) / Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
                                                                     const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("$tdt / 5", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                    SizedBox(height: 20, child: Text("$tdt / 15", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
                                                                   ],
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 3, 
+                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
                                                             child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
                                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                               child: Card( 
                                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
                                                                 shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                                                                 child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Total dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
+                                                                  children: [  
+                                                                    ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                                      title: Text('Satut dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                      trailing: const Row(mainAxisSize: MainAxisSize.min, 
+                                                                        children: [
+                                                                          /*TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                          TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                          TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),*/
+                                                                        ],
+                                                                      )
+                                                                    ),
+                                                                    const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                    SizedBox(height: MediaQuery.of(context).size.height - 476, 
                                                                       child: Padding(padding: const EdgeInsets.all(10),
                                                                         child: PieChart(
                                                                           dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), animationDuration: const Duration(milliseconds: 100),
@@ -2135,92 +2317,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                               ),
                                                             ),
                                                           ),
-                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 3, 
-                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('${MainApp.mois[DateTime.now().month - 1]}  ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
-                                                                      child: Padding(padding: const EdgeInsets.all(10),
-                                                                        child: Chart(
-                                                                          state: ChartState<void>(
-                                                                            data: ChartData( [ monthdata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
-                                                                            itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
-                                                                              padding: const EdgeInsets.only(left: 10, right: 10),
-                                                                              barItemBuilder: (itemBuilderData) {
-                                                                                return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
-                                                                                  gradient: LinearGradient(
-                                                                                    begin: Alignment.topRight, end: Alignment.bottomLeft,
-                                                                                    colors: [MainApp.navcolor2, MainApp.navcolor3],
-                                                                                    stops: [0, 2], tileMode: TileMode.clamp,
-                                                                                  ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
-                                                                                );
-                                                                              }
-                                                                            ),
-                                                                            //behaviour: const ChartBehaviour(),
-                                                                            backgroundDecorations: [
-                                                                              HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
-                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
-                                                                              VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
-                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => axisval[value],)
-                                                                            ]
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
-                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Dossiers de ${DateTime.now().year}', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: MediaQuery.of(context).size.height - 469, 
-                                                                      child: Padding(padding: const EdgeInsets.all(10),
-                                                                        child: Chart(
-                                                                          state: ChartState<void>(
-                                                                            data: ChartData( [ yeardata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
-                                                                            itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
-                                                                              padding: const EdgeInsets.only(left: 10, right: 10),
-                                                                              barItemBuilder: (itemBuilderData) {
-                                                                                return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
-                                                                                  gradient: LinearGradient(
-                                                                                    begin: Alignment.topRight, end: Alignment.bottomLeft,
-                                                                                    colors: [MainApp.navcolor2, MainApp.navcolor3],
-                                                                                    stops: [0, 2], tileMode: TileMode.clamp,
-                                                                                  ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
-                                                                                );
-                                                                              }
-                                                                            ),
-                                                                            //behaviour: const ChartBehaviour(),
-                                                                            backgroundDecorations: [
-                                                                              HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
-                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
-                                                                              VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
-                                                                                legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'][value],)
-                                                                            ]
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
+                                                          sp
                                                         ],
                                                       );
                                                     },
