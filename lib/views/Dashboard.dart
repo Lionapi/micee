@@ -2029,10 +2029,14 @@ class DashboardPageState extends State<DashboardPage> {
                                                       if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
                                                         datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
                                                       for(var y = 1; y<=7; y++){ // week
-                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ weekdata[y - 1] += 1; }
+                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                          weekdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])))  - 1] += 1; 
+                                                        }
                                                       }
                                                       for(var y = 1; y<=ld; y++){ // month
-                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ monthdata[y - 1] += 1; }
+                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                          monthdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) - 1] += 1; 
+                                                        }
                                                       }
                                                       for(var y = 0; y<=12; y++){ // year
                                                         if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == y + 1){ yeardata[y] += 1; }
@@ -2595,6 +2599,7 @@ class DashboardPageState extends State<DashboardPage> {
                                     children: <Widget>[
                                       const SizedBox(height: 15.0,),
                                       Text('Paramètres', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
                                     ]
                                   ),
                                 ),
