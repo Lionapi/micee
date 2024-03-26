@@ -91,9 +91,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         autofocus: false, controller: _nomController,                 
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Nom', suffixIcon: const Icon(LineAwesome.user_alt_solid, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Nom', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -109,9 +113,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         autofocus: false, controller: _prenomController,                 
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Prénom', suffixIcon: const Icon(LineAwesome.user_alt_solid, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Prénom', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -127,9 +135,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         autofocus: false, controller: _hbdController,                 
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Date de naissance', suffixIcon: const Icon(EvaIcons.calendar_outline, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Date de naissance', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -154,9 +166,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         autofocus: false, controller: _emailController,                 
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Email', suffixIcon: const Icon(EvaIcons.email_outline, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Email', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -174,9 +190,13 @@ class RegisterPageState extends State<RegisterPage> {
         autofocus: false, autocorrect: false, controller: _phoneController,
         countrySelectorNavigator: const CountrySelectorNavigator.dialog(width: 325, height: 500, ),               
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Portable', suffixIcon: const Icon(LineAwesome.phone_solid, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Portable', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         flagSize: 16, defaultCountry : IsoCode.FR,
@@ -193,9 +213,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         autofocus: false, controller: _loginController,                 
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Login', suffixIcon: const Icon(FontAwesome.circle_user, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Login', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.circle_user, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -210,14 +234,18 @@ class RegisterPageState extends State<RegisterPage> {
       height: 32.5,
       child: TextFormField(              
         autofocus: false, controller: _passwordController,
+        cursorColor: MainApp.textwr,              
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Password', suffixIcon: const Icon(FontAwesome.lock_solid, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Password', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.lock_solid, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
-        enabled: true, enableSuggestions: false,
-        keyboardType: TextInputType.text, obscureText: true, readOnly: false,
+        enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: true, readOnly: false, 
         style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
         validator: (value) { return  (value == null || value.isEmpty) ?  'Password incorrect' : null; },
       )
@@ -229,9 +257,13 @@ class RegisterPageState extends State<RegisterPage> {
       child: TextFormField(              
         autofocus: false, controller: _cpasswordController,
         decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+          fillColor: MainApp.textwr, focusColor: MainApp.textwr,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: const EdgeInsets.only(left: 9.5),
-          labelText: 'Confirm Password', suffixIcon: const Icon(FontAwesome.lock_solid, size: 18,),
+          contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+          labelText: 'Confirm Password', labelStyle: MainApp.styleall.copyWith(),
+          suffixIcon: const Icon(FontAwesome.lock_solid, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
         enabled: true, enableSuggestions: false,
@@ -246,7 +278,7 @@ class RegisterPageState extends State<RegisterPage> {
       width: MediaQuery.of(context).size.width,
       child: OutlinedButton.icon( //ElevatedButton
         icon: const Icon(LineAwesome.save, size: 15, color: Colors.white),
-        label: Text("ENREGISTRER", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(fontWeight: FontWeight.bold, fontSize: 10.0),),
+        label: Text("ENREGISTRER", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
         onPressed: () {
           if(submitnom && submitprenom && submithbd && submitemail && submitphone != null && submitlogin && submitpassword && submitcpassword /*&& _registerform.currentState!.validate()*/){
             if(EmailValidator.validate(_emailController.text)){
@@ -304,7 +336,7 @@ class RegisterPageState extends State<RegisterPage> {
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(5, 255, 255, 255), side: const BorderSide(color: Colors.white, width: 1.5,),
+          backgroundColor: MainApp.textwr, side: const BorderSide(color: MainApp.gray, width: 1.5,),
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50.0)),),
         ),
       )
@@ -335,7 +367,7 @@ class RegisterPageState extends State<RegisterPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight, end: Alignment.bottomLeft,
-            colors: [MainApp.bg, MainApp.bg2],
+            colors: [MainApp.navcolor2, MainApp.navcolor3],
             stops: [0, 2], tileMode: TileMode.clamp,
           ),
         ),
@@ -345,8 +377,8 @@ class RegisterPageState extends State<RegisterPage> {
               //height: MediaQuery.of(context).size.height,
               width: 370,
               child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: Colors.white, width: 1.8), ),
-                shadowColor: Colors.transparent, color: const Color.fromARGB(15, 255, 255, 255), elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.8), ),
+                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
                   child: Form(
@@ -364,7 +396,7 @@ class RegisterPageState extends State<RegisterPage> {
                         // Big Text
                         Text('INSCRIPTION', style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
 
-                        const Divider(color: Colors.white), const SizedBox(height: 20.0,),
+                        const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
 
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // Nom // Prénom
@@ -383,7 +415,7 @@ class RegisterPageState extends State<RegisterPage> {
 
                         cpasswordField, const SizedBox(height: 20.0),
 
-                        const Divider(color: Colors.white), const SizedBox(height: 20.0,),
+                        const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
 
                         registerButton, const SizedBox(height: 5.0,),
 
