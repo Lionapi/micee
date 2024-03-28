@@ -74,7 +74,7 @@ class MainApp extends StatelessWidget {
           useInheritedMediaQuery: true,
           title: 'MiCee',
           theme: ThemeData(
-            textSelectionTheme: const TextSelectionThemeData(cursorColor: MainApp.textwr, selectionColor: MainApp.dark,  selectionHandleColor: MainApp.dark,),
+            textSelectionTheme: const TextSelectionThemeData(cursorColor: MainApp.textwr, selectionColor: MainApp.dark, selectionHandleColor: MainApp.dark,),
             colorScheme: const ColorScheme.dark(onPrimary: Colors.black, onSurface: Colors.white, primary: Colors.white),
             primaryColor: appcolor,
             primarySwatch: const MaterialColor(

@@ -20,6 +20,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:download/download.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
@@ -140,23 +141,6 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Custom calendar theme
-    ThemeData Ctheme () {
-      return ThemeData.dark().copyWith(
-        colorScheme: const ColorScheme.dark( onPrimary: Colors.black, onSurface: Colors.white, primary: Colors.white ), dialogBackgroundColor: const Color.fromARGB(250, 0, 0, 0), 
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white, selectionColor: MainApp.dark, selectionHandleColor: MainApp.dark,),
-        //dialogTheme: const DialogTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)))),
-        //cardTheme: const CardTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)))),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 12,),
-            foregroundColor: Colors.white, backgroundColor: Colors.black, 
-            shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.white, width: 1.2, style: BorderStyle.solid), borderRadius: BorderRadius.circular(25.0)),
-          ),
-        ),
-      );
-    }
-
     // Custom msgbox
     AlertDialog msg (Color bg, ico, Color c, String s) {
       return AlertDialog(
@@ -244,14 +228,35 @@ class DashboardPageState extends State<DashboardPage> {
         ),
         enabled: true, enableSuggestions: false,
         keyboardType: TextInputType.text, obscureText: false,
-        onTap: () async { 
-          DateTime? dt = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(DateTime.now().year - 100), lastDate: DateTime.now(),
-            locale : const Locale("fr","FR"),
-            builder: (context, child) {
-              return Theme(data: Ctheme(), child: child!,);
-            },
-          ); 
-          if(dt != null){ setState(() { _hbdController.text = DateFormat('yyyy-MM-dd').format(dt); }); }
+        onTap: () { 
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              //title: Text(titre, style: const TextStyle(color: MainApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
+              //actions: [ MaterialButton(color: MainApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
+              //actionsAlignment: MainAxisAlignment.center,
+              //backgroundColor: bg,
+              content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                return SizedBox(height: 300, width: 300,
+                  child: SfDateRangePicker(
+                    view: DateRangePickerView.month, initialSelectedDate: DateTime.now(), minDate: DateTime(DateTime.now().year - 100), maxDate: DateTime.now(),
+                    toggleDaySelection: true, showNavigationArrow: true, showActionButtons: true, confirmText: 'Valider', cancelText: 'Annuler',
+                    selectionShape: DateRangePickerSelectionShape.rectangle, viewSpacing: 20, 
+                    headerStyle: DateRangePickerHeaderStyle(backgroundColor: MainApp.textwr, textAlign: TextAlign.center,
+                      textStyle: MainApp.styleall.copyWith(fontStyle: FontStyle.normal, fontSize: 15, letterSpacing: 5, color: Colors.white,)),
+                    monthViewSettings: const DateRangePickerMonthViewSettings(firstDayOfWeek: 1, showTrailingAndLeadingDates: true,),
+                    onCancel: (){ Navigator.of(context).pop(true); },
+                    onSubmit: (val){ 
+                      Future.delayed(const Duration(milliseconds: 50), (){ 
+                        setState(() { _hbdController.text = DateFormat('yyyy-MM-dd').format(DateTime.parse(val.toString())).toString(); }); 
+                      }); 
+                      Navigator.of(context).pop(true); 
+                    },
+                    //onSelectionChanged: (DateRangePickerSelectionChangedArgs args) { args.value; },
+                  )
+                );
+              })
+            ); 
+          });
         },
         readOnly: true, style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
         validator: (value) { return  (value == null || value.isEmpty) ?  'Date de naissance incorrect' : null; },
