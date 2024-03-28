@@ -226,7 +226,7 @@ class DashboardPageState extends State<DashboardPage> {
           suffixIcon: const Icon(EvaIcons.calendar_outline, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
-        enabled: true, enableSuggestions: false,
+        enabled: true, enableSuggestions: false, enableInteractiveSelection: false,
         keyboardType: TextInputType.text, obscureText: false,
         onTap: () { 
           showDialog(context: context, builder: (context){
@@ -246,9 +246,7 @@ class DashboardPageState extends State<DashboardPage> {
                     monthViewSettings: const DateRangePickerMonthViewSettings(firstDayOfWeek: 1, showTrailingAndLeadingDates: true,),
                     onCancel: (){ Navigator.of(context).pop(true); },
                     onSubmit: (val){ 
-                      Future.delayed(const Duration(milliseconds: 50), (){ 
-                        setState(() { _hbdController.text = DateFormat('yyyy-MM-dd').format(DateTime.parse(val.toString())).toString(); }); 
-                      }); 
+                      setState(() { _hbdController.text = DateFormat('yyyy-MM-dd').format(DateTime.parse(val.toString())).toString(); });
                       Navigator.of(context).pop(true); 
                     },
                     //onSelectionChanged: (DateRangePickerSelectionChangedArgs args) { args.value; },
@@ -256,7 +254,7 @@ class DashboardPageState extends State<DashboardPage> {
                 );
               })
             ); 
-          });
+          }); 
         },
         readOnly: true, style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
         validator: (value) { return  (value == null || value.isEmpty) ?  'Date de naissance incorrect' : null; },
