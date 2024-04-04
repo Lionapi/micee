@@ -1,15 +1,15 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 class Utilisateur {
-  final int? id;
+  final BigInt? id;
   final String name;
-  final int IdUser;
+  final BigInt IdUser;
   final String Nom, Prenom, Login, Motdepasse, Adresse, Tel, Email; 
-  final int Admin; 
+  final BigInt Admin; 
   final String Ste, Fonction, Siret; 
   final String Psr, Precaire, Classique;
   final DateTime Datenaiss, Livetime, Creation, Modification; 
-  final int Is2kfactor, IdRef;
+  final BigInt Is2kfactor, IdRef;
   final dynamic docs; // documents
 
   // constructeur
@@ -22,11 +22,11 @@ class Utilisateur {
 
   // methode
   Utilisateur.fromMap(Map<String, dynamic> map) :
-    id = int.parse(map['id']), name = map['name'], IdUser = int.parse(map['IdUser']), Nom = map['Nom'], Prenom = map['Prenom'],
+    id = BigInt.parse(map['id']), name = map['name'], IdUser = BigInt.parse(map['IdUser']), Nom = map['Nom'], Prenom = map['Prenom'],
     Login = map['Login'], Motdepasse = map['Motdepasse'], Adresse = map['Adresse'], Tel = map['Tel'], Email = map['Email'], 
-    Admin = int.parse(map['Admin']), Ste = map['Ste'], Fonction = map['Fonction'], Siret = map['Siret'], Psr = map['Psr'], 
+    Admin = BigInt.parse(map['Admin']), Ste = map['Ste'], Fonction = map['Fonction'], Siret = map['Siret'], Psr = map['Psr'], 
     Precaire = map['Precaire'], Classique = map['Classique'], Datenaiss = DateTime.parse(map['Datenaiss']), Livetime = DateTime.parse(map['Livetime']), 
-    Creation = DateTime.parse(map['Creation']), Modification = DateTime.parse(map['Modification']), Is2kfactor = int.parse(map['Is2kfactor']), IdRef = int.parse(map['IdRef']), docs = map['docs'];
+    Creation = DateTime.parse(map['Creation']), Modification = DateTime.parse(map['Modification']), Is2kfactor = BigInt.parse(map['Is2kfactor']), IdRef = BigInt.parse(map['IdRef']), docs = map['docs'];
 
   // fonction
   Map<String, dynamic> toMap() {

@@ -65,7 +65,7 @@ class DashboardPageState extends State<DashboardPage> {
   late List<Utilisateur> sfudata, sfddata;
   String? selectedValue; final List<String> selectoption = <String>['Entreprise', 'Particulier'], pdffile = [];
   FilePickerResult? filePickerResult;
-  late int id, rel, iddoc, pc, pn; late double hsd; late dynamic docts;
+  late BigInt id, iddoc; late int rel, pc, pn; late double hsd; late dynamic docts;
   late bool en, prt;
   late DateTime cre, lt, cred; 
 
@@ -550,13 +550,13 @@ class DashboardPageState extends State<DashboardPage> {
                         }else if(_statutController.text == 'Particulier'){
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
-                        }
-                        await UserModel.createUser(_loginController.text.trim(), UserModel.formaterxmldata(0, _nomController.text, 
+                        } 
+                        await UserModel.createUser(_loginController.text.trim(), UserModel.formaterxmldata(BigInt.parse(0.toString()), _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
-                          _phoneController.value.toString(), _emailController.text.trim(), 0, ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
+                          _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
-                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, 
-                          int.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
+                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), 
+                          BigInt.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur ajouté."){
                               setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                               Navigator.of(context, rootNavigator: true).pop();
@@ -645,14 +645,14 @@ class DashboardPageState extends State<DashboardPage> {
                         }else if(_statutController.text == 'Particulier'){
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
-                        } //val.docs.length == 0 ? 0 : val.id as int,
-                        await UserModel.updateUser(id, _loginController.text.trim(), UserModel.formaterxmldata(docts.length == 0 ? 0 : id, _nomController.text, 
+                        } //val.docs.length == 0 ? 0 : val.id!,
+                        await UserModel.updateUser(id, _loginController.text.trim(), UserModel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
-                          _phoneController.value.toString(), _emailController.text.trim(), 0, ste, fct, sir, psr, pre, cla, 
-                          docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', '\\r\\n'), DateTime.parse(_hbdController.text), 
+                          _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, 
+                          docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', ''), DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(lt)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(cre)), 
-                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, 
-                          int.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
+                          DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), 
+                          BigInt.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur modifié."){
                               setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                               Navigator.of(context, rootNavigator: true).pop();
@@ -1113,14 +1113,14 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Complément") { aa = 1; bb = 1; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
-                            await UserModel.getOneUser(int.parse(i.toString())).then((val) {
-                              UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
-                                val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n') + 
-                                UserModel.docforxmldata(val.docs.length + 1, "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
+                            await UserModel.getOneUser(BigInt.parse(i.toString())).then((val) {
+                              UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                                val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
+                                UserModel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()))), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
-                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), 0, val.IdRef)).then((value){
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), BigInt.parse(0.toString()), val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -1223,16 +1223,15 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
                             await UserModel.getOneUser(id).then((val) {
-                              datadoc = "<?xml version='1.0' encoding='UTF-8'?>\\r\\n"
+                              datadoc = "<?xml version='1.0' encoding='UTF-8'?>"
                                 "${UserModel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
-                              datadoc = datadoc.substring(0, datadoc.length - 4);
-                              val.docs[iddoc - 1] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
-                              UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
-                                val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
-                                val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+                              val.docs[(iddoc - BigInt.parse(1.toString())).toInt()] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
+                              UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                                val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
+                                val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
-                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), 0, val.IdRef)).then((value){
+                                DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), BigInt.parse(0.toString()), val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
                                     setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
@@ -1323,18 +1322,18 @@ class DashboardPageState extends State<DashboardPage> {
           List<xml.XmlElement> datadoc = []; int cpt = 0;
           UserModel.getOneUser(id).then((val) {
             if(val.docs.length == 1){ val.docs.clear(); } else if (val.docs.length > 1) {
-              val.docs.removeAt(iddoc - 1);
+              val.docs.removeAt((iddoc - BigInt.parse(1.toString())).toInt());
               for(final xm in val.docs){
-                cpt++; var xmlt = xml.XmlDocument.parse("<?xml version='1.0' encoding='UTF-8'?>\\r\\n$xm").findElements("Doc").first.findElements("IdDoc").first.toString();
-                var xmlstr = "<?xml version='1.0' encoding='UTF-8'?>\\r\\n${xm.toString().replaceAll(xmlt, "<IdDoc>$cpt</IdDoc>")}";
+                cpt++; var xmlt = xml.XmlDocument.parse("<?xml version='1.0' encoding='UTF-8'?>$xm").findElements("Doc").first.findElements("IdDoc").first.toString();
+                var xmlstr = "<?xml version='1.0' encoding='UTF-8'?>${xm.toString().replaceAll(xmlt, "<IdDoc>$cpt</IdDoc>")}";
                 datadoc.add(xml.XmlDocument.parse(xmlstr).findElements("Doc").first);
               }
             }
-            UserModel.updateUser(val.id as int, val.name, UserModel.formaterxmldata(val.docs.length == 0 ? 0 : val.id as int, val.Nom, val.Prenom, val.Login, val.Motdepasse,
-              val.Adresse, val.Tel, val.Email, 0, val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
-              datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\\r\\n'), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
+            UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+              val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
+              datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
-              DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), 0, val.IdRef)).then((value){
+              DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), val.IdRef)).then((value){
                 if(value == "Utilisateur modifié."){
                   setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                   Navigator.of(context, rootNavigator: true).pop();
@@ -1597,7 +1596,7 @@ class DashboardPageState extends State<DashboardPage> {
                             return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
                               itemCount: nc.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
                                 List<Widget> array = <Widget>[];
-                                if(nc.data?[index].IdUser == 0){
+                                if(nc.data?[index].IdUser == BigInt.parse(0.toString())){
                                   z++;
                                   array.add(const Divider(color: MainApp.dark,));
                                   array.add(
@@ -1651,7 +1650,7 @@ class DashboardPageState extends State<DashboardPage> {
                             return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
                               itemCount: nd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
                                 List<Widget> array = <Widget>[];
-                                if(nd.data?[index].IdUser != 0 && nd.data?[index].docs!.length > 0){
+                                if(nd.data?[index].IdUser != BigInt.parse(0.toString()) && nd.data?[index].docs!.length > 0){
                                   for(var i = 0; i < nd.data?[index].docs!.length; i++){ 
                                     if(nd.data?[index].docs[i]['StatutDoc']['Decision'] == '0'){
                                       z++;
@@ -1709,7 +1708,7 @@ class DashboardPageState extends State<DashboardPage> {
                             return ListView.builder(padding: const EdgeInsets.only(left: 15, right: 15), 
                               itemCount: fd.data!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int index) {
                                 List<Widget> array = <Widget>[];
-                                if(fd.data?[index].IdUser != 0 && fd.data?[index].docs!.length > 0){
+                                if(fd.data?[index].IdUser != BigInt.parse(0.toString()) && fd.data?[index].docs!.length > 0){
                                   for(var i = 0; i < fd.data?[index].docs!.length; i++){ 
                                     if(fd.data?[index].docs[i]['StatutDoc']['Decision'] == '1'){
                                       z++;
@@ -2454,7 +2453,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                         children: <Widget>[ 
                                                                           const Icon(AntDesign.file_pdf_outline, size: 50, color: MainApp.textwr,),
                                                                           Flexible(
-                                                                            child: SizedBox(width: 250, height: 28,
+                                                                            child: SizedBox(width: 300, height: 28,
                                                                               child: Text('  ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]}\n' 
                                                                                 '  Prime : ${docsdata.data?[index].docs![i]['Prime']} €\n',
                                                                                 style: MainApp.styleall.copyWith(fontSize: 13.0,), textAlign: TextAlign.center,
@@ -2495,7 +2494,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                                   onPressed: () { 
                                                                                     setState(() { hsd = 162; });
                                                                                     UserModel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                      id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
+                                                                                      id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
                                                                                       _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
                                                                                       pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
                                                                                       if(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == '0'){ _statutdocController.text = "En cours"; 
@@ -2518,7 +2517,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                                   onPressed: () {
                                                                                     setState(() { });
                                                                                     UserModel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                      id = val.id!; iddoc = int.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
+                                                                                      id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
                                                                                       showDialog(context: context, builder: (context){
                                                                                         return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');
                                                                                       });

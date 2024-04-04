@@ -1,0 +1,15 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+DROP DATABASE `micee`;
+CREATE DATABASE IF NOT EXISTS `micee`;
+USE `micee`;
+
+CREATE TABLE IF NOT EXISTS `usersdata` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `xmlcontent` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT IGNORE INTO `usersdata` (`id`, `name`, `xmlcontent`) VALUES (1, 'Admin', "<?xml version='1.0' encoding='UTF-8'?><utilisateur><IdUser>1</IdUser><Nom>Admin</Nom><Prenom>Admin</Prenom><Login>Admin</Login><Motdepasse>VwXjIVpwYXoktL7PNl3RjQ==</Motdepasse><Adresse>Admin Street</Adresse><Tel>PhoneNumber(isoCode: IsoCode.FR, countryCode: 33, nsn: 629600023)</Tel><Email>admin@gmail.com</Email><Statut><Admin>1</Admin><Entreprise><Ste>0</Ste><Fonction>0</Fonction><Siret>0</Siret></Entreprise><Particulier><Psr>0</Psr><Precaire>0</Precaire><Classique>0</Classique></Particulier></Statut><Dossiers><Doc><IdDoc>0</IdDoc><Msg>.|.</Msg><StatutDoc><Encours>0</Encours><Complement>0</Complement><Instruction>0</Instruction><Decision>0</Decision></StatutDoc><AnaTech>0</AnaTech><AnaAdmin>0</AnaAdmin><ComTech>0</ComTech><ComAdmin>0</ComAdmin><Prime>0</Prime><Synthese>0</Synthese><Creation>0000-00-00 00:00:00</Creation><Modification>0000-00-00 00:00:00</Modification></Doc></Dossiers><Datenaiss>0000-00-00 00:00:00</Datenaiss><Livetime>0000-00-00 00:00:00</Livetime><Creation>0000-00-00 00:00:00</Creation><Modification>0000-00-00 00:00:00</Modification><Is2kfactor>0</Is2kfactor><IdRef>0</IdRef></utilisateur>");

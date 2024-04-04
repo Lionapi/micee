@@ -1,46 +1,48 @@
-// ignore_for_file: file_names, avoid_print, non_constant_identifier_names
+// ignore_for_file: file_names, avoid_print, non_constant_identifier_names, avoid_init_to_null
 
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 import 'package:xml2json/xml2json.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
+import 'package:micee/mysql/database.dart';
 import 'package:micee/random/randomcode.dart';
 import 'package:micee/bo/Userdata.dart';
 
 class Userdatamodel {
+  static final DBconnexionSql DB = DBconnexionSql();
+  static String table_name = "usersdata";
   static final RandomCode Rc = RandomCode();
   static Map<String, dynamic> ud = {};
-  static String datadoc =  "<Doc>\\r\\n<IdDoc>0</IdDoc>\\r\\n<Msg>...</Msg>\\r\\n<StatutDoc>\\r\\n<Encours>0</Encours>\\r\\n<Complement>0</Complement>\\r\\n<Instruction>0</Instruction>\\r\\n<Decision>0</Decision>\\r\\n</StatutDoc>\\r\\n<AnaTech>0</AnaTech>\\r\\n<AnaAdmin>0</AnaAdmin>\\r\\n<ComTech>0</ComTech>\\r\\n<ComAdmin>0</ComAdmin>\\r\\n<Prime>0</Prime>\\r\\n<Synthese>0</Synthese>\\r\\n</Doc>\\r\\n";
+  static String datadoc =  "<Doc><IdDoc>0</IdDoc><Msg>...</Msg><StatutDoc><Encours>0</Encours><Complement>0</Complement><Instruction>0</Instruction><Decision>0</Decision></StatutDoc><AnaTech>0</AnaTech><AnaAdmin>0</AnaAdmin><ComTech>0</ComTech><ComAdmin>0</ComAdmin><Prime>0</Prime><Synthese>0</Synthese></Doc>";
   List<String> useroption = [];
 
-  String formaterxmldata(int id, String nom, String prenom, String login, String mdp, String ad, String tel, String mail,
-    int admin, String ste, String fct, String sir, String psr, String pre, String cla, String dd, DateTime dn, DateTime lt, DateTime cre, DateTime mdf, int is2k, int idr) {
-    return "<?xml version='1.0' encoding='UTF-8'?>\\r\\n"
-      "<utilisateur>\\r\\n"
-        "<IdUser>$id</IdUser>\\r\\n<Nom>$nom</Nom>\\r\\n<Prenom>$prenom</Prenom>\\r\\n<Login>$login</Login>\\r\\n<Motdepasse>${Rc.encryptAESQr(mdp, 'MiCee', '01122024')}</Motdepasse>\\r\\n<Adresse>$ad</Adresse>\\r\\n<Tel>$tel</Tel>\\r\\n<Email>$mail</Email>\\r\\n"
-        "<Statut>\\r\\n"
-          "<Admin>$admin</Admin>\\r\\n"
-          "<Entreprise>\\r\\n<Ste>$ste</Ste>\\r\\n<Fonction>$fct</Fonction>\\r\\n<Siret>$sir</Siret>\\r\\n</Entreprise>\\r\\n"
-          "<Particulier>\\r\\n<Psr>$psr</Psr>\\r\\n<Precaire>$pre</Precaire>\\r\\n<Classique>$cla</Classique>\\r\\n</Particulier>\\r\\n"
-        "</Statut>\\r\\n"
-        "<Dossiers>\\r\\n"
+  String formaterxmldata(BigInt id, String nom, String prenom, String login, String mdp, String ad, String tel, String mail,
+    BigInt admin, String ste, String fct, String sir, String psr, String pre, String cla, String dd, DateTime dn, DateTime lt, DateTime cre, DateTime mdf, BigInt is2k, BigInt idr) {
+    return "<?xml version='1.0' encoding='UTF-8'?>"
+      "<utilisateur>"
+        "<IdUser>$id</IdUser><Nom>$nom</Nom><Prenom>$prenom</Prenom><Login>$login</Login><Motdepasse>${Rc.encryptAESQr(mdp, 'MiCee', '01122024')}</Motdepasse><Adresse>$ad</Adresse><Tel>$tel</Tel><Email>$mail</Email>"
+        "<Statut>"
+          "<Admin>$admin</Admin>"
+          "<Entreprise><Ste>$ste</Ste><Fonction>$fct</Fonction><Siret>$sir</Siret></Entreprise>"
+          "<Particulier><Psr>$psr</Psr><Precaire>$pre</Precaire><Classique>$cla</Classique></Particulier>"
+        "</Statut>"
+        "<Dossiers>"
           "$dd"
-        "</Dossiers>\\r\\n"
-        "<Datenaiss>$dn</Datenaiss>\\r\\n<Livetime>$lt</Livetime>\\r\\n<Creation>$cre</Creation>\\r\\n<Modification>$mdf</Modification>\\r\\n<Is2kfactor>$is2k</Is2kfactor>\\r\\n<IdRef>$idr</IdRef>\\r\\n"
+        "</Dossiers>"
+        "<Datenaiss>$dn</Datenaiss><Livetime>$lt</Livetime><Creation>$cre</Creation><Modification>$mdf</Modification><Is2kfactor>$is2k</Is2kfactor><IdRef>$idr</IdRef>"
       "</utilisateur>";
   }
 
-  String docforxmldata(int docid, String msg, int en, int cp, int ins, int dec, String at, String aa, String ct, String ca, double pr, String sy, DateTime cre, DateTime mdf) {
-    datadoc = '';
-    datadoc +=  "<Doc>\\r\\n"
-                  "<IdDoc>$docid</IdDoc>\\r\\n<Msg>$msg</Msg>\\r\\n"
-                  "<StatutDoc>\\r\\n"
-                    "<Encours>$en</Encours>\\r\\n<Complement>$cp</Complement>\\r\\n<Instruction>$ins</Instruction>\\r\\n<Decision>$dec</Decision>\\r\\n"
-                  "</StatutDoc>\\r\\n"
-                  "<AnaTech>$at</AnaTech>\\r\\n<AnaAdmin>$aa</AnaAdmin>\\r\\n<ComTech>$ct</ComTech>\\r\\n<ComAdmin>$ca</ComAdmin>\\r\\n<Prime>$pr</Prime>\\r\\n<Synthese>$sy</Synthese>\\r\\n"
-                  "<Creation>$cre</Creation>\\r\\n<Modification>$mdf</Modification>\\r\\n"
-                "</Doc>\\r\\n";
-    return datadoc;
+  String docforxmldata(BigInt docid, String msg, int en, int cp, int ins, int dec, String at, String aa, String ct, String ca, double pr, String sy, DateTime cre, DateTime mdf) {
+    return
+      "<Doc>"
+        "<IdDoc>$docid</IdDoc><Msg>$msg</Msg>"
+        "<StatutDoc>"
+          "<Encours>$en</Encours><Complement>$cp</Complement><Instruction>$ins</Instruction><Decision>$dec</Decision>"
+        "</StatutDoc>"
+        "<AnaTech>$at</AnaTech><AnaAdmin>$aa</AnaAdmin><ComTech>$ct</ComTech><ComAdmin>$ca</ComAdmin><Prime>$pr</Prime><Synthese>$sy</Synthese>"
+        "<Creation>$cre</Creation><Modification>$mdf</Modification>"
+      "</Doc>";
   }
 
   static Map<String, dynamic> mapxmldata(xmldata) {
@@ -111,117 +113,186 @@ class Userdatamodel {
 
   // connexion
   Future<dynamic> connect(String log, String mdp) async {
-    final response = await http.post(Uri.parse("http://localhost:81/api/connect_userdata.php"), //Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': '{http}'})
-      //headers: <String, String> {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json; charset=UTF-8",},
-      body: jsonEncode(<String, String> { "Login": log, "Motdepasse": Rc.encryptAESQr(mdp, 'MiCee', '01122024') }),
-    );
-    List<Map<String, dynamic>> user = []; ud = {};
-    if (response.statusCode == 200) {
-      if(response.body == "Compte ou Mot de passe incorrect."){
-        return response.body;
-      } else {
-        ud = {};
-        ud.addEntries({"id": jsonDecode(response.body)[0]['id']}.entries);
-        ud.addEntries({"name": jsonDecode(response.body)[0]['name']}.entries);
-        mapxmldata(jsonDecode(response.body)[0]['xmlcontent']);
-        user.add(ud);
-        return user;
-      }
-    } else {
-      return ('Request failed with status: ${response.statusCode}.');
+    // variables
+    var Con = null, stmt = null, results = null;
+    List<Map<String, dynamic>> user = [];
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("SELECT * FROM $table_name WHERE ExtractValue(xmlcontent, 'utilisateur/Login') = ? AND ExtractValue(xmlcontent, 'utilisateur/Motdepasse') = ?");
+      // execute
+      results = await stmt.execute([log, Rc.encryptAESQr(mdp, 'MiCee', '01122024')]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      for (final r in results.rows) { user.add(r.assoc()); }
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
+
+    // check
+    if (user.isNotEmpty) { return user; } else { return "Compte ou Mot de passe incorrect."; }
   }
 
   // create userdata
   Future<dynamic> createUser(String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://localhost:81/api/create_userdata.php"),
-      body: jsonEncode(<String, String> { "name": name, "xmlcontent": xlmcontent }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was created.") {
-        return "Utilisateur ajouté.";
-      } else {
-        return "Impossible d'ajouter l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+    // variables
+    var Con = null, stmt = null, results = null;
+    BigInt afr = BigInt.parse(0.toString());
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("INSERT IGNORE INTO $table_name SET name = ?, xmlcontent = ?");
+      // execute
+      results = await stmt.execute([name, xlmcontent]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      afr = results.affectedRows as BigInt;
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur ajouté."; } else { return "Impossible d'ajouter l'utilisateur."; }
   }
 
   // get all usersdata
   Future<List<Utilisateur>> getAllUsers() async {
-    final response = await http.get(Uri.parse("http://localhost:81/api/read_userdata.php"));
-    final List<Map<String, dynamic>> users = []; useroption = [];
-    if (response.statusCode == 200) {
-      if (jsonDecode(response.body)['records'].length > 0){
-        for(int i = 0; i < jsonDecode(response.body)['records'].length; i++){
-          useroption.add("${jsonDecode(response.body)['records'][i]['name']} ~ ${jsonDecode(response.body)['records'][i]['id']}");
-          ud = {}; 
-          ud.addEntries({"id": jsonDecode(response.body)['records'][i]['id']}.entries);
-          ud.addEntries({"name": jsonDecode(response.body)['records'][i]['name']}.entries);
-          mapxmldata(jsonDecode(response.body)['records'][i]['xmlcontent']);
-          docdata(jsonDecode(response.body)['records'][i]['xmlcontent']);
-          users.add(ud);
-        }
+    // variables
+    var Con = null, stmt = null, results = null;
+    List<Map<String, dynamic>> users = []; useroption.clear();
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("SELECT * FROM $table_name WHERE id <> ? ORDER BY id ASC LIMIT 5000");
+      // execute
+      results = await stmt.execute([1]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      for (final r in results.rows) { 
+        useroption.add("${r.assoc()['name']} ~ ${r.assoc()['id']}");
+        ud = {}; 
+        ud.addEntries({"id": r.assoc()['id']}.entries);
+        ud.addEntries({"name": r.assoc()['name']}.entries);
+        mapxmldata(r.assoc()['xmlcontent']); 
+        docdata(r.assoc()['xmlcontent']);
+        users.add(ud);
       }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
-    //print(users);
+
+    // return all 
     return users.map((e) => Utilisateur.fromMap(e)).toList();
   }
 
   // get one userdata
-  Future<Utilisateur> getOneUser(int id) async {
-    final response = await http.post(Uri.parse("http://localhost:81/api/read_one_userdata.php"),
-      body: jsonEncode(<String, int> { "id": id, }),
-    );
-    final List<Map<String, dynamic>> user = [];
-    if (response.statusCode == 200) {
-      if (jsonDecode(response.body).length == 1){
-        ud = {};
-        ud.addEntries({"id": jsonDecode(response.body)[0]['id']}.entries);
-        ud.addEntries({"name": jsonDecode(response.body)[0]['name']}.entries);
-        mapxmldata(jsonDecode(response.body)[0]['xmlcontent']);
-        mapxmldocdata(jsonDecode(response.body)[0]['xmlcontent']);
+  Future<Utilisateur> getOneUser(BigInt id) async {
+    // variables
+    var Con = null, stmt = null, results = null;
+    List<Map<String, dynamic>> user = [];
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("SELECT id, name, xmlcontent FROM $table_name WHERE id = ? LIMIT 0,1");
+      // execute
+      results = await stmt.execute([id]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      for (final r in results.rows) { 
+        useroption.add("${r.assoc()['name']} ~ ${r.assoc()['id']}");
+        ud = {}; 
+        ud.addEntries({"id": r.assoc()['id']}.entries);
+        ud.addEntries({"name": r.assoc()['name']}.entries);
+        mapxmldata(r.assoc()['xmlcontent']); 
+        docdata(r.assoc()['xmlcontent']);
         user.add(ud);
       }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
+
+    // return one 
     return user.map((e) => Utilisateur.fromMap(e)).first;
   }
 
   // update userdata
-  Future<dynamic> updateUser(int id, String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://localhost:81/api/update_userdata.php"),
-      body: jsonEncode(<String, dynamic> { "id": id, "name": name, "xmlcontent": xlmcontent }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was updated.") {
-        return "Utilisateur modifié.";
-      } else {
-        return "Impossible de modifier l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+  Future<dynamic> updateUser(BigInt id, String name, String xlmcontent) async {
+    // variables
+    var Con = null, stmt = null, results = null;
+    BigInt afr = BigInt.parse(0.toString());
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("UPDATE $table_name SET name = ?, xmlcontent = ? WHERE id = ?");
+      // execute
+      results = await stmt.execute([name, xlmcontent, id]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      afr = results.affectedRows as BigInt;
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur modifié."; } else { return "Impossible de modifier l'utilisateur."; }
   }
 
   // delete userdata
-  Future<dynamic>deleteUser(int id) async {
-    final response = await http.post(Uri.parse("http://localhost:81/api/delete_userdata.php"),
-      body: jsonEncode(<String, dynamic> { "id": id }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was deleted.") {
-        return "Utilisateur supprimé.";
-      } else {
-        return "Impossible de supprimer l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+  Future<dynamic>deleteUser(BigInt id) async {
+    // variables
+    var Con = null, stmt = null, results = null;
+    BigInt afr = BigInt.parse(0.toString());
+
+    try {
+      Con = await DB.getConnexion();
+      // connected
+      await Con.connect();
+      // prepare
+      stmt = await Con.prepare("DELETE FROM $table_name WHERE id = ?");
+      // execute
+      results = await stmt.execute([id]);
+      // deal
+      await stmt.deallocate();
+      // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+      afr = results.affectedRows as BigInt;
+      // closed
+      await Con.close();
+    } catch (e) {
+      print("Error : $e"); throw Exception(e);
     }
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur supprimé."; } else { return "Impossible de supprimer l'utilisateur."; }
   }
 
   // Search a user from collection
