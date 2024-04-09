@@ -16,25 +16,26 @@ dependencies:
   flutter_screenutil: ^5.9.0
   get_storage: ^2.1.1
   icons_plus: ^5.0.0
-  phone_form_field: ^8.1.1
+  phone_form_field: ^9.2.3
   cupertino_icons: ^1.0.5
   intl: ^0.18.1
   http: ^1.1.2
   xml: ^6.3.0
   google_fonts: ^6.1.0
-  easy_sidemenu: ^0.5.0
+  easy_sidemenu: ^0.6.0
   font_awesome_flutter: ^10.6.0
   dropdown_button2: ^2.3.9
   select_field: ^1.0.0
   xml2json: ^6.2.2
-  file_picker: ^6.1.1
-  syncfusion_flutter_pdfviewer: ^24.2.9
+  file_picker: ^8.0.0+1
+  syncfusion_flutter_pdfviewer: ^25.1.38
   download: ^1.0.0
   simple_grid: ^0.1.4
   charts_painter: ^3.1.1
   pie_chart: ^5.4.0
-  syncfusion_flutter_datepicker: ^24.2.9
+  syncfusion_flutter_datepicker: ^25.1.38
   mysql_client: ^0.0.27
+  dart_frog: ^1.1.0
 
 dev_dependencies:
   flutter_test:

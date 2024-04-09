@@ -77,7 +77,7 @@ class DashboardPageState extends State<DashboardPage> {
     super.initState();
 
     _nomController = TextEditingController(); _prenomController = TextEditingController(); _hbdController = TextEditingController();
-    _emailController = TextEditingController(); _addressController = TextEditingController(); _phoneController = PhoneController(null);
+    _emailController = TextEditingController(); _addressController = TextEditingController(); _phoneController = PhoneController();
     _loginController = TextEditingController(); _passwordController = TextEditingController(); _cpasswordController = TextEditingController();
     _statutController = TextEditingController(); _nomsteController = TextEditingController(); _fctsteController = TextEditingController(); 
     _siretsteController = TextEditingController(); _psrController = TextEditingController(); _preController = TextEditingController(); 
@@ -128,7 +128,7 @@ class DashboardPageState extends State<DashboardPage> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _nomController.dispose(); _prenomController.dispose(); _loginController.dispose(); _hbdController.dispose(); _emailController.dispose();
-    /*_phoneController.dispose();*/ _addressController.dispose(); _passwordController.dispose(); _cpasswordController.dispose(); 
+    _phoneController.dispose(); _addressController.dispose(); _passwordController.dispose(); _cpasswordController.dispose(); 
     _statutController.dispose(); _nomsteController.dispose(); _fctsteController.dispose(); _siretsteController.dispose(); 
     _psrController.dispose(); _preController.dispose(); _claController.dispose();
 
@@ -155,7 +155,7 @@ class DashboardPageState extends State<DashboardPage> {
     }
 
     void resetuserform(){
-      _nomController.text = ""; _prenomController.text = ""; _hbdController.text = ""; _emailController.text = ""; _addressController.text = ""; _phoneController.reset();
+      _nomController.text = ""; _prenomController.text = ""; _hbdController.text = ""; _emailController.text = ""; _addressController.text = ""; _phoneController.value = PhoneNumber.parse('+33');
       _loginController.text = ""; _passwordController.text = ""; _cpasswordController.text = ""; _statutController.text = ""; _nomsteController.text = ""; _fctsteController.text = ""; 
       _siretsteController.text = ""; _psrController.text = ""; _preController.text = ""; _claController.text = ""; en = false; prt = false;
     }
@@ -313,7 +313,7 @@ class DashboardPageState extends State<DashboardPage> {
         autofillHints: const [AutofillHints.telephoneNumber],
         autofocus: false, autocorrect: false, controller: _phoneController,
         countrySelectorNavigator: const CountrySelectorNavigator.dialog(width: 325, height: 500, ),               
-        cursorColor: MainApp.textwr,              
+        cursorColor: MainApp.textwr,          
         decoration: InputDecoration(
           focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
           enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
@@ -324,6 +324,8 @@ class DashboardPageState extends State<DashboardPage> {
           suffixIcon: const Icon(LineAwesome.phone_solid, size: 18, color: MainApp.textwr,),
           suffixIconConstraints: const BoxConstraints(minWidth: 35,),
         ),
+        isCountrySelectionEnabled: true, isCountryButtonPersistent: false,
+        countryButtonStyle: CountryButtonStyle(textStyle: MainApp.styleall.copyWith(), padding: const EdgeInsets.only(left: 0), flagSize: 16, showDropdownIcon: false),
         flagSize: 16, defaultCountry : IsoCode.FR, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         enabled: true, enableSuggestions: false, keyboardType: TextInputType.phone, obscureText: false, /*readOnly: false,*/
         style: MainApp.styleall.copyWith(), //toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
@@ -538,7 +540,7 @@ class DashboardPageState extends State<DashboardPage> {
         onPressed: () async {
           if(submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
             if(EmailValidator.validate(_emailController.text)){
-              if(_phoneController.value!.isValid(type: PhoneNumberType.mobile) || _phoneController.value!.isValid(type: PhoneNumberType.fixedLine)){
+              if(_phoneController.value.isValid(type: PhoneNumberType.mobile) || _phoneController.value.isValid(type: PhoneNumberType.fixedLine)){
                 if(MainApp.regexp.hasMatch(_passwordController.text.trim()) && MainApp.regexp.hasMatch(_cpasswordController.text.trim())){
                   if(_passwordController.text.trim().compareTo(_cpasswordController.text.trim()) == 0){
                     if(_statutController.text.trim().isNotEmpty){
@@ -633,7 +635,7 @@ class DashboardPageState extends State<DashboardPage> {
         onPressed: () async {
           if(submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
             if(EmailValidator.validate(_emailController.text)){
-              if(_phoneController.value!.isValid(type: PhoneNumberType.mobile) || _phoneController.value!.isValid(type: PhoneNumberType.fixedLine)){
+              if(_phoneController.value.isValid(type: PhoneNumberType.mobile) || _phoneController.value.isValid(type: PhoneNumberType.fixedLine)){
                 if(MainApp.regexp.hasMatch(_passwordController.text.trim()) && MainApp.regexp.hasMatch(_cpasswordController.text.trim())){
                   if(_passwordController.text.trim().compareTo(_cpasswordController.text.trim()) == 0){
                     if(_statutController.text.trim().isNotEmpty){

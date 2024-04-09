@@ -22,7 +22,7 @@ class DBconnexionSql {
         host: host, port: port, userName: userName, password: password, databaseName: databaseName, secure: false, collation: 'utf8_general_ci'
       );
     } catch (e) {
-      print("Erreur connexion : $e");
+      print("Error : $e"); throw Exception(e);
     }
     return await conn;
   }

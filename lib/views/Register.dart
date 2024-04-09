@@ -34,7 +34,7 @@ class RegisterPageState extends State<RegisterPage> {
     super.initState();
 
     _nomController = TextEditingController(); _prenomController = TextEditingController(); _hbdController = TextEditingController();
-    _emailController = TextEditingController(); _phoneController = PhoneController(null);
+    _emailController = TextEditingController(); _phoneController = PhoneController();
     _loginController = TextEditingController(); _passwordController = TextEditingController(); _cpasswordController = TextEditingController();
 
     submitnom = false;  _nomController.addListener(() { setState(() { submitnom = _nomController.text.trim().isNotEmpty; }); });
@@ -51,7 +51,7 @@ class RegisterPageState extends State<RegisterPage> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _nomController.dispose(); _prenomController.dispose(); _loginController.dispose(); _hbdController.dispose(); _emailController.dispose();
-    /*_phoneController.dispose();*/ _passwordController.dispose(); _cpasswordController.dispose();
+    _phoneController.dispose(); _passwordController.dispose(); _cpasswordController.dispose();
     super.dispose();
   }
 
@@ -282,7 +282,7 @@ class RegisterPageState extends State<RegisterPage> {
         onPressed: () {
           if(submitnom && submitprenom && submithbd && submitemail && submitphone != null && submitlogin && submitpassword && submitcpassword /*&& _registerform.currentState!.validate()*/){
             if(EmailValidator.validate(_emailController.text)){
-              if(_phoneController.value!.isValid(type: PhoneNumberType.mobile) || _phoneController.value!.isValid(type: PhoneNumberType.fixedLine)){
+              if(_phoneController.value.isValid(type: PhoneNumberType.mobile) || _phoneController.value.isValid(type: PhoneNumberType.fixedLine)){
                 if(MainApp.regexp.hasMatch(_passwordController.text.trim()) && MainApp.regexp.hasMatch(_cpasswordController.text.trim())){
                   if(_passwordController.text.trim().compareTo(_cpasswordController.text.trim()) == 0){
                     /*// constructor for login

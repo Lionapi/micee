@@ -95,7 +95,6 @@ class MainApp extends StatelessWidget {
             fontFamily: GoogleFonts.ubuntu().fontFamily,
           ),
           themeMode: ThemeMode.system,
-
           initialRoute: splash,
           routes: {
             splash: (context) => const SplashscreenPage(),
@@ -108,11 +107,10 @@ class MainApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
-            PhoneFieldLocalization.delegate
+            ...PhoneFieldLocalization.delegates
           ],
           supportedLocales: const [
-            Locale("fr", "FR"),
-            Locale('en', 'US'),
+            Locale("fr", "FR"), Locale('en', 'US'),
           ],
           locale: const Locale('fr'),
           //home: const MyHomePage(title: 'Flutter Demo Home Page'),
