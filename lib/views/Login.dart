@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   //final Utilisateur User = Utilisateur();
-  final Userdatamodel UserModel = Userdatamodel();
+  //final Userdatamodel UserModel = Userdatamodel();
   final GlobalKey<FormState> _loginform = GlobalKey<FormState>();
 
   late bool submitlogin, submitpassword;
@@ -110,7 +110,7 @@ class LoginPageState extends State<LoginPage> {
         label: Text("CONNEXION", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
         onPressed: () async {
           if(submitlogin && submitpassword && _loginform.currentState!.validate()){
-            final u = await UserModel.connect(_loginController.text.trim(), _passwordController.text.trim());
+            final u = await Userdatamodel.connect(_loginController.text.trim(), _passwordController.text.trim());
             if(u.runtimeType == String) {
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });

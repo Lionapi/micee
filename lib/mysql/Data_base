@@ -1,0 +1,53 @@
+// ignore_for_file: file_names
+
+import 'package:mysql_client/mysql_client.dart';
+
+class DBconnexionSql {
+  // DB param
+  // static String host = "10.0.2.2";  //when you use emulator like android
+  static String host = "10.0.2.15";  //when you use navigator like chrome
+  // static String host = "127.0.0.1"; //when you use simulator like windows
+  static int port = 3309;
+  static String userName = "Franck-Lionel";
+  static String password = "Franck-Lionel007";
+  static String databaseName = "micee";
+  static String colation = "utf8_general_ci";
+
+  MySQLConnection? conn; PreparedStmt? stmt; IResultSet? results;
+
+  /// initializes a connection to database
+  Future<void> _getConnexion() async {
+    conn = await MySQLConnection.createConnection(
+      host: host, port: port, userName: userName, password: password, databaseName: databaseName, secure: false, collation: colation
+    );
+    // connected
+    await conn?.connect();
+  }
+
+  ///execute a given query and checks for db connection
+  Future<IResultSet> getResults(String query, List<dynamic>? params,) async {
+    if (conn == null || conn?.connected == false) {
+      await _getConnexion();
+    }
+
+    if (conn?.connected == false) {
+      throw Exception('Base de données indisponible ou en maintenance.');
+    }
+
+    // prepare
+    stmt = await conn?.prepare(query);
+    // execute
+    results = await stmt?.execute(params!);
+    // deal
+    await stmt?.deallocate();
+    // closed
+    await conn?.close();
+
+    return results!;
+  }
+}
+
+// https://github.com/ayoubzulfiqar/frogging_with_mysql/tree/main
+// https://github.com/zim32/mysql.dart
+// https://github.com/dongri727/sample_app_flutter_mysql8
+      

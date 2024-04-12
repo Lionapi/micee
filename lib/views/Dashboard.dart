@@ -60,7 +60,7 @@ class DashboardPageState extends State<DashboardPage> {
 
   PdfViewerController pdfc = PdfViewerController();
 
-  Userdatamodel UserModel = Userdatamodel();
+  //final Userdatamodel UserModel = Userdatamodel();
   late Future<List<Utilisateur>> futuredata, ncdata, nddata, fddata; 
   late List<Utilisateur> sfudata, sfddata;
   String? selectedValue; final List<String> selectoption = <String>['Entreprise', 'Particulier'], pdffile = [];
@@ -118,7 +118,7 @@ class DashboardPageState extends State<DashboardPage> {
       Navigator.pushReplacementNamed(context, MainApp.login);
     } else {
       Future.delayed(Duration.zero,(){ sideMenu.addListener((index) { pageController.jumpToPage(index); }); });
-      futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null; hsd = 40.5;
+      futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null; hsd = 40.5;
       _searchuserController = TextEditingController(); _searchfolderController = TextEditingController();
       en = false; prt = false;
     }
@@ -553,14 +553,14 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } 
-                        await UserModel.createUser(_loginController.text.trim(), UserModel.formaterxmldata(BigInt.parse(0.toString()), _nomController.text, 
+                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), 
                           BigInt.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur ajouté."){
-                              setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+                              setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -648,7 +648,7 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } //val.docs.length == 0 ? 0 : val.id!,
-                        await UserModel.updateUser(id, _loginController.text.trim(), UserModel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, _nomController.text, 
+                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, 
                           docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', ''), DateTime.parse(_hbdController.text), 
@@ -656,7 +656,7 @@ class DashboardPageState extends State<DashboardPage> {
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), 
                           BigInt.parse(Sessiondata.read("Datas")[0]["id"]))).then((value){
                             if(value == "Utilisateur modifié."){
-                              setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+                              setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -729,9 +729,9 @@ class DashboardPageState extends State<DashboardPage> {
         icon: const Icon(IonIcons.person_remove, size: 15, color: Colors.white),
         label: Text("SUPPRIMER", textAlign: TextAlign.center, style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
         onPressed: () async {
-          await UserModel.deleteUser(id).then((value){
+          await Userdatamodel.deleteUser(id).then((value){
             if(value == "Utilisateur supprimé."){
-              setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+              setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
               Navigator.of(context, rootNavigator: true).pop();
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -1109,22 +1109,22 @@ class DashboardPageState extends State<DashboardPage> {
                       if(_comadController.text.isNotEmpty) {
                         if(_primeController.text.isNotEmpty) {
                           if(_synController.text.isNotEmpty) {
-                            var i = UserModel.useroption.where((e) => e.split(' ~ ')[0].toLowerCase().contains(_userController.text.trim().toString().toLowerCase())).toString().split(" ~ ")[1].split(")")[0];
+                            var i = MainApp.useroption.where((e) => e.split(' ~ ')[0].toLowerCase().contains(_userController.text.trim().toString().toLowerCase())).toString().split(" ~ ")[1].split(")")[0];
                             late int aa, bb, cc, dd;
                             if(_statutdocController.text == "En cours"){ aa = 1; bb = 0; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Complément") { aa = 1; bb = 1; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
-                            await UserModel.getOneUser(BigInt.parse(i.toString())).then((val) {
-                              UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                            await Userdatamodel.getOneUser(BigInt.parse(i.toString())).then((val) {
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
-                                UserModel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
+                                Userdatamodel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()))), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), BigInt.parse(0.toString()), val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
-                                    setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+                                    setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -1224,18 +1224,18 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Complément") { aa = 1; bb = 1; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
-                            await UserModel.getOneUser(id).then((val) {
+                            await Userdatamodel.getOneUser(id).then((val) {
                               datadoc = "<?xml version='1.0' encoding='UTF-8'?>"
-                                "${UserModel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
+                                "${Userdatamodel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
                               val.docs[(iddoc - BigInt.parse(1.toString())).toInt()] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
-                              UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
                                 val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Modification)), BigInt.parse(0.toString()), val.IdRef)).then((value){
                                   if(value == "Utilisateur modifié."){
-                                    setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+                                    setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -1322,7 +1322,7 @@ class DashboardPageState extends State<DashboardPage> {
         label: Text("SUPPRIMER", textAlign: TextAlign.center, style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
         onPressed: () async {
           List<xml.XmlElement> datadoc = []; int cpt = 0;
-          UserModel.getOneUser(id).then((val) {
+          Userdatamodel.getOneUser(id).then((val) {
             if(val.docs.length == 1){ val.docs.clear(); } else if (val.docs.length > 1) {
               val.docs.removeAt((iddoc - BigInt.parse(1.toString())).toInt());
               for(final xm in val.docs){
@@ -1331,13 +1331,13 @@ class DashboardPageState extends State<DashboardPage> {
                 datadoc.add(xml.XmlDocument.parse(xmlstr).findElements("Doc").first);
               }
             }
-            UserModel.updateUser(val.id!, val.name, UserModel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
               val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
               datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), val.IdRef)).then((value){
                 if(value == "Utilisateur modifié."){
-                  setState(() {futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
+                  setState(() {futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;});
                   Navigator.of(context, rootNavigator: true).pop();
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
@@ -1386,7 +1386,7 @@ class DashboardPageState extends State<DashboardPage> {
 
                     SizedBox(height: 32.5, child: SelectField( // user
                       textController : _userController,
-                      options: UserModel.useroption.map((value) => Option(label: value.split(' ~ ')[0], value: value.split(' ~ ')[0])).toList(), //initialOption: Option<String>(label: selectoption[0], value: selectoption[0]),
+                      options: MainApp.useroption.map((value) => Option(label: value.split(' ~ ')[0], value: value.split(' ~ ')[0])).toList(), //initialOption: Option<String>(label: selectoption[0], value: selectoption[0]),
                       onTextChanged: (value) {
                         setState(() {  });
                       },
@@ -1403,7 +1403,7 @@ class DashboardPageState extends State<DashboardPage> {
                         suffixIconConstraints: const BoxConstraints(minWidth: 35,), 
                       ),
                       menuDecoration: MenuDecoration(
-                        margin: const EdgeInsets.only(top: 5), height: double.tryParse((40.5 * UserModel.useroption.length).toString()), alignment: MenuAlignment.center,
+                        margin: const EdgeInsets.only(top: 5), height: double.tryParse((40.5 * MainApp.useroption.length).toString()), alignment: MenuAlignment.center,
                         buttonStyle: TextButton.styleFrom(fixedSize: const Size(double.infinity, 40), backgroundColor: Colors.white, 
                           alignment: Alignment.centerLeft, padding: const EdgeInsets.all(10.0), iconColor: MainApp.textwr,
                           shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent, width: 0.5,)), 
@@ -1785,12 +1785,12 @@ class DashboardPageState extends State<DashboardPage> {
         enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false,
         style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
         onChanged: (s) { 
-          //setState(() { futuredata = _searchuserController.text.isEmpty ? UserModel.getAllUsers() : UserModel.searchData(s); });
+          //setState(() { futuredata = _searchuserController.text.isEmpty ? Userdatamodel.getAllUsers() : Userdatamodel.searchData(s); });
           setState(() {
             if(_searchuserController.text.isEmpty){
-              futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;
+              futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;
             }else{
-              futuredata = UserModel.searchData(sfudata, s); futuredata.then((r) => rel = r.length);
+              futuredata = Userdatamodel.searchData(sfudata, s); futuredata.then((r) => rel = r.length);
             }
           });
         },
@@ -1816,12 +1816,12 @@ class DashboardPageState extends State<DashboardPage> {
         enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false,
         style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
         onChanged: (s) { 
-          //setState(() { futuredata = _searchfolderController.text.isEmpty ? UserModel.getAllUsers() : UserModel.searchData(s); });
+          //setState(() { futuredata = _searchfolderController.text.isEmpty ? Userdatamodel.getAllUsers() : Userdatamodel.searchData(s); });
           setState(() {
             if(_searchfolderController.text.isEmpty){
-              futuredata = UserModel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;
+              futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null;
             }else{
-              futuredata = UserModel.searchData(sfddata, s); futuredata.then((r) => rel = r.length);
+              futuredata = Userdatamodel.searchData(sfddata, s); futuredata.then((r) => rel = r.length);
             }
           });
         },
@@ -2034,7 +2034,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                         datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
                                                       for(var y = 1; y<=7; y++){ // week
                                                         if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
-                                                          weekdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])))  - 1] += 1; 
+                                                          weekdata[y - 1] += 1; 
                                                         }
                                                       }
                                                       for(var y = 1; y<=ld; y++){ // month
@@ -2322,7 +2322,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                     if(users.data?[index].Ste != '0'){ _statutController.text = "Entreprise"; en = true; prt = false; }
                                                                     if(users.data?[index].Psr != '0'){ _statutController.text = "Particulier"; en = false; prt = true; }
                                                                   });
-                                                                  UserModel.getOneUser(users.data![index].id!).then((val) {
+                                                                  Userdatamodel.getOneUser(users.data![index].id!).then((val) {
                                                                     id = val.id!; docts = val.docs!; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
                                                                     _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
                                                                     destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
@@ -2345,7 +2345,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                               FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
                                                                 shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
                                                                 onPressed: () {
-                                                                  UserModel.getOneUser(users.data![index].id!).then((val) {
+                                                                  Userdatamodel.getOneUser(users.data![index].id!).then((val) {
                                                                     id = val.id!; docts = val.docs!;
                                                                     showDialog(context: context, builder: (context){
                                                                       return userdel(Colors.white, MainApp.danger, 'SUPPR UTILISATEUR', delUserBtn, 'Voulez-vous supprimer ${val.Login} ?');
@@ -2495,7 +2495,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                                   shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
                                                                                   onPressed: () { 
                                                                                     setState(() { hsd = 162; });
-                                                                                    UserModel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                    Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
                                                                                       id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
                                                                                       _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
                                                                                       pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
@@ -2518,7 +2518,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                                   shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
                                                                                   onPressed: () {
                                                                                     setState(() { });
-                                                                                    UserModel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                    Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
                                                                                       id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
                                                                                       showDialog(context: context, builder: (context){
                                                                                         return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');

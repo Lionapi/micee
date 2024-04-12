@@ -28,14 +28,13 @@ dependencies:
   select_field: ^1.0.0
   xml2json: ^6.2.2
   file_picker: ^8.0.0+1
-  syncfusion_flutter_pdfviewer: ^25.1.38
+  syncfusion_flutter_pdfviewer: ^25.1.39
   download: ^1.0.0
   simple_grid: ^0.1.4
   charts_painter: ^3.1.1
   pie_chart: ^5.4.0
-  syncfusion_flutter_datepicker: ^25.1.38
+  syncfusion_flutter_datepicker: ^25.1.39
   mysql_client: ^0.0.27
-  dart_frog: ^1.1.0
 
 dev_dependencies:
   flutter_test:

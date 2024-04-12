@@ -1,0 +1,63 @@
+#interdiction de lister le contenu d'un dossier
+Options -Indexes
+
+
+#suivre les liens symboliques
+Options +FollowSymlinks
+RewriteEngine on
+
+
+#htaccess file
+<files .htaccess>
+order allow,deny
+deny from all
+</files>
+
+
+#désactiver signature serveur
+ServerSignature Off
+
+
+### FILTRE CONTRE XSS, REDIRECTIONS HTTP, base64_encode, VARIABLE PHP GLOBALS VIA URL, MODIFIER VARIABLE _REQUEST VIA URL, TEST DE FAILLE PHP, INJECTION SQL SIMPLE
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} (GET|POST) [NC]
+RewriteCond %{QUERY_STRING} ^(.*)(%3C|<)/?script(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)(%3D|=)?javascript(%3A|:)(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)document\.location\.href(.*)$ [OR]
+RewriteCond %{QUERY_STRING} ^.*(%24&x).* [NC,OR]
+RewriteCond %{QUERY_STRING} ^.*(127\.0).* [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)(%3D|=)(https?|ftp|mosConfig)(%3A|:)//(.*)$ [NC,OR] ## ATTENTION A CETTE REGLE. ELLE PEUT CASSER CERTAINES REDIRECTIONS RESSEMBLANT A: http://www.truc.fr/index.php?r=http://www.google.fr ##
+RewriteCond %{QUERY_STRING} ^.*(_encode|localhost|loopback).* [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)GLOBALS(=|[|%[0-9A-Z]{0,2})(.*)$ [OR]
+RewriteCond %{QUERY_STRING} ^(.*)_REQUEST(=|[|%[0-9A-Z]{0,2})(.*)$ [OR]
+RewriteCond %{QUERY_STRING} ^(.*)(SELECT(%20|\+)|UNION(%20|\+)ALL|INSERT(%20|\+)|DELETE(%20|\+)|CHAR\(|UPDATE(%20|\+)|REPLACE(%20|\+)|LIMIT(%20|\+)|CONCAT(%20|\+)|DECLARE(%20|\+))(.*)$ [NC]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ Index.php [F,L]
+
+
+#désactiver les erreurs
+php_value display_errors Off 
+
+
+#base url
+#RewriteRule ^base$ /micee/ [L]
+
+
+#Model de données
+#RewriteRule ^bo$  api/Bo_userdata.php [L]
+#RewriteRule ^connect$  api/connect_userdata.php [L]
+#RewriteRule ^create$  api/create_userdata.php [L]
+#RewriteRule ^database$  api/Database_userdata.php [L]
+#RewriteRule ^delete$  api/delete_userdata.php [L]
+#RewriteRule ^readone$  api/read_one_userdata.php [L]
+#RewriteRule ^read$  api/read_userdata.php [L]
+#RewriteRule ^update$  api/update_userdata.php [L]
+
+
+# https://www.edoardovignati.it/solved-xmlhttprequest-error-in-flutter-web-is-a-cors-error/
+<ifModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Headers "Content-Type"
+    Header set Referrer-Policy "no-referrer-when-downgrade"
+</ifModule>
