@@ -1527,11 +1527,11 @@ class DashboardPageState extends State<DashboardPage> {
                   // Big Text
                   Text(titre, style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
 
-                  const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+                  const Divider(color: MainApp.textwr), //const SizedBox(height: 5.0,),
 
                   Row(mainAxisAlignment: MainAxisAlignment.center, 
                     children: [
-                      Text("$pc  Pages", style: MainApp.styleall.copyWith(),), const SizedBox(width: 10.0,),
+                      Text("$pc  Page(s)", style: MainApp.styleall.copyWith(),), const SizedBox(width: 10.0,),
                       IconButton(onPressed: (){ pdfc.previousPage(); setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); }, 
                         icon: const Icon(Icons.arrow_left_sharp), color: MainApp.textwr, tooltip: "Précédent",
                         splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
@@ -1562,9 +1562,9 @@ class DashboardPageState extends State<DashboardPage> {
                     ], 
                   ), const SizedBox(height: 5.0,),
 
-                  SizedBox(height: 712, child: SfPdfViewer.memory(data, controller: pdfc, onDocumentLoaded:(details) { setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); },
+                  SizedBox(height: 727, child: SfPdfViewer.memory(data, controller: pdfc, onDocumentLoaded:(details) { setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); },
                     onPageChanged: (details) { setState(() { pc = pdfc.pageCount; pn = pdfc.pageNumber; }); },
-                  ),), const SizedBox(height: 20.0,),
+                  ),), //const SizedBox(height: 20.0,),
                   
                   const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
                 ]
@@ -1578,8 +1578,8 @@ class DashboardPageState extends State<DashboardPage> {
 
     // headerboxes
     final headerbox = <Widget>[
-      SpGrid(width: MediaQuery.of(context).size.width - 265, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
-        crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.center,
+      SpGrid(width: MediaQuery.of(context).size.width - 265, spacing: 10, runSpacing: 10, alignment: WrapAlignment.spaceAround,
+        crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.spaceAround,
         children: [
           SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
             child: Container(height: 150, 
@@ -1636,7 +1636,7 @@ class DashboardPageState extends State<DashboardPage> {
             ),
           ),
           SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
-            child: Container(height: 150,
+            child: Container(height: 150, 
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
               child: Card( 
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
@@ -1694,7 +1694,7 @@ class DashboardPageState extends State<DashboardPage> {
             ),
           ),
           SpGridItem(xs: 12, sm: 6, md: 4, lg: 3,
-            child: Container(height: 150,
+            child: Container(height: 150, 
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
               child: Card( 
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
