@@ -1954,12 +1954,12 @@ class DashboardPageState extends State<DashboardPage> {
                             child: Text('New', style: TextStyle(fontSize: 11, color: Colors.white),),
                           )
                         ),*/
-                      ),
+                      ),/*
                       SideMenuItem(
                         title: 'Paramètres',
                         onTap: (index, _) {sideMenu.changePage(index);},
                         icon: const Icon(Icons.settings),
-                      ),
+                      ),*/
                       SideMenuItem(
                         title: 'Déconnexion',
                         onTap: (index, _) {Sessiondata.erase(); Sessiondata.write('IsLogged', 0); Navigator.pushNamed(context, MainApp.login);},
@@ -2580,7 +2580,7 @@ class DashboardPageState extends State<DashboardPage> {
                             ],
                           ),
                         ),
-                        /*4th*/
+                        /*4th
                         SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
@@ -2622,7 +2622,7 @@ class DashboardPageState extends State<DashboardPage> {
                               const SizedBox(height: 8,),
                             ],
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),

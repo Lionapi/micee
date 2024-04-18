@@ -22,14 +22,14 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   // app url
-  static const String baseUrl = ""; //'app/v1'; //http://localhost:8080/app/v1
-  static const String splash = '$baseUrl/splash';
-  static const String login = '$baseUrl/login';
-  static const String register = '$baseUrl/register';
-  static const String dashboard = '$baseUrl/dashboard';
-  static const String forgotPassword = '$baseUrl/forgot_password';
-  static const String test = '$baseUrl/test';
-  static const String pdf = '$baseUrl/pdf';
+  static String baseUrl = "http://192.168.1.53:81/api"; //"http://192.168.1.182:81/api"; //http://localhost:8080/app/v1
+  static String splash = '${baseUrl.substring(0, baseUrl.length - 4)}/splash';
+  static String login = '${baseUrl.substring(0, baseUrl.length - 4)}/login';
+  static String register = '${baseUrl.substring(0, baseUrl.length - 4)}/register';
+  static String dashboard = '${baseUrl.substring(0, baseUrl.length - 4)}/dashboard';
+  static String forgotPassword = '${baseUrl.substring(0, baseUrl.length - 4)}/forgot_password';
+  static String test = '${baseUrl.substring(0, baseUrl.length - 4)}/test';
+  static String pdf = '${baseUrl.substring(0, baseUrl.length - 4)}/pdf';
 
   // textstyle https://fonts.google.com/
   static TextStyle styleall = const TextStyle(color: Color(0xff3a8ac5),);

@@ -1,14 +1,16 @@
-// ignore_for_file: file_names, avoid_print, non_constant_identifier_names
+// ignore_for_file: file_names, avoid_print, non_constant_identifier_names, avoid_init_to_null
 
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 import 'package:xml2json/xml2json.dart';
-import 'package:http/http.dart' as http;
 import 'package:micee/main.dart';
+import 'package:mysql_client/mysql_client.dart';
+import 'package:micee/mysql/database.dart';
 import 'package:micee/random/randomcode.dart';
 import 'package:micee/bo/Userdata.dart';
 
 class Userdatamodel {
+  static final DBconnexionSql DB = DBconnexionSql();
   static String table_name = "usersdata";
   static final RandomCode Rc = RandomCode();
   static Map<String, dynamic> ud = {};
@@ -111,116 +113,113 @@ class Userdatamodel {
 
   // connexion
   static Future<dynamic> connect(String log, String mdp) async {
-    final response = await http.post(Uri.parse("http://192.168.1.182:81/api/connect_userdata.php"), 
-      body: jsonEncode(<String, String> { "Login": log, "Motdepasse": Rc.encryptAESQr(mdp, 'MiCee', '01122024') }),
-    );
-    List<Map<String, dynamic>> user = []; ud = {};
-    if (response.statusCode == 200) {
-      if(response.body == "Compte ou Mot de passe incorrect."){
-        return response.body;
-      } else {
-        ud = {};
-        ud.addEntries({"id": jsonDecode(response.body)[0]['id']}.entries);
-        ud.addEntries({"name": jsonDecode(response.body)[0]['name']}.entries);
-        mapxmldata(jsonDecode(response.body)[0]['xmlcontent']);
-        user.add(ud);
-        return user;
-      }
-    } else {
-      return ('Request failed with status: ${response.statusCode}.');
+    // variables
+    List<Map<String, dynamic>> user = [];
+
+    String query = "SELECT * FROM $table_name WHERE ExtractValue(xmlcontent, 'utilisateur/Login') = ? AND ExtractValue(xmlcontent, 'utilisateur/Motdepasse') = ?";
+    List<dynamic> param = [log, Rc.encryptAESQr(mdp, 'MiCee', '01122024')];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    for (final r in res.rows) { 
+      ud = {}; 
+      ud.addEntries({"id": r.assoc()['id']}.entries);
+      ud.addEntries({"name": r.assoc()['name']}.entries);
+      mapxmldata(r.assoc()['xmlcontent']); 
+      user.add(ud);
     }
+
+    // check
+    if (user.isNotEmpty) { return user; } else { return "Compte ou Mot de passe incorrect."; }
   }
 
   // create userdata
   static Future<dynamic> createUser(String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://192.168.1.182:81/api/create_userdata.php"),
-      body: jsonEncode(<String, String> { "name": name, "xmlcontent": xlmcontent }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was created.") {
-        return "Utilisateur ajouté.";
-      } else {
-        return "Impossible d'ajouter l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
-    }
+    // variables
+    BigInt afr = BigInt.parse(0.toString());
+
+    String query = "INSERT IGNORE INTO $table_name SET name = ?, xmlcontent = ?";
+    List<dynamic> param = [name, xlmcontent];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    afr = res.affectedRows;
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur ajouté."; } else { return "Impossible d'ajouter l'utilisateur."; }
   }
 
   // get all usersdata
   static Future<List<Utilisateur>> getAllUsers() async {
-    final response = await http.get(Uri.parse("http://192.168.1.182:81/api/read_userdata.php"));
-    final List<Map<String, dynamic>> users = []; MainApp.useroption.clear();
-    if (response.statusCode == 200) {
-      if (jsonDecode(response.body)['records'].length > 0){
-        for(int i = 0; i < jsonDecode(response.body)['records'].length; i++){
-          MainApp.useroption.add("${jsonDecode(response.body)['records'][i]['name']} ~ ${jsonDecode(response.body)['records'][i]['id']}");
-          ud = {}; 
-          ud.addEntries({"id": jsonDecode(response.body)['records'][i]['id']}.entries);
-          ud.addEntries({"name": jsonDecode(response.body)['records'][i]['name']}.entries);
-          mapxmldata(jsonDecode(response.body)['records'][i]['xmlcontent']);
-          docdata(jsonDecode(response.body)['records'][i]['xmlcontent']);
-          users.add(ud);
-        }
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+    // variables
+    List<Map<String, dynamic>> users = []; MainApp.useroption.clear();
+
+    String query = "SELECT * FROM $table_name WHERE id <> ? ORDER BY id ASC LIMIT 5000";
+    List<dynamic> param = [1];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    for (final r in res.rows) { 
+      MainApp.useroption.add("${r.assoc()['name']} ~ ${r.assoc()['id']}");
+      ud = {}; 
+      ud.addEntries({"id": r.assoc()['id']}.entries);
+      ud.addEntries({"name": r.assoc()['name']}.entries);
+      mapxmldata(r.assoc()['xmlcontent']); 
+      docdata(r.assoc()['xmlcontent']);
+      users.add(ud);
     }
-    //print(users);
+
+    // return all 
     return users.map((e) => Utilisateur.fromMap(e)).toList();
   }
 
   // get one userdata
   static Future<Utilisateur> getOneUser(BigInt id) async {
-    final response = await http.post(Uri.parse("http://192.168.1.182:81/api/read_one_userdata.php"),
-      body: jsonEncode(<String, dynamic> { "id": id.toString(), }),
-    );
-    final List<Map<String, dynamic>> user = [];
-    if (response.statusCode == 200) {
-      if (jsonDecode(response.body).length == 1){
-        ud = {};
-        ud.addEntries({"id": jsonDecode(response.body)[0]['id']}.entries);
-        ud.addEntries({"name": jsonDecode(response.body)[0]['name']}.entries);
-        mapxmldata(jsonDecode(response.body)[0]['xmlcontent']);
-        mapxmldocdata(jsonDecode(response.body)[0]['xmlcontent']);
-        user.add(ud);
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
+    // variables
+    List<Map<String, dynamic>> user = [];
+
+    String query = "SELECT id, name, xmlcontent FROM $table_name WHERE id = ? LIMIT 0,1";
+    List<dynamic> param = [id];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    for (final r in res.rows) { 
+      ud = {}; 
+      ud.addEntries({"id": r.assoc()['id']}.entries);
+      ud.addEntries({"name": r.assoc()['name']}.entries);
+      mapxmldata(r.assoc()['xmlcontent']); 
+      docdata(r.assoc()['xmlcontent']);
+      user.add(ud);
     }
+
+    // return one 
     return user.map((e) => Utilisateur.fromMap(e)).first;
   }
 
   // update userdata
   static Future<dynamic> updateUser(BigInt id, String name, String xlmcontent) async {
-    final response = await http.post(Uri.parse("http://192.168.1.182:81/api/update_userdata.php"),
-      body: jsonEncode(<String, dynamic> { "id": id.toString(), "name": name, "xmlcontent": xlmcontent }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was updated.") {
-        return "Utilisateur modifié.";
-      } else {
-        return "Impossible de modifier l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
-    }
+    // variables
+    BigInt afr = BigInt.parse(0.toString());
+
+    String query = "UPDATE $table_name SET name = ?, xmlcontent = ? WHERE id = ?";
+    List<dynamic> param = [name, xlmcontent, id];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    afr = res.affectedRows;
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur modifié."; } else { return "Impossible de modifier l'utilisateur."; }
   }
 
   // delete userdata
   static Future<dynamic>deleteUser(BigInt id) async {
-    final response = await http.post(Uri.parse("http://192.168.1.182:81/api/delete_userdata.php"),
-      body: jsonEncode(<String, dynamic> { "id": id.toString() }),
-    );
-    if (response.statusCode == 200) {
-      if (response.body == "userdata was deleted.") {
-        return "Utilisateur supprimé.";
-      } else {
-        return "Impossible de supprimer l'utilisateur.";
-      }
-    } else {
-      throw Exception('Request failed with status: ${response.statusCode}.');
-    }
+    // variables
+    BigInt afr = BigInt.parse(0.toString());
+
+    String query = "DELETE FROM $table_name WHERE id = ?";
+    List<dynamic> param = [id];
+    IResultSet res = await DB.getResults(query, param);
+    // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
+    afr = res.affectedRows;
+
+    // check
+    if (afr == BigInt.parse(1.toString())) { return "Utilisateur supprimé."; } else { return "Impossible de supprimer l'utilisateur."; }
   }
 
   // Search a user from collection

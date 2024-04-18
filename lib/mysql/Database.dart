@@ -4,8 +4,8 @@ import 'package:mysql_client/mysql_client.dart';
 
 class DBconnexionSql {
   // DB param
-  // static String host = "10.0.2.2";  //when you use emulator like android
-  static String host = "10.0.2.15";  //when you use navigator like chrome
+  static String host = "10.0.2.2";  //when you use emulator like android
+  // static String host = "10.0.2.15";  //when you use navigator like chrome
   // static String host = "127.0.0.1"; //when you use simulator like windows
   static int port = 3309;
   static String userName = "Franck-Lionel";
@@ -47,7 +47,6 @@ class DBconnexionSql {
   }
 }
 
-// https://github.com/ayoubzulfiqar/frogging_with_mysql/tree/main
 // https://github.com/zim32/mysql.dart
 // https://github.com/dongri727/sample_app_flutter_mysql8
       

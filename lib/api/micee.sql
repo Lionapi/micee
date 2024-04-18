@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS `micee`;
 USE `micee`;
 
 CREATE TABLE IF NOT EXISTS `usersdata` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `xmlcontent` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
