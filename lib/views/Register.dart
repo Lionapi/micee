@@ -57,34 +57,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Custom msgbox
-    AlertDialog msg (Color bg, ico, Color c, String s) {
-      return AlertDialog(
-        //actions: [ MaterialButton(color: Colors.white, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
-        backgroundColor: bg,
-        content: RichText(
-          text: TextSpan( children: [ WidgetSpan(child: Icon(ico, color: c, size: 20,),), TextSpan(text: s, style: const TextStyle(color: Colors.white)), ], ),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
-        //title: const Text("AUTHENTIFICATION", style: TextStyle(color: Color.fromARGB(255, 33, 116, 185), decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
-      );
-    }
-
-    // Custom calendar theme
-    ThemeData Ctheme () {
-      return ThemeData.dark().copyWith(
-        colorScheme: const ColorScheme.dark( onPrimary: Colors.black, onSurface: Colors.white, primary: Colors.white ),
-        dialogBackgroundColor: const Color.fromARGB(250, 0, 0, 0),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 12, fontFamily: 'Roboto'),
-            foregroundColor: Colors.white, backgroundColor: Colors.black, 
-            shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.white, width: 1.2, style: BorderStyle.solid), borderRadius: BorderRadius.circular(5)),
-          ),
-        ),
-      );
-    }
-
     // Nom
     final nomField = SizedBox(
       height: 32.5,
@@ -150,7 +122,7 @@ class RegisterPageState extends State<RegisterPage> {
           DateTime? dt = await showDatePicker(context: context, initialDate: DateTime(2000), firstDate: DateTime(DateTime.now().year - 60), lastDate: DateTime(DateTime.now().year - 18),
             locale : const Locale("fr","FR"),
             builder: (context, child) {
-              return Theme(data: Ctheme(), child: child!,);
+              return Theme(data: MainApp.ctheme(), child: child!,);
             }
           ); 
           if(dt != null){ setState(() { _hbdController.text = DateFormat('yyyy-MM-dd').format(dt); }); }
@@ -293,13 +265,13 @@ class RegisterPageState extends State<RegisterPage> {
                       showDialog(context: context, builder: (context){
                         Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
                         if(res.runtimeType == String){
-                          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $res');
+                          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $res');
                         }else{
                           if(res.length > 0){
                             //Navigator.pushReplacementNamed(context, '/dashboard');
-                            return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle_sharp, MainApp.success, '  Bienvenu(e) ${_loginController.text}');
+                            return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle_sharp, MainApp.success, '  Bienvenu(e) ${_loginController.text}');
                           }else{
-                            return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Login ou Password incorrect(s).');
+                            return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Login ou Password incorrect(s).');
                           }
                         }
                       });
@@ -307,31 +279,31 @@ class RegisterPageState extends State<RegisterPage> {
                   }else{
                     showDialog(context: context, builder: (context){
                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
+                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
                     });
                   }
                 }else{
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
                   });
                 }
               }else{
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
                 });
               }
             }else{
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
               });
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.warning, MainApp.warning, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.warning, MainApp.warning, '  Merci de remplir tous les champs.');
             });
           }
         },

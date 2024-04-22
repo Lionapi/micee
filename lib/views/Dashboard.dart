@@ -141,19 +141,6 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Custom msgbox
-    AlertDialog msg (Color bg, ico, Color c, String s) {
-      return AlertDialog(
-        //actions: [ MaterialButton(color: Colors.white, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
-        backgroundColor: bg,
-        content: RichText(
-          text: TextSpan( children: [ WidgetSpan(child: Icon(ico, color: c, size: 20,),), TextSpan(text: s, style: const TextStyle(color: Colors.white)), ], ),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
-        //title: const Text("AUTHENTIFICATION", style: TextStyle(color: Color.fromARGB(255, 33, 116, 185), decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
-      );
-    }
-
     void resetuserform(){
       _nomController.text = ""; _prenomController.text = ""; _hbdController.text = ""; _emailController.text = ""; _addressController.text = ""; _phoneController.value = PhoneNumber.parse('+33');
       _loginController.text = ""; _passwordController.text = ""; _cpasswordController.text = ""; _statutController.text = ""; _nomsteController.text = ""; _fctsteController.text = ""; 
@@ -564,13 +551,13 @@ class DashboardPageState extends State<DashboardPage> {
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
+                                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
                               });
                             }else{
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
+                                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
                               });
                             }
                             resetuserform();
@@ -579,43 +566,43 @@ class DashboardPageState extends State<DashboardPage> {
                       }else{
                         showDialog(context: context, builder: (context){
                           Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Détails ${_statutController.text.trim()} incorrects.');
+                          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Détails ${_statutController.text.trim()} incorrects.');
                         });
                       }
                     }else{
                       showDialog(context: context, builder: (context){
                         Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                        return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Statut incorrect.');
+                        return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Statut incorrect.');
                       });
                     }
                   }else{
                     showDialog(context: context, builder: (context){
                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
+                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
                     });
                   }
                 }else{
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
                   });
                 }
               }else{
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
                 });
               }
             }else{
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
               });
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
             });
           }
         },
@@ -660,13 +647,13 @@ class DashboardPageState extends State<DashboardPage> {
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
+                                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
                               });
                             }else{
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(context: context, builder: (context){
                                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
+                                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
                               });
                             }
                             resetuserform();
@@ -675,43 +662,43 @@ class DashboardPageState extends State<DashboardPage> {
                       }else{
                         showDialog(context: context, builder: (context){
                           Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Détails ${_statutController.text.trim()} incorrects.');
+                          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Détails ${_statutController.text.trim()} incorrects.');
                         });
                       }
                     }else{
                       showDialog(context: context, builder: (context){
                         Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                        return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Statut incorrect.');
+                        return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Statut incorrect.');
                       });
                     }
                   }else{
                     showDialog(context: context, builder: (context){
                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
+                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Passwords non identiques.');
                     });
                   }
                 }else{
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Password exemple "Aaaa0@".');
                   });
                 }
               }else{
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, ' Portable incorrect.');
                 });
               }
             }else{
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Email incorrect.');
               });
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
             });
           }
         },
@@ -735,13 +722,13 @@ class DashboardPageState extends State<DashboardPage> {
               Navigator.of(context, rootNavigator: true).pop();
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  $value');
               });
             }else{
               Navigator.of(context, rootNavigator: true).pop();
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $value');
               });
             }
           });
@@ -1066,7 +1053,7 @@ class DashboardPageState extends State<DashboardPage> {
                 // ignore: use_build_context_synchronously
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Le fichier choisi doit être un PDF.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Le fichier choisi doit être un PDF.');
                 });
               }
             }else{
@@ -1074,7 +1061,7 @@ class DashboardPageState extends State<DashboardPage> {
               // ignore: use_build_context_synchronously
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Le fichier choisi ne doit pas dépasser 5 Mo.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Le fichier choisi ne doit pas dépasser 5 Mo.');
               });
             }
           }else{
@@ -1082,7 +1069,7 @@ class DashboardPageState extends State<DashboardPage> {
             // ignore: use_build_context_synchronously
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Aucun fichier n\'a été choisi.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Aucun fichier n\'a été choisi.');
             });
           }
         },
@@ -1128,13 +1115,13 @@ class DashboardPageState extends State<DashboardPage> {
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier ajouté.');
+                                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier ajouté.');
                                     });
                                   }else{
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible d\'ajouter le dossier.');
+                                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible d\'ajouter le dossier.');
                                     });
                                   }
                                   resetfolderform();
@@ -1144,55 +1131,55 @@ class DashboardPageState extends State<DashboardPage> {
                           } else {
                             showDialog(context: context, builder: (context){
                               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Synthèse incorrecte.');
+                              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Synthèse incorrecte.');
                             });
                           }
                         } else {
                           showDialog(context: context, builder: (context){
                             Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                            return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Prime incorrecte P >= 0.99€.');
+                            return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Prime incorrecte P >= 0.99€.');
                           });
                         }
                       } else {
                         showDialog(context: context, builder: (context){
                           Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire administratif incorrect.');
+                          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire administratif incorrect.');
                         });
                       }
                     } else {
                       showDialog(context: context, builder: (context){
                         Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                        return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire technique incorrect.');
+                        return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire technique incorrect.');
                       });
                     }
                   } else {
                     showDialog(context: context, builder: (context){
                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse administrative incorrecte.');
+                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse administrative incorrecte.');
                     });
                   }
                 } else {
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse technique incorrecte.');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse technique incorrecte.');
                   });
                 }
               } else {
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Statut document incorrect.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Statut document incorrect.');
                 });
               }
             } else {
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Utilisateur incorrect.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Utilisateur incorrect.');
               });
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
             });
           }
         },
@@ -1239,13 +1226,13 @@ class DashboardPageState extends State<DashboardPage> {
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier modifié.');
+                                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier modifié.');
                                     });
                                   }else{
                                     Navigator.of(context, rootNavigator: true).pop();
                                     showDialog(context: context, builder: (context){
                                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible de modifier le dossier.');
+                                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible de modifier le dossier.');
                                     });
                                   }
                                   resetfolderform();
@@ -1255,55 +1242,55 @@ class DashboardPageState extends State<DashboardPage> {
                           } else {
                             showDialog(context: context, builder: (context){
                               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Synthèse incorrecte.');
+                              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Synthèse incorrecte.');
                             });
                           }
                         } else {
                           showDialog(context: context, builder: (context){
                             Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                            return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Prime incorrecte P >= 0.99€.');
+                            return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Prime incorrecte P >= 0.99€.');
                           });
                         }
                       } else {
                         showDialog(context: context, builder: (context){
                           Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire administratif incorrect.');
+                          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire administratif incorrect.');
                         });
                       }
                     } else {
                       showDialog(context: context, builder: (context){
                         Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                        return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire technique incorrect.');
+                        return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Commentaire technique incorrect.');
                       });
                     }
                   } else {
                     showDialog(context: context, builder: (context){
                       Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                      return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse administrative incorrecte.');
+                      return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse administrative incorrecte.');
                     });
                   }
                 } else {
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse technique incorrecte.');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Analyse technique incorrecte.');
                   });
                 }
               } else {
                 showDialog(context: context, builder: (context){
                   Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                  return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Statut document incorrect.');
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Statut document incorrect.');
                 });
               }
             } else {
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Utilisateur incorrect.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Utilisateur incorrect.');
               });
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
             });
           }
         },
@@ -1341,13 +1328,13 @@ class DashboardPageState extends State<DashboardPage> {
                   Navigator.of(context, rootNavigator: true).pop();
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier supprimé.');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Dossier supprimé.');
                   });
                 }else{
                   Navigator.of(context, rootNavigator: true).pop();
                   showDialog(context: context, builder: (context){
                     Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                    return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible de supprimer le dossier.');
+                    return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible de supprimer le dossier.');
                   });
                 }
                 resetfolderform();
@@ -1554,7 +1541,7 @@ class DashboardPageState extends State<DashboardPage> {
                             // ignore: use_build_context_synchronously
                             showDialog(context: context, builder: (context){
                               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, ' ${downloadsDir?.path}\\$pdffilename.pdf prêt.');
+                              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, ' ${downloadsDir?.path}\\$pdffilename.pdf prêt.');
                             });
                           }
                         }, icon: const Icon(Icons.file_download_outlined), color: MainApp.textwr, tooltip: "Télécharger",

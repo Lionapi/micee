@@ -20,7 +20,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   intl: ^0.18.1
   http: ^1.1.2
-  xml: ^6.3.0
+  xml: ^6.5.0
   google_fonts: ^6.1.0
   easy_sidemenu: ^0.6.0
   font_awesome_flutter: ^10.6.0

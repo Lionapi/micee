@@ -1,10 +1,12 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:micee/views/Splashscreen.dart';
 import 'package:micee/views/Login.dart';
@@ -56,8 +58,36 @@ class MainApp extends StatelessWidget {
   gray = Color(0xB3FFFFFF), dark = Color(0xFF262626), bg = Color(0xFFE6E9EE), bg1 = Color(0xFF042B59),
   bg2 = Color(0xFF043875), bg3 = Color(0xFF0553B1), badgecol = Color(0xffec4a79), 
   textwr = Color(0xff3a8ac5), navcolor1 = Color(0xFFA5D6A7), navcolor2 = Color(0xFF00695C), navcolor3 = Color(0xFF2E7D32);
-  
-  //
+
+  // Custom msgbox
+  static AlertDialog msg (Color bg, ico, Color c, String s) {
+    return AlertDialog(
+      //actions: [ MaterialButton(color: Colors.white, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
+      backgroundColor: bg,
+      content: RichText(
+        text: TextSpan( children: [ WidgetSpan(child: Icon(ico, color: c, size: 20,),), TextSpan(text: s, style: const TextStyle(color: Colors.white)), ], ),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
+      //title: const Text("AUTHENTIFICATION", style: TextStyle(color: Color.fromARGB(255, 33, 116, 185), decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
+    );
+  }
+
+  // Custom calendar theme
+  static ThemeData ctheme () {
+    return ThemeData.dark().copyWith(
+      colorScheme: const ColorScheme.dark( onPrimary: Colors.black, onSurface: Colors.white, primary: Colors.white ),
+      dialogBackgroundColor: const Color.fromARGB(250, 0, 0, 0),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 12, fontFamily: 'Roboto'),
+          foregroundColor: Colors.white, backgroundColor: Colors.black, 
+          shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.white, width: 1.2, style: BorderStyle.solid), borderRadius: BorderRadius.circular(5)),
+        ),
+      ),
+    );
+  }
+
+  // others //
   static List<String> useroption = [];
 
   // mois
@@ -66,6 +96,182 @@ class MainApp extends StatelessWidget {
   static const Map<String, String> sday = {'Mon':'Lun', 'Tue':'Mar', 'Wed':'Mer', 'Thu':'Jeu', 'Fri':'Ven', 'Sat':'Sam', 'Sun':'Dim'};
   // jours
   static const Map<String, int> adays = {'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7};
+
+  // for mysql authenticate
+  static final GlobalKey<FormState> mysqlform = GlobalKey<FormState>();
+  static final TextEditingController hostController = TextEditingController(), portController = TextEditingController(), userController = TextEditingController(), 
+    dbController = TextEditingController(), passwordController = TextEditingController(), ceController = TextEditingController();
+  
+  // Host
+  static final hostField = SizedBox(
+    height: 32.5,
+    child: TextFormField(
+      autofocus: false, controller: hostController, 
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Host', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(Clarity.host_solid, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return (value == null || value.isEmpty) ? 'Host incorrect' : null; },
+    )
+  );
+
+  // Port
+  static final portField = SizedBox(
+    height: 32.5,
+    child: TextFormField(
+      autofocus: false, controller: portController,   
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Port', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(AntDesign.project_fill, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.number, obscureText: false, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return (value == null || value.isEmpty) ? 'Port incorrect' : null; }, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    )
+  );
+
+  // User
+  static final userField = SizedBox(
+    height: 32.5,
+    child: TextFormField(
+      autofocus: false, controller: userController,   
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Username', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(FontAwesome.user_solid, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return (value == null || value.isEmpty) ? 'Username incorrect' : null; },
+    )
+  );
+
+  // PasswordField
+  static final passwordField = SizedBox(
+    height: 32.5,
+    child: TextFormField(              
+      autofocus: false, controller: passwordController,
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Password', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(FontAwesome.lock_solid, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: true, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return  (value == null || value.isEmpty) ?  'Password incorrect' : null; },
+    )
+  );
+
+  // Db
+  static final dbField = SizedBox(
+    height: 32.5,
+    child: TextFormField(
+      autofocus: false, controller: dbController,   
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Database name', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(FontAwesome.database_solid, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return (value == null || value.isEmpty) ? 'Database name incorrect' : null; },
+    )
+  );
+
+  // Charencoder
+  static final ceField = SizedBox(
+    height: 32.5,
+    child: TextFormField(
+      autofocus: false, controller: ceController,   
+      cursorColor: MainApp.textwr,              
+      decoration: InputDecoration(
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: MainApp.textwr,),),
+        fillColor: MainApp.textwr, focusColor: MainApp.textwr,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        contentPadding: const EdgeInsets.only(left: 9.5), hintStyle: MainApp.styleall.copyWith(),
+        labelText: 'Character encoding', labelStyle: MainApp.styleall.copyWith(),
+        suffixIcon: const Icon(MingCute.letter_spacing_fill, size: 18, color: MainApp.textwr,),
+        suffixIconConstraints: const BoxConstraints(minWidth: 35,),
+      ),
+      enabled: true, enableSuggestions: false, keyboardType: TextInputType.text, obscureText: false, readOnly: false, 
+      style: MainApp.styleall.copyWith(), toolbarOptions: const ToolbarOptions(copy: false, paste: false, cut: false, selectAll: false,),
+      validator: (value) { return (value == null || value.isEmpty) ? 'Character encoding incorrect' : null; },
+    )
+  );
+  
+  // Custom mysql
+  static AlertDialog mysqldialog (Color bg, Color c, String titre, SizedBox btn1, SizedBox btn2) {
+    return AlertDialog(
+      //title: Text(titre, style: const TextStyle(color: MyApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
+      //actions: [ MaterialButton(color: MyApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
+      //actionsAlignment: MainAxisAlignment.center,
+      backgroundColor: bg,
+      content: SizedBox(
+        height: 472, width: 320,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
+          child: Form(
+            key: mysqlform,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Big Text
+                Text(titre, style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+
+                const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                hostField, const SizedBox(height: 15.0), portField, const SizedBox(height: 15.0), 
+
+                userField, const SizedBox(height: 15.0), passwordField, const SizedBox(height: 15.0), 
+                
+                dbField, const SizedBox(height: 15.0), ceField, const SizedBox(height: 20.0),
+
+                const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+
+                btn1, const SizedBox(height: 10.0,), btn2
+              ],
+            ),
+          ),
+        ),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

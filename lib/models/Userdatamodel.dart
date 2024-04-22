@@ -118,9 +118,9 @@ class Userdatamodel {
 
     String query = "SELECT * FROM $table_name WHERE ExtractValue(xmlcontent, 'utilisateur/Login') = ? AND ExtractValue(xmlcontent, 'utilisateur/Motdepasse') = ?";
     List<dynamic> param = [log, Rc.encryptAESQr(mdp, 'MiCee', '01122024')];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    for (final r in res.rows) { 
+    for (final r in res!.rows) { 
       ud = {}; 
       ud.addEntries({"id": r.assoc()['id']}.entries);
       ud.addEntries({"name": r.assoc()['name']}.entries);
@@ -139,9 +139,9 @@ class Userdatamodel {
 
     String query = "INSERT IGNORE INTO $table_name SET name = ?, xmlcontent = ?";
     List<dynamic> param = [name, xlmcontent];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    afr = res.affectedRows;
+    afr = res!.affectedRows;
 
     // check
     if (afr == BigInt.parse(1.toString())) { return "Utilisateur ajouté."; } else { return "Impossible d'ajouter l'utilisateur."; }
@@ -154,9 +154,9 @@ class Userdatamodel {
 
     String query = "SELECT * FROM $table_name WHERE id <> ? ORDER BY id ASC LIMIT 5000";
     List<dynamic> param = [1];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    for (final r in res.rows) { 
+    for (final r in res!.rows) { 
       MainApp.useroption.add("${r.assoc()['name']} ~ ${r.assoc()['id']}");
       ud = {}; 
       ud.addEntries({"id": r.assoc()['id']}.entries);
@@ -177,9 +177,9 @@ class Userdatamodel {
 
     String query = "SELECT id, name, xmlcontent FROM $table_name WHERE id = ? LIMIT 0,1";
     List<dynamic> param = [id];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    for (final r in res.rows) { 
+    for (final r in res!.rows) { 
       ud = {}; 
       ud.addEntries({"id": r.assoc()['id']}.entries);
       ud.addEntries({"name": r.assoc()['name']}.entries);
@@ -199,9 +199,9 @@ class Userdatamodel {
 
     String query = "UPDATE $table_name SET name = ?, xmlcontent = ? WHERE id = ?";
     List<dynamic> param = [name, xlmcontent, id];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    afr = res.affectedRows;
+    afr = res!.affectedRows;
 
     // check
     if (afr == BigInt.parse(1.toString())) { return "Utilisateur modifié."; } else { return "Impossible de modifier l'utilisateur."; }
@@ -214,9 +214,9 @@ class Userdatamodel {
 
     String query = "DELETE FROM $table_name WHERE id = ?";
     List<dynamic> param = [id];
-    IResultSet res = await DB.getResults(query, param);
+    IResultSet? res = await DB.getResults(query, param);
     // results.numOfColumns | .numOfRows | .lastInsertID | .affectedRows  // for(final row in results.rows) { row.colAt(0)  | .colByName("title")  Map<String, dynamic>   row.assoc() }
-    afr = res.affectedRows;
+    afr = res!.affectedRows;
 
     // check
     if (afr == BigInt.parse(1.toString())) { return "Utilisateur supprimé."; } else { return "Impossible de supprimer l'utilisateur."; }

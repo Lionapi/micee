@@ -5,6 +5,7 @@ import 'package:micee/main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:micee/models/Userdatamodel.dart';
+import 'package:micee/mysql/database.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +23,7 @@ class LoginPageState extends State<LoginPage> {
   late TextEditingController _loginController, _passwordController;
 
   final Sessiondata = GetStorage();
+  final DBconnexionSql DB = DBconnexionSql();  
 
   @override
   void initState() {
@@ -45,18 +47,6 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Custom msgbox
-    AlertDialog msg (Color bg, ico, Color c, String s) {
-      return AlertDialog(
-        //actions: [ MaterialButton(color: Colors.white, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
-        backgroundColor: bg,
-        content: RichText(
-          text: TextSpan( children: [ WidgetSpan(child: Icon(ico, color: c, size: 20,),), TextSpan(text: s, style: MainApp.styleall.copyWith(color: Colors.white)), ], ),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
-        //title: const Text("AUTHENTIFICATION", style: TextStyle(color: Color.fromARGB(255, 33, 116, 185), decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
-      );
-    }
 
     // Login
     final loginField = SizedBox(
@@ -110,25 +100,113 @@ class LoginPageState extends State<LoginPage> {
         label: Text("CONNEXION", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
         onPressed: () async {
           if(submitlogin && submitpassword && _loginform.currentState!.validate()){
-            final u = await Userdatamodel.connect(_loginController.text.trim(), _passwordController.text.trim());
-            if(u.runtimeType == String) {
+            final con = await DB.chechconn(); final List<String> conn = await DB.getparam();
+            if(con == false){
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $u');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de donnée perdue.');
               });
-            } else if(u.runtimeType == List<Map<String, dynamic>>) {
-              Sessiondata.write('IsLogged', 1); Sessiondata.write('Datas', u);
-              //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Bienvenu(e) ${_loginController.text}')),);
-              Navigator.pushReplacementNamed(context, MainApp.dashboard);
-              showDialog(context: context, builder: (context){
-                Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
-                return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Bienvenu(e) ${_loginController.text}.');
+              Future.delayed(const Duration(seconds: 5), () {
+                MainApp.hostController.text = conn[0]; MainApp.portController.text = conn[1]; MainApp.userController.text = conn[2]; MainApp.passwordController.text = conn[3]; 
+                MainApp.dbController.text = conn[4]; MainApp.ceController.text = conn[5];
+                showDialog(context: context, builder: (BuildContext context){
+                  return MainApp.mysqldialog(Colors.white, MainApp.textwr, "CONNEXION A MYSQL", 
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: OutlinedButton.icon( //ElevatedButton
+                        icon: const Icon(IonIcons.save, size: 15, color: MainApp.textwr),
+                        label: Text("SAUVEGARDER LE PARAMETRAGE", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: MainApp.textwr, fontWeight: FontWeight.bold, fontSize: 10.0),),
+                        onPressed: () async {
+                          if(MainApp.hostController.text.trim().isNotEmpty && MainApp.portController.text.trim().isNotEmpty && MainApp.userController.text.trim().isNotEmpty && 
+                            MainApp.passwordController.text.trim().isNotEmpty && MainApp.dbController.text.trim().isNotEmpty && MainApp.ceController.text.trim().isNotEmpty && 
+                            MainApp.mysqlform.currentState!.validate()) {
+                            await DB.saveparam(MainApp.hostController.text.trim(), int.parse(MainApp.portController.text.trim()), MainApp.userController.text.trim(), 
+                              MainApp.passwordController.text, MainApp.dbController.text.trim(), MainApp.ceController.text.trim()).then((val){
+                              if(val.existsSync()){
+                                showDialog(context: context, builder: (context){
+                                  Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.success, '  Paramètres sauvegardés.');
+                                });
+                              } else {
+                                showDialog(context: context, builder: (context){
+                                  Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Impossible de sauver les paramètres.');
+                                });
+                              }
+                            });
+                          } else {
+                            showDialog(context: context, builder: (context){
+                              Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
+                              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MainApp.gray, side: const BorderSide(color: MainApp.textwr, width: 1.5,),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50.0)),),
+                        ),
+                      )
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: OutlinedButton.icon( //ElevatedButton
+                        icon: const Icon(IonIcons.checkmark_done_circle, size: 15, color: Colors.white),
+                        label: Text("TESTER LA CONNEXION", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
+                        onPressed: () async {
+                          if(MainApp.hostController.text.trim().isNotEmpty && MainApp.portController.text.trim().isNotEmpty && MainApp.userController.text.trim().isNotEmpty && 
+                            MainApp.passwordController.text.trim().isNotEmpty && MainApp.dbController.text.trim().isNotEmpty && MainApp.ceController.text.trim().isNotEmpty && 
+                            MainApp.mysqlform.currentState!.validate()) {
+                            await DB.chechconn().then((val){
+                              if(val == true){
+                                showDialog(context: context, builder: (context){
+                                  Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.success, '  Connexion à la base de donnée réussie.');
+                                });
+                                Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
+                              } else {
+                                showDialog(context: context, builder: (context){
+                                  Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de donnée échouée.');
+                                });
+                              }
+                            });
+                          } else {
+                            showDialog(context: context, builder: (context){
+                              Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
+                              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MainApp.textwr, side: const BorderSide(color: MainApp.gray, width: 1.5,),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50.0)),),
+                        ),
+                      )
+                    )
+                  );
+                });
               });
+            }else{
+              final u = await Userdatamodel.connect(_loginController.text.trim(), _passwordController.text.trim());
+              if(u.runtimeType == String) {
+                showDialog(context: context, builder: (context){
+                  Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  $u');
+                });
+              } else if(u.runtimeType == List<Map<String, dynamic>>) {
+                Sessiondata.write('IsLogged', 1); Sessiondata.write('Datas', u);
+                //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Bienvenu(e) ${_loginController.text}')),);
+                Navigator.pushReplacementNamed(context, MainApp.dashboard);
+                showDialog(context: context, builder: (context){
+                  Future.delayed(const Duration(milliseconds: 1000), () { Navigator.of(context).pop(true); });
+                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.checkmark_circle, MainApp.success, '  Bienvenu(e) ${_loginController.text}.');
+                });
+              }
             }
           } else {
             showDialog(context: context, builder: (context){
               Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-              return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
+              return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Merci de remplir tous les champs.');
             });
           }
         },
@@ -144,7 +222,7 @@ class LoginPageState extends State<LoginPage> {
       onPressed: () {
         showDialog(context: context, builder: (context){
           Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-          return msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Cette fonctionnalité est en cours de développement.');
+          return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.info, '  Cette fonctionnalité est en cours de développement.');
         });
       },
       child: Text('Login ou Password oublié ?', style: MainApp.styleall.copyWith(fontSize: 12.5),),
