@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, file_names
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:micee/main.dart';
 
@@ -45,72 +46,81 @@ class TestPageState extends State<TestPage> {
       ),*/
       //resizeToAvoidBottomInset: false,
       //backgroundColor: const Color.fromARGB(255, 33, 116, 185),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight, end: Alignment.bottomLeft,
-            colors: [MainApp.bg, MainApp.bg2],
-            stops: [0, 2],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Row(
-            children: <Widget>[
-              NavigationRail(
-                selectedIndex: selectedpage, groupAlignment: 0, 
-                backgroundColor: MainApp.navcolor3,
-                onDestinationSelected: (int index) { setState(() { selectedpage = index ; }); },
-                labelType: NavigationRailLabelType.all,
-                /*
-                leading: FloatingActionButton(
-                  elevation: 0, child: const Icon(Icons.add),
-                  onPressed: () { }, 
+      body: WindowBorder(
+        color: Colors.white, width: 1.5,
+        child: Column(
+          children: [const CenterSide(), 
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                    colors: [MainApp.bg, MainApp.bg2],
+                    stops: [0, 2],
+                    tileMode: TileMode.clamp,
+                  ),
                 ),
-                */
-                destinations: const <NavigationRailDestination>[
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: Text('Dashboard'),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Row(
+                    children: <Widget>[
+                      NavigationRail(
+                        selectedIndex: selectedpage, groupAlignment: 0, 
+                        backgroundColor: MainApp.navcolor3,
+                        onDestinationSelected: (int index) { setState(() { selectedpage = index ; }); },
+                        labelType: NavigationRailLabelType.all,
+                        /*
+                        leading: FloatingActionButton(
+                          elevation: 0, child: const Icon(Icons.add),
+                          onPressed: () { }, 
+                        ),
+                        */
+                        destinations: const <NavigationRailDestination>[
+                          NavigationRailDestination(
+                            icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: Text('Dashboard'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.supervisor_account_outlined), selectedIcon: Icon(Icons.supervisor_account), label: Text('Users'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.file_copy_outlined), selectedIcon: Icon(Icons.file_copy_rounded), label: Text('Files'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.download_outlined), selectedIcon: Icon(Icons.download_rounded), label: Text('Download'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: Text('Settings'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.exit_to_app_outlined), selectedIcon: Icon(Icons.exit_to_app_rounded), label: Text('Déconnexion'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Badge(child: Icon(Icons.bookmark_border)),
+                            selectedIcon: Badge(child: Icon(Icons.book)),
+                            label: Text('Second'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Badge(label: Text('4'), child: Icon(Icons.star_border),),
+                            selectedIcon: Badge(label: Text('4'), child: Icon(Icons.star),),
+                            label: Text('Third'),
+                          ),
+                        ],
+                        /*
+                        trailing: IconButton( icon: const Icon(Icons.more_horiz_rounded),
+                          onPressed: () { },
+                        ),
+                        */
+                      ),
+                      const VerticalDivider(thickness: 1.5, width: 1.5),
+                      const Expanded(
+                        child: Column(),
+                      ),
+                    ]
                   ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.supervisor_account_outlined), selectedIcon: Icon(Icons.supervisor_account), label: Text('Users'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.file_copy_outlined), selectedIcon: Icon(Icons.file_copy_rounded), label: Text('Files'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.download_outlined), selectedIcon: Icon(Icons.download_rounded), label: Text('Download'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: Text('Settings'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.exit_to_app_outlined), selectedIcon: Icon(Icons.exit_to_app_rounded), label: Text('Déconnexion'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Badge(child: Icon(Icons.bookmark_border)),
-                    selectedIcon: Badge(child: Icon(Icons.book)),
-                    label: Text('Second'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Badge(label: Text('4'), child: Icon(Icons.star_border),),
-                    selectedIcon: Badge(label: Text('4'), child: Icon(Icons.star),),
-                    label: Text('Third'),
-                  ),
-                ],
-                /*
-                trailing: IconButton( icon: const Icon(Icons.more_horiz_rounded),
-                  onPressed: () { },
                 ),
-                */
               ),
-              const VerticalDivider(thickness: 1.5, width: 1.5),
-              const Expanded(
-                child: Column(),
-              ),
-            ]
-          ),
+            ),
+          ],
         ),
       ),
     );

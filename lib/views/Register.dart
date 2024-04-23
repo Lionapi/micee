@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, file_names, unused_local_variable, deprecated_member_use, non_constant_identifier_names, unused_element, unused_import
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:micee/main.dart';
 import 'package:flutter/services.dart';
@@ -335,70 +336,79 @@ class RegisterPageState extends State<RegisterPage> {
       ),*/
       //resizeToAvoidBottomInset: false,
       //backgroundColor: const Color.fromARGB(255, 33, 116, 185),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight, end: Alignment.bottomLeft,
-            colors: [MainApp.navcolor2, MainApp.navcolor3],
-            stops: [0, 2], tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              //height: MediaQuery.of(context).size.height,
-              width: 370,
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.8), ),
-                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
-                  child: Form(
-                    key: _registerform,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        // Logo
-                        Container(
-                          alignment: Alignment.center, child: Image.asset('assets/user.png', fit:BoxFit.cover, height: 100, width: 100,),
+      body: WindowBorder(
+        color: Colors.white, width: 1.5,
+        child: Column(
+          children: [const CenterSide(), 
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                    colors: [MainApp.navcolor2, MainApp.navcolor3],
+                    stops: [0, 2], tileMode: TileMode.clamp,
+                  ),
+                ),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      //height: MediaQuery.of(context).size.height,
+                      width: 370,
+                      child: Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.8), ),
+                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
+                          child: Form(
+                            key: _registerform,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // Logo
+                                Container(
+                                  alignment: Alignment.center, child: Image.asset('assets/user.png', fit:BoxFit.cover, height: 100, width: 100,),
+                                ),
+                                const SizedBox(height: 10,),
+
+                                // Big Text
+                                Text('INSCRIPTION', style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+
+                                const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  // Nom // Prénom
+                                  children: [Flexible( child: nomField), const SizedBox(width: 8,), Flexible(child: prenomField),]
+                                ), const SizedBox(height: 15.0),
+
+                                hbdField, const SizedBox(height: 15.0),
+
+                                emailField, const SizedBox(height: 15.0),
+
+                                phoneField, const SizedBox(height: 15.0),
+
+                                loginField, const SizedBox(height: 15.0),
+
+                                passwordField, const SizedBox(height: 15.0),
+
+                                cpasswordField, const SizedBox(height: 20.0),
+
+                                const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                                registerButton, const SizedBox(height: 5.0,),
+
+                                linkButtonL,                
+                              ]
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 10,),
-
-                        // Big Text
-                        Text('INSCRIPTION', style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
-
-                        const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
-
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          // Nom // Prénom
-                          children: [Flexible( child: nomField), const SizedBox(width: 8,), Flexible(child: prenomField),]
-                        ), const SizedBox(height: 15.0),
-
-                        hbdField, const SizedBox(height: 15.0),
-
-                        emailField, const SizedBox(height: 15.0),
-
-                        phoneField, const SizedBox(height: 15.0),
-
-                        loginField, const SizedBox(height: 15.0),
-
-                        passwordField, const SizedBox(height: 15.0),
-
-                        cpasswordField, const SizedBox(height: 20.0),
-
-                        const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
-
-                        registerButton, const SizedBox(height: 5.0,),
-
-                        linkButtonL,                
-                      ]
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
