@@ -53,14 +53,14 @@ class DBconnexionSql {
   /// save params
   Future<File> saveparam(String ht, int pt, String un, String pw, String db, String cn) async {
     return await File('assets/files/database.xml').writeAsString(
-      "<?xml version='1.0' encoding='UTF-8'?>"
-        "<configuration>"
-            "<Host>$ht</Host>"
-            "<Port>$pt</Port>"
-            "<User>$un</User>"
-            "<Pass>$pw</Pass>"
-            "<Database>$db</Database>"
-            "<Characterencoding>$cn</Characterencoding>"
+      "<?xml version='1.0' encoding='UTF-8'?>\n"
+        "<configuration>\n"
+            "\t<Host>$ht</Host>\n"
+            "\t<Port>$pt</Port>\n"
+            "\t<User>$un</User>\n"
+            "\t<Pass>$pw</Pass>\n"
+            "\t<Database>$db</Database>\n"
+            "\t<Characterencoding>$cn</Characterencoding>\n"
         "</configuration>"
     );
   }

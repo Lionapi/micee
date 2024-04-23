@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, file_names, unused_local_variable, deprecated_member_use, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_build_context_synchronously
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:micee/main.dart';
 import 'package:get_storage/get_storage.dart';
@@ -101,14 +102,14 @@ class LoginPageState extends State<LoginPage> {
         onPressed: () async {
           if(submitlogin && submitpassword && _loginform.currentState!.validate()){
             final con = await DB.chechconn(); final List<String> conn = await DB.getparam();
+            MainApp.hostController.text = conn[0]; MainApp.portController.text = conn[1]; MainApp.userController.text = conn[2]; 
+            MainApp.passwordController.text = conn[3]; MainApp.dbController.text = conn[4]; MainApp.ceController.text = conn[5];
             if(con == false){
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
                 return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de donnée perdue.');
               });
               Future.delayed(const Duration(seconds: 5), () {
-                MainApp.hostController.text = conn[0]; MainApp.portController.text = conn[1]; MainApp.userController.text = conn[2]; MainApp.passwordController.text = conn[3]; 
-                MainApp.dbController.text = conn[4]; MainApp.ceController.text = conn[5];
                 showDialog(context: context, builder: (BuildContext context){
                   return MainApp.mysqldialog(Colors.white, MainApp.textwr, "CONNEXION A MYSQL", 
                     SizedBox(
@@ -249,59 +250,68 @@ class LoginPageState extends State<LoginPage> {
       ),*/
       //resizeToAvoidBottomInset: false,
       //backgroundColor: const Color.fromARGB(255, 33, 116, 185),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight, end: Alignment.bottomLeft,
-            colors: [MainApp.navcolor2, MainApp.navcolor3],
-            stops: [0, 2], tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              //height: MediaQuery.of(context).size.height,
-              width: 320,
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.8), ),
-                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
-                  child: Form(
-                    key: _loginform,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        // Logo
-                        Container(
-                          alignment: Alignment.center, child: Image.asset('assets/user.png', fit:BoxFit.cover, height: 100, width: 100,),
+      body: WindowBorder(
+        color: Colors.white, width: 1.5,
+        child: Column(
+          children: [const CenterSide(), 
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                    colors: [MainApp.navcolor2, MainApp.navcolor3],
+                    stops: [0, 2], tileMode: TileMode.clamp,
+                  ),
+                ),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      //height: MediaQuery.of(context).size.height,
+                      width: 320,
+                      child: Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.8), ),
+                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
+                          child: Form(
+                            key: _loginform,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // Logo
+                                Container(
+                                  alignment: Alignment.center, child: Image.asset('assets/user.png', fit:BoxFit.cover, height: 100, width: 100,),
+                                ),
+                                const SizedBox(height: 10,),
+
+                                // Big Text
+                                Text('AUTHENTIFICATION', style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+
+                                const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                                loginField,  const SizedBox(height: 15.0),
+
+                                passwordField, const SizedBox(height: 12.5),
+
+                                linkButtonFLP, const SizedBox(height: 12.5,),
+
+                                const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+                                
+                                loginButton, const SizedBox(height: 5.0,),
+                              ],
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 10,),
-
-                        // Big Text
-                        Text('AUTHENTIFICATION', style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
-
-                        const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
-
-                        loginField,  const SizedBox(height: 15.0),
-
-                        passwordField, const SizedBox(height: 12.5),
-
-                        linkButtonFLP, const SizedBox(height: 12.5,),
-
-                        const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
-                        
-                        loginButton, const SizedBox(height: 5.0,),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ),
+      ), 
     );
   }
 }

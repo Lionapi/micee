@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -1831,794 +1832,803 @@ class DashboardPageState extends State<DashboardPage> {
       ),*/
       //resizeToAvoidBottomInset: false,
       //backgroundColor: const Color.fromARGB(255, 33, 116, 185),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight, end: Alignment.bottomLeft,
-            colors: [MainApp.navcolor2, MainApp.navcolor3],
-            stops: [0, 2],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: SizedBox(height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SideMenu(
-                    controller: sideMenu, //showToggle: true, alwaysShowFooter: true,
-                    style: SideMenuStyle(
-                      itemBorderRadius: const BorderRadius.all(Radius.circular(5)),
-                      itemOuterPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.5),
-                      openSideMenuWidth: 250, showTooltip: true,
-                      displayMode: MediaQuery.of(context).size.width >= 650 ? SideMenuDisplayMode.open : SideMenuDisplayMode.compact,
-                      hoverColor: MainApp.navcolor2, selectedHoverColor: MainApp.gray,
-                      selectedColor: Colors.white, iconSize: 20, //toggleColor: Colors.white,
-                      selectedTitleTextStyle: const TextStyle(color: MainApp.dark),
-                      unselectedTitleTextStyle: const TextStyle(color: Colors.white),
-                      selectedIconColor: MainApp.dark, unselectedIconColor: Colors.white,
-                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)),),
-                      backgroundColor: MainApp.navcolor3
-                    ),
-                    title: Column(
-                      children: [
-                        const SizedBox(height: 8.0,),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 161, maxWidth: 211,),
-                          child: Image.asset("assets/micee-high-resolution-logo-white-transparent.png", fit: BoxFit.contain),
-                        ),
-                        const Divider(indent: 8.0, endIndent: 8.0,),
-                        Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 2.5),
-                          child: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? DropdownButtonHideUnderline(
-                            child: DropdownButton2<String>(
-                              isExpanded: true, hint: const Row(children: [
-                                Icon(Icons.add_circle_sharp, color: Colors.white, size: 20,), SizedBox(width: 4,), 
-                                Expanded(child: Text(' Ajouter',  overflow: TextOverflow.ellipsis,),),
-                              ]),
-                              items: ['Utilisateur','Dossier'].map((String item) => DropdownMenuItem<String>(value: item,
-                                //child: Text(item, style: const TextStyle(color: Colors.black,), overflow: TextOverflow.ellipsis,),
-                                child: Row(children: [
-                                  Icon(item == 'Utilisateur' ? FontAwesome.user_plus_solid : FontAwesome.folder_plus_solid, color: Colors.white, size: 15,), const SizedBox(width: 7,), 
-                                  Expanded(child: Text(' $item', style: const TextStyle(color: Colors.white,), overflow: TextOverflow.ellipsis,),),
-                                ]),
-                              )).toList(),
-                              value: selectedValue,
-                              onChanged: (value) {
-                                setState(() { /*selectedValue = value;*/ });
-                                resetuserform(); resetfolderform();
-                                if(value == 'Utilisateur'){
-                                  showDialog(context: context, builder: (BuildContext context){
-                                    return userform(Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
-                                  });
-                                }
-                                if(value == 'Dossier'){
-                                  showDialog(context: context, builder: (BuildContext context){
-                                    return folderform(Colors.white, MainApp.success, 'AJOUT DOSSIER', addFolderBtn);
-                                  });
-                                }
-                              },
-                              buttonStyleData: ButtonStyleData(height: 50, width: 249, elevation: 2, padding: const EdgeInsets.only(left: 9, right: 5),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.white,), color: MainApp.navcolor2,),
-                              ),
-                              iconStyleData: const IconStyleData(
-                                icon: Icon(Icons.arrow_drop_down_rounded, color: Colors.white, size: 20, ),
-                                //iconSize: 20, iconEnabledColor: Colors.yellow, iconDisabledColor: Colors.grey,
-                              ),
-                              dropdownStyleData: DropdownStyleData(maxHeight: 200, width: 242,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.white,), color: MainApp.navcolor2,),
-                                padding: const EdgeInsets.only(), offset: const Offset(0, -5),
-                                scrollbarTheme: ScrollbarThemeData(radius: const Radius.circular(40), thickness: MaterialStateProperty.all(6), thumbVisibility: MaterialStateProperty.all(true),),
-                              ),
-                              menuItemStyleData: const MenuItemStyleData(height: 40, padding: EdgeInsets.only(left: 12, right: 12),),
-                            ),
-                          ) : const SizedBox(),
-                        ),
-                      ],
-                    ),
-                    items: [
-                      SideMenuItem(
-                        title: 'Dashboard',
-                        onTap: (index, _) {sideMenu.changePage(index);},
-                        icon: const Icon(Icons.home),
-                        /*badgeContent: const Text('3', style: TextStyle(color: Colors.white),),
-                        badgeColor: MainApp.badgecol,*/
-                      ),
-                      SideMenuItem(
-                        title: 'Utilisateurs',
-                        onTap: (index, _) {sideMenu.changePage(index);},
-                        icon: const Icon(Icons.supervisor_account),
-                      ),
-                      SideMenuItem(
-                        title: 'Dossiers',
-                        onTap: (index, _) {sideMenu.changePage(index);},
-                        icon: const Icon(Icons.folder_copy_rounded),
-                        /*trailing: Container(
-                          decoration: const BoxDecoration(
-                            color: MainApp.badgecol, borderRadius: BorderRadius.all(Radius.circular(6))
-                          ),
-                          child: const Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-                            child: Text('New', style: TextStyle(fontSize: 11, color: Colors.white),),
-                          )
-                        ),*/
-                      ),/*
-                      SideMenuItem(
-                        title: 'Paramètres',
-                        onTap: (index, _) {sideMenu.changePage(index);},
-                        icon: const Icon(Icons.settings),
-                      ),*/
-                      SideMenuItem(
-                        title: 'Déconnexion',
-                        onTap: (index, _) {Sessiondata.erase(); Sessiondata.write('IsLogged', 0); Navigator.pushNamed(context, MainApp.login);},
-                        icon: const Icon(Icons.exit_to_app),
-                      ),
-                      /*SideMenuItem(
-                        builder: (context, displayMode) { return const Divider(indent: 8.0, endIndent: 8.0,); },
-                      ),*/
-                    ],
-                    footer: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
-                        child: Padding(padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                          child: Text('© MiCee 2024', style: MainApp.styleall.copyWith(color: MainApp.gray, fontSize: 12.5, fontWeight: FontWeight.bold),),
-                        ),
-                      ),
-                    ),
+      body: WindowBorder(
+        color: Colors.white, width: 1.5,
+        child: Column(
+          children: [const CenterSide(), 
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight, end: Alignment.bottomLeft,
+                    colors: [MainApp.navcolor2, MainApp.navcolor3],
+                    stops: [0, 2],
+                    tileMode: TileMode.clamp,
                   ),
-                  Expanded(
-                    child: PageView(
-                      controller: pageController,
-                      onPageChanged: (int page) { setState(() { sideMenu.changePage(page); }); },
-                      children: [
-                        /*1st*/
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const SizedBox(height: 8,),
-                              Flex(
-                                direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: headerbox,
+                ),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: SizedBox(height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SideMenu(
+                            controller: sideMenu, //showToggle: true, alwaysShowFooter: true,
+                            style: SideMenuStyle(
+                              itemBorderRadius: const BorderRadius.all(Radius.circular(5)),
+                              itemOuterPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.5),
+                              openSideMenuWidth: 250, showTooltip: true,
+                              displayMode: MediaQuery.of(context).size.width >= 650 ? SideMenuDisplayMode.open : SideMenuDisplayMode.compact,
+                              hoverColor: MainApp.navcolor2, selectedHoverColor: MainApp.gray,
+                              selectedColor: Colors.white, iconSize: 20, //toggleColor: Colors.white,
+                              selectedTitleTextStyle: const TextStyle(color: MainApp.dark),
+                              unselectedTitleTextStyle: const TextStyle(color: Colors.white),
+                              selectedIconColor: MainApp.dark, unselectedIconColor: Colors.white,
+                              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)),),
+                              backgroundColor: MainApp.navcolor3
+                            ),
+                            title: Column(
+                              children: [
+                                const SizedBox(height: 8.0,),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(maxHeight: 161, maxWidth: 211,),
+                                  child: Image.asset("assets/micee-high-resolution-logo-white-transparent.png", fit: BoxFit.contain),
+                                ),
+                                const Divider(indent: 8.0, endIndent: 8.0,),
+                                Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 2.5),
+                                  child: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<String>(
+                                      isExpanded: true, hint: const Row(children: [
+                                        Icon(Icons.add_circle_sharp, color: Colors.white, size: 20,), SizedBox(width: 4,), 
+                                        Expanded(child: Text(' Ajouter',  overflow: TextOverflow.ellipsis,),),
+                                      ]),
+                                      items: ['Utilisateur','Dossier'].map((String item) => DropdownMenuItem<String>(value: item,
+                                        //child: Text(item, style: const TextStyle(color: Colors.black,), overflow: TextOverflow.ellipsis,),
+                                        child: Row(children: [
+                                          Icon(item == 'Utilisateur' ? FontAwesome.user_plus_solid : FontAwesome.folder_plus_solid, color: Colors.white, size: 15,), const SizedBox(width: 7,), 
+                                          Expanded(child: Text(' $item', style: const TextStyle(color: Colors.white,), overflow: TextOverflow.ellipsis,),),
+                                        ]),
+                                      )).toList(),
+                                      value: selectedValue,
+                                      onChanged: (value) {
+                                        setState(() { /*selectedValue = value;*/ });
+                                        resetuserform(); resetfolderform();
+                                        if(value == 'Utilisateur'){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return userform(Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
+                                          });
+                                        }
+                                        if(value == 'Dossier'){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return folderform(Colors.white, MainApp.success, 'AJOUT DOSSIER', addFolderBtn);
+                                          });
+                                        }
+                                      },
+                                      buttonStyleData: ButtonStyleData(height: 50, width: 249, elevation: 2, padding: const EdgeInsets.only(left: 9, right: 5),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.white,), color: MainApp.navcolor2,),
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(Icons.arrow_drop_down_rounded, color: Colors.white, size: 20, ),
+                                        //iconSize: 20, iconEnabledColor: Colors.yellow, iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(maxHeight: 200, width: 242,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.white,), color: MainApp.navcolor2,),
+                                        padding: const EdgeInsets.only(), offset: const Offset(0, -5),
+                                        scrollbarTheme: ScrollbarThemeData(radius: const Radius.circular(40), thickness: MaterialStateProperty.all(6), thumbVisibility: MaterialStateProperty.all(true),),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(height: 40, padding: EdgeInsets.only(left: 12, right: 12),),
+                                    ),
+                                  ) : const SizedBox(),
+                                ),
+                              ],
+                            ),
+                            items: [
+                              SideMenuItem(
+                                title: 'Dashboard',
+                                onTap: (index, _) {sideMenu.changePage(index);},
+                                icon: const Icon(Icons.home),
+                                /*badgeContent: const Text('3', style: TextStyle(color: Colors.white),),
+                                badgeColor: MainApp.badgecol,*/
                               ),
-                              const Divider(indent: 5.0, endIndent: 5.0,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: MediaQuery.of(context).size.height - 240,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                              SideMenuItem(
+                                title: 'Utilisateurs',
+                                onTap: (index, _) {sideMenu.changePage(index);},
+                                icon: const Icon(Icons.supervisor_account),
+                              ),
+                              SideMenuItem(
+                                title: 'Dossiers',
+                                onTap: (index, _) {sideMenu.changePage(index);},
+                                icon: const Icon(Icons.folder_copy_rounded),
+                                /*trailing: Container(
+                                  decoration: const BoxDecoration(
+                                    color: MainApp.badgecol, borderRadius: BorderRadius.all(Radius.circular(6))
+                                  ),
+                                  child: const Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+                                    child: Text('New', style: TextStyle(fontSize: 11, color: Colors.white),),
+                                  )
+                                ),*/
+                              ),/*
+                              SideMenuItem(
+                                title: 'Paramètres',
+                                onTap: (index, _) {sideMenu.changePage(index);},
+                                icon: const Icon(Icons.settings),
+                              ),*/
+                              SideMenuItem(
+                                title: 'Déconnexion',
+                                onTap: (index, _) {Sessiondata.erase(); Sessiondata.write('IsLogged', 0); Navigator.pushNamed(context, MainApp.login);},
+                                icon: const Icon(Icons.exit_to_app),
+                              ),
+                              /*SideMenuItem(
+                                builder: (context, displayMode) { return const Divider(indent: 8.0, endIndent: 8.0,); },
+                              ),*/
+                            ],
+                            footer: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
+                                child: Padding(padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                  child: Text('© MiCee 2024', style: MainApp.styleall.copyWith(color: MainApp.gray, fontSize: 12.5, fontWeight: FontWeight.bold),),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: PageView(
+                              controller: pageController,
+                              onPageChanged: (int page) { setState(() { sideMenu.changePage(page); }); },
+                              children: [
+                                /*1st*/
+                                SingleChildScrollView(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      const SizedBox(height: 15.0,),
-                                      Text('Dashboard', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                        child: SizedBox(height: MediaQuery.of(context).size.height - 329.5, width: MediaQuery.of(context).size.width - 18,
-                                          child: FutureBuilder(
-                                            future: futuredata,
-                                            builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
-                                              if (datas.hasData) {
-                                                if(datas.data!.isNotEmpty) {
-                                                  int tu = datas.data!.length, td = 0, tdt = 0, ld = int.parse(DateFormat('dd').format(DateTime(DateTime.now().year, DateTime.now().month+1, 0))); 
-                                                  double tp = 0, ec = 0, cc = 0, it = 0, de = 0; Map <String, double> statutdoc = {}; 
-                                                  List<String> axiswval = []; List<String> axismval = []; List<String> axisyval = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-                                                  List<int> weekdata = [0, 0, 0, 0, 0, 0, 0]; List<int> monthdata = List<int>.filled(ld, 0, growable: false); List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; 
-                                                  for(var i = 0; i < datas.data!.length; i++){ 
-                                                    td += datas.data![i].docs!.length as int;
-                                                    for(var x = 0; x < datas.data![i].docs!.length; x++){ // statut
-                                                      tp += double.parse(datas.data![i].docs![x]['Prime']); 
-                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '0' && 
-                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ ec += 1; }
-                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ cc += 1; }
-                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ it += 1; }
-                                                      if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
-                                                        datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
-                                                      for(var y = 1; y<=7; y++){ // week
-                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
-                                                          weekdata[y - 1] += 1; 
-                                                        }
-                                                      }
-                                                      for(var y = 1; y<=ld; y++){ // month
-                                                        if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
-                                                          monthdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) - 1] += 1; 
-                                                        }
-                                                      }
-                                                      for(var y = 0; y<=12; y++){ // year
-                                                        if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == y + 1){ yeardata[y] += 1; }
-                                                      }
-                                                    }
-                                                  }
-                                                  statutdoc = {"En cours": ec, "Complément": cc, "Instruction": it, "Décision": de};
-                                                  for(var i = 1; i<=7; i++){ 
-                                                    var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)));
-                                                    for(var item in MainApp.sday.entries){
-                                                      dateday = dateday.replaceAll(item.key, item.value);
-                                                    }  
-                                                    axiswval.add(dateday); 
-                                                  }
-                                                  for(var i = 1; i<=ld; i++){ 
-                                                    var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: int.parse(DateFormat('dd').format(DateTime.now())) - i)));
-                                                    for(var item in MainApp.sday.entries){
-                                                      dateday = dateday.replaceAll("${item.key} ", "");
-                                                    }
-                                                    axismval.add(dateday); 
-                                                  }
-                                                  SpGridItem sgpi (String txt, List<int> ydata, List<String> xdata) {
-                                                    return SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
-                                                      child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
-                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                        child: Card( 
-                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                          child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                                                            return Column(
-                                                              children: [ 
-                                                                ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
-                                                                  title: Text(txt, style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                  trailing: Row(mainAxisSize: MainAxisSize.min, 
-                                                                    children: [
-                                                                      SizedBox(width: 25,
-                                                                        child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = 'Semaine du ${axiswval[0]} au ${axiswval[6]} ${MainApp.mois[DateTime.now().month - 1]} ${DateTime.now().year}'; ydata = weekdata; xdata = axiswval; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
-                                                                      ), const SizedBox(width: 5),
-                                                                      SizedBox(width: 25,
-                                                                        child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = '${MainApp.mois[DateTime.now().month - 1]}  ${DateTime.now().year}'; ydata = monthdata; xdata = axismval; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
-                                                                      ), const SizedBox(width: 5),
-                                                                      SizedBox(width: 25,
-                                                                        child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = '${DateTime.now().year}'; ydata = yeardata; xdata = axisyval; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
-                                                                      )
-                                                                    ],
-                                                                  )
-                                                                ),
-                                                                const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                SizedBox(height: MediaQuery.of(context).size.height - 476, 
-                                                                  child: Padding(padding: const EdgeInsets.all(10),
-                                                                    child: Chart(
-                                                                      state: ChartState<void>(
-                                                                        data: ChartData( [ ydata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
-                                                                        itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
-                                                                          padding: const EdgeInsets.only(left: 10, right: 10),
-                                                                          barItemBuilder: (itemBuilderData) {
-                                                                            return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
-                                                                              gradient: LinearGradient(
-                                                                                begin: Alignment.topRight, end: Alignment.bottomLeft,
-                                                                                colors: [MainApp.navcolor2, MainApp.navcolor3],
-                                                                                stops: [0, 2], tileMode: TileMode.clamp,
-                                                                              ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
-                                                                            );
-                                                                          }
+                                      const SizedBox(height: 8,),
+                                      Flex(
+                                        direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: headerbox,
+                                      ),
+                                      const Divider(indent: 5.0, endIndent: 5.0,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: MediaQuery.of(context).size.height - 240,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              const SizedBox(height: 15.0,),
+                                              Text('Dashboard', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 329.5, width: MediaQuery.of(context).size.width - 18,
+                                                  child: FutureBuilder(
+                                                    future: futuredata,
+                                                    builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
+                                                      if (datas.hasData) {
+                                                        if(datas.data!.isNotEmpty) {
+                                                          int tu = datas.data!.length, td = 0, tdt = 0, ld = int.parse(DateFormat('dd').format(DateTime(DateTime.now().year, DateTime.now().month+1, 0))); 
+                                                          double tp = 0, ec = 0, cc = 0, it = 0, de = 0; Map <String, double> statutdoc = {}; 
+                                                          List<String> axiswval = []; List<String> axismval = []; List<String> axisyval = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+                                                          List<int> weekdata = [0, 0, 0, 0, 0, 0, 0]; List<int> monthdata = List<int>.filled(ld, 0, growable: false); List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; 
+                                                          for(var i = 0; i < datas.data!.length; i++){ 
+                                                            td += datas.data![i].docs!.length as int;
+                                                            for(var x = 0; x < datas.data![i].docs!.length; x++){ // statut
+                                                              tp += double.parse(datas.data![i].docs![x]['Prime']); 
+                                                              if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '0' && 
+                                                                datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ ec += 1; }
+                                                              if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                                datas.data![i].docs![x]['StatutDoc']['Instruction'] == '0' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ cc += 1; }
+                                                              if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                                datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '0'){ it += 1; }
+                                                              if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
+                                                                datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
+                                                              for(var y = 1; y<=7; y++){ // week
+                                                                if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                                  weekdata[y - 1] += 1; 
+                                                                }
+                                                              }
+                                                              for(var y = 1; y<=ld; y++){ // month
+                                                                if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                                  monthdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) - 1] += 1; 
+                                                                }
+                                                              }
+                                                              for(var y = 0; y<=12; y++){ // year
+                                                                if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == y + 1){ yeardata[y] += 1; }
+                                                              }
+                                                            }
+                                                          }
+                                                          statutdoc = {"En cours": ec, "Complément": cc, "Instruction": it, "Décision": de};
+                                                          for(var i = 1; i<=7; i++){ 
+                                                            var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - i)));
+                                                            for(var item in MainApp.sday.entries){
+                                                              dateday = dateday.replaceAll(item.key, item.value);
+                                                            }  
+                                                            axiswval.add(dateday); 
+                                                          }
+                                                          for(var i = 1; i<=ld; i++){ 
+                                                            var dateday = DateFormat('E dd').format(DateTime.now().subtract(Duration(days: int.parse(DateFormat('dd').format(DateTime.now())) - i)));
+                                                            for(var item in MainApp.sday.entries){
+                                                              dateday = dateday.replaceAll("${item.key} ", "");
+                                                            }
+                                                            axismval.add(dateday); 
+                                                          }
+                                                          SpGridItem sgpi (String txt, List<int> ydata, List<String> xdata) {
+                                                            return SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                              child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                child: Card( 
+                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                  child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                                                                    return Column(
+                                                                      children: [ 
+                                                                        ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                                          title: Text(txt, style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                          trailing: Row(mainAxisSize: MainAxisSize.min, 
+                                                                            children: [
+                                                                              SizedBox(width: 25,
+                                                                                child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = 'Semaine du ${axiswval[0]} au ${axiswval[6]} ${MainApp.mois[DateTime.now().month - 1]} ${DateTime.now().year}'; ydata = weekdata; xdata = axiswval; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                              ), const SizedBox(width: 5),
+                                                                              SizedBox(width: 25,
+                                                                                child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = '${MainApp.mois[DateTime.now().month - 1]}  ${DateTime.now().year}'; ydata = monthdata; xdata = axismval; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                              ), const SizedBox(width: 5),
+                                                                              SizedBox(width: 25,
+                                                                                child: FloatingActionButton.small(backgroundColor: MainApp.gray, onPressed: (){ setState(() { txt = '${DateTime.now().year}'; ydata = yeardata; xdata = axisyval; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                              )
+                                                                            ],
+                                                                          )
                                                                         ),
-                                                                        //behaviour: const ChartBehaviour(),
-                                                                        backgroundDecorations: [
-                                                                          HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
-                                                                            legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
-                                                                          VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
-                                                                            legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => xdata[value],)
-                                                                        ]
+                                                                        const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                        SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                                          child: Padding(padding: const EdgeInsets.all(10),
+                                                                            child: Chart(
+                                                                              state: ChartState<void>(
+                                                                                data: ChartData( [ ydata.map((e) => ChartItem<void>(e.toDouble())).toList(), ], ),
+                                                                                itemOptions: BarItemOptions(minBarWidth: 2, maxBarWidth: 8,
+                                                                                  padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                                  barItemBuilder: (itemBuilderData) {
+                                                                                    return const BarItem(border: BorderSide(width: 2, color: MainApp.textwr), 
+                                                                                      gradient: LinearGradient(
+                                                                                        begin: Alignment.topRight, end: Alignment.bottomLeft,
+                                                                                        colors: [MainApp.navcolor2, MainApp.navcolor3],
+                                                                                        stops: [0, 2], tileMode: TileMode.clamp,
+                                                                                      ), radius: BorderRadius.all(Radius.circular(6)), /*color: itemBuilderData.listIndex == 0 ? Colors.red : Colors.blue*/
+                                                                                    );
+                                                                                  }
+                                                                                ),
+                                                                                //behaviour: const ChartBehaviour(),
+                                                                                backgroundDecorations: [
+                                                                                  HorizontalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 8, right: 6),
+                                                                                    legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), legendPosition: HorizontalLegendPosition.start),
+                                                                                  VerticalAxisDecoration(showValues: true, endWithChart: true, valuesPadding: const EdgeInsets.only(top: 6), 
+                                                                                    legendFontStyle: MainApp.styleall.copyWith(fontSize: 12,), valueFromIndex: (value) => xdata[value],)
+                                                                                ]
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  }),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                          SpGridItem sp = sgpi('Semaine du ${axiswval[0]} au ${axiswval[6]} ${MainApp.mois[DateTime.now().month - 1]} ${DateTime.now().year}', weekdata, axiswval);
+                                                          return ListView.builder(itemCount: 1, shrinkWrap: true,
+                                                            itemBuilder: (BuildContext context, int index) {
+                                                              return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
+                                                                crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.center,
+                                                                children: [
+                                                                  SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                                    child: Container(height: 81, 
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                      child: Card( 
+                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                        child: Column(
+                                                                          children: [ 
+                                                                            const SizedBox(height: 5.0,), Text("Nombre d'utilisateur(ise)", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                            const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                            SizedBox(height: 20, child: Text("$tu", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                          ],
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          }),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  SpGridItem sp = sgpi('Semaine du ${axiswval[0]} au ${axiswval[6]} ${MainApp.mois[DateTime.now().month - 1]} ${DateTime.now().year}', weekdata, axiswval);
-                                                  return ListView.builder(itemCount: 1, shrinkWrap: true,
-                                                    itemBuilder: (BuildContext context, int index) {
-                                                      return SpGrid(width: MediaQuery.of(context).size.width, spacing: 15, runSpacing: 10, alignment: WrapAlignment.center,
-                                                        crossAlignment: WrapCrossAlignment.center, runAlignment: WrapAlignment.center,
-                                                        children: [
-                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
-                                                            child: Container(height: 81, 
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text("Nombre d'utilisateur(ise)", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("$tu", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
-                                                            child: Container(height: 81, 
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Nombre de dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("$td", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
-                                                            child: Container(height: 81, 
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Total prime(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("$tp €", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
-                                                            child: Container(height: 81, 
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [ 
-                                                                    const SizedBox(height: 5.0,), Text('Dossier(s) Terminé(s) / Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                    const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: 20, child: Text("$tdt / 15", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
-                                                            child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
-                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
-                                                              child: Card( 
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                                shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                                                child: Column(
-                                                                  children: [  
-                                                                    ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
-                                                                      title: Text('Satut dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
-                                                                      trailing: const Row(mainAxisSize: MainAxisSize.min, 
-                                                                        children: [
-                                                                          /*TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
-                                                                          TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
-                                                                          TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),*/
-                                                                        ],
-                                                                      )
-                                                                    ),
-                                                                    const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                    SizedBox(height: MediaQuery.of(context).size.height - 476, 
-                                                                      child: Padding(padding: const EdgeInsets.all(10),
-                                                                        child: PieChart(
-                                                                          dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), animationDuration: const Duration(milliseconds: 100),
-                                                                          chartLegendSpacing: 32, colorList: const [MainApp.navcolor1, MainApp.navcolor3, MainApp.navcolor2, MainApp.textwr],
-                                                                          initialAngleInDegree: 0, chartType: ChartType.disc, centerText: "", 
-                                                                          legendOptions: LegendOptions(showLegendsInRow: true, showLegends: true, legendTextStyle: MainApp.styleall.copyWith(fontSize: 12,),
-                                                                            legendPosition: LegendPosition.bottom, legendShape: BoxShape.rectangle,
-                                                                          ),
-                                                                          chartValuesOptions: const ChartValuesOptions(showChartValueBackground: true, showChartValues: true, showChartValuesInPercentage: false),
+                                                                  SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                                    child: Container(height: 81, 
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                      child: Card( 
+                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                        child: Column(
+                                                                          children: [ 
+                                                                            const SizedBox(height: 5.0,), Text('Nombre de dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                            const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                            SizedBox(height: 20, child: Text("$td", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                          ],
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          sp
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }else{
-                                                  return Center(
-                                                    child: Text("Aucune(s) donnée(s) trouvée(s)", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
-                                                    ),
-                                                  );
-                                                }
-                                              } else {
-                                                return const Center(child: CircularProgressIndicator());
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
-                                    ]
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: footerligne,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8,),
-                            ],
-                          ),
-                        ),
-                        /*2nd*/ 
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const SizedBox(height: 8,),
-                              Flex(
-                                direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: headerbox,
-                              ),
-                              const Divider(indent: 5.0, endIndent: 5.0,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: MediaQuery.of(context).size.height - 240,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      const SizedBox(height: 15.0,),
-                                      Padding(padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: searchuserField,),
-                                      const SizedBox(height: 3.0,),
-                                      Text("$rel résultat(s) de la recherche", style: MainApp.styleall.copyWith(fontSize: 10, fontWeight: FontWeight.bold),),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                        child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
-                                          child: FutureBuilder(
-                                            future: futuredata,
-                                            builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> users) {
-                                              if (users.hasData) {
-                                                if(users.data!.isNotEmpty) {
-                                                  sfudata = users.data!;
-                                                  return ListView.builder(itemCount: users.data?.length, shrinkWrap: true,
-                                                    itemBuilder: (BuildContext context, int index) {
-                                                      return Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                        shadowColor: Colors.transparent, color: MainApp.bg, elevation: 5,
-                                                        child: ListTile(
-                                                          leading: const Icon(ZondIcons.user_solid_circle, color: MainApp.textwr, size: 50, ), //Image.asset('assets/user.png', fit:BoxFit.cover,),
-                                                          title: Text('${users.data?[index].Nom}  ${users.data?[index].Prenom}  ${users.data?[index].Email}', style: MainApp.styleall.copyWith(fontSize: 13,),),
-                                                          subtitle: Text('${users.data?[index].Adresse} / +${users.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${users.data?[index].Tel.split("nsn: ")[1].substring(0, users.data![index].Tel.split("nsn: ")[1].length - 1)}', 
-                                                            style: MainApp.styleall.copyWith(fontSize: 11,),),
-                                                          trailing: Row(mainAxisSize: MainAxisSize.min,
-                                                            children: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? [
-                                                              FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                onPressed: () {
-                                                                  setState((){ 
-                                                                    if(users.data?[index].Ste != '0'){ _statutController.text = "Entreprise"; en = true; prt = false; }
-                                                                    if(users.data?[index].Psr != '0'){ _statutController.text = "Particulier"; en = false; prt = true; }
-                                                                  });
-                                                                  Userdatamodel.getOneUser(users.data![index].id!).then((val) {
-                                                                    id = val.id!; docts = val.docs!; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
-                                                                    _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
-                                                                    destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
-                                                                    _loginController.text = val.Login; _passwordController.text = ""; _cpasswordController.text = ""; lt = val.Livetime; cre = val.Creation;
-                                                                    if(val.Ste != '0'){  
-                                                                      _nomsteController.text = val.Ste; _fctsteController.text = val.Fonction; _siretsteController.text = val.Siret;
-                                                                      _psrController.text = ""; _preController.text = ""; _claController.text = "";
-                                                                    }
-                                                                    if(val.Psr != '0'){
-                                                                      _nomsteController.text = ""; _fctsteController.text = ""; _siretsteController.text = "";
-                                                                      _psrController.text = val.Psr; _preController.text = val.Precaire; _claController.text = val.Classique;
-                                                                    } 
-                                                                  });
-                                                                  showDialog(context: context, builder: (BuildContext context){
-                                                                    return userform(Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
-                                                                  });
-                                                                },
-                                                                child: const Icon(Icons.edit,),
-                                                              ), const SizedBox(width: 10,), 
-                                                              FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                onPressed: () {
-                                                                  Userdatamodel.getOneUser(users.data![index].id!).then((val) {
-                                                                    id = val.id!; docts = val.docs!;
-                                                                    showDialog(context: context, builder: (context){
-                                                                      return userdel(Colors.white, MainApp.danger, 'SUPPR UTILISATEUR', delUserBtn, 'Voulez-vous supprimer ${val.Login} ?');
-                                                                    });
-                                                                  });
-                                                                },
-                                                                child: const Icon(Icons.delete,),
-                                                              ),
-                                                            ] : [],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                }else{
-                                                  return Center(
-                                                    child: Text("Aucun(e)s utilisateur(rise)s trouvé(e)s", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
-                                                    ),
-                                                  );
-                                                }
-                                              } else {
-                                                return const Center(child: CircularProgressIndicator());
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
-                                    ]
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: footerligne,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8,),
-                            ],
-                          ),
-                        ),
-                        /*3rd*/
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const SizedBox(height: 8,),
-                              Flex(
-                                direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: headerbox,
-                              ),
-                              const Divider(indent: 5.0, endIndent: 5.0,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: MediaQuery.of(context).size.height - 240,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      const SizedBox(height: 15.0,),
-                                      Padding(padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: searchfolderField,),
-                                      const SizedBox(height: 3.0,),
-                                      Text("$rel résultat(s) de la recherche", style: MainApp.styleall.copyWith(fontSize: 10, fontWeight: FontWeight.bold),),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                        child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
-                                          child: FutureBuilder(
-                                            future: futuredata,
-                                            builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> docsdata) {
-                                              //docsdata.data?.removeWhere((w) => w.IdDoc == 0);
-                                              if (docsdata.hasData) {
-                                                if(docsdata.data!.isNotEmpty) {
-                                                  sfddata = docsdata.data!; int z = 0;
-                                                  return ListView.builder(itemCount: docsdata.data?.length, shrinkWrap: true,
-                                                    itemBuilder: (context, index){
-                                                      return Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
-                                                        shadowColor: Colors.transparent, color: MainApp.bg, elevation: 5,
-                                                        child: ExpansionTile(iconColor: MainApp.textwr, collapsedIconColor: MainApp.textwr, backgroundColor: MainApp.bg,
-                                                          leading: const Icon(AntDesign.folder_open_fill, color: MainApp.textwr, size: 50, ), 
-                                                          title: Text(docsdata.data?[index].Ste != '0' ? 
-                                                            '${docsdata.data?[index].Ste} / ${docsdata.data?[index].Adresse} / +${docsdata.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${docsdata.data?[index].Tel.split("nsn: ")[1].substring(0, docsdata.data![index].Tel.split("nsn: ")[1].length - 1)}' : 
-                                                            '${docsdata.data?[index].Psr} / ${docsdata.data?[index].Adresse} / +${docsdata.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${docsdata.data?[index].Tel.split("nsn: ")[1].substring(0, docsdata.data![index].Tel.split("nsn: ")[1].length - 1)}', 
-                                                            style: MainApp.styleall.copyWith(fontSize: 13,)
-                                                          ),
-                                                          subtitle: Text('${docsdata.data![index].docs!.length}  Dossier(s)', style: MainApp.styleall.copyWith(fontSize: 11,),),
-                                                          children: <Widget>[
-                                                            Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1), side: const BorderSide(color: MainApp.bg, width: 1.2), ),
-                                                              shadowColor: Colors.transparent, color: MainApp.gray, elevation: 5,
-                                                              child: ListView.builder(padding: const EdgeInsets.only(left: 10, right: 10),
-                                                                itemCount: docsdata.data![index].docs!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int i) {
-                                                                  List<Widget> array = <Widget>[];
-                                                                  if(docsdata.data![index].docs!.length > 0){
-                                                                    z++;
-                                                                    array.add(const Divider(color:MainApp.dark,),);
-                                                                    array.add(
-                                                                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        children: <Widget>[ 
-                                                                          const Icon(AntDesign.file_pdf_outline, size: 50, color: MainApp.textwr,),
-                                                                          Flexible(
-                                                                            child: SizedBox(width: 300, height: 28,
-                                                                              child: Text('  ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]}\n' 
-                                                                                '  Prime : ${docsdata.data?[index].docs![i]['Prime']} €\n',
-                                                                                style: MainApp.styleall.copyWith(fontSize: 13.0,), textAlign: TextAlign.center,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: SizedBox(width: 350, 
-                                                                              child: Text('  Statut : ${(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == "0") ? "En cours" 
-                                                                                : (docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == "0") ? "Complément" 
-                                                                                : (docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == "0") ? "Instruction"
-                                                                                : (docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == "1") ? "Décision" : "" }\n'
-                                                                                '  Analyse Technique : ${docsdata.data?[index].docs![i]['AnaTech']}\n'
-                                                                                '  Analyse Administrative : ${docsdata.data?[index].docs![i]['AnaAdmin']}\n'
-                                                                                '  Com Technique : ${docsdata.data?[index].docs![i]['ComTech']}\n'
-                                                                                '  Com Administrative : ${docsdata.data?[index].docs![i]['ComAdmin']}\n'
-                                                                                '  Synthèse : ${docsdata.data?[index].docs![i]['Synthese']}', 
-                                                                                style: MainApp.styleall.copyWith(fontSize: 12.5,), 
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, child: const SizedBox(width: 10,), ),
-                                                                          Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, 
-                                                                            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                FloatingActionButton(tooltip: 'Consulter', foregroundColor: MainApp.success, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                  onPressed: () async {
-                                                                                    await showDialog(context: context, builder: (BuildContext context){
-                                                                                      return pdfviewer(Colors.white, MainApp.textwr, docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0], base64Decode(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]), 
-                                                                                        docsdata.data?[index].Ste != '0' ? "${docsdata.data?[index].Ste}_${docsdata.data?[index].docs![i]['IdDoc']}" : "${docsdata.data?[index].Psr}_${docsdata.data?[index].docs![i]['IdDoc']}");
-                                                                                    });
-                                                                                  },
-                                                                                  child: const Icon(AntDesign.eye_fill,),
-                                                                                ), const SizedBox(width: 10,),
-                                                                                FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                  onPressed: () { 
-                                                                                    setState(() { hsd = 162; });
-                                                                                    Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                      id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
-                                                                                      _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
-                                                                                      pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
-                                                                                      if(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == '0'){ _statutdocController.text = "En cours"; 
-                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == '0'){ _statutdocController.text = "Complément"; 
-                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '0'){ _statutdocController.text = "Instruction"; 
-                                                                                      } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '1'){ _statutdocController.text = "Décision"; }
-                                                                                      _anatechController.text = docsdata.data?[index].docs![i]['AnaTech']; _anaadController.text = docsdata.data?[index].docs![i]['AnaAdmin'];
-                                                                                      _comtechController.text = docsdata.data?[index].docs![i]['ComTech']; _comadController.text = docsdata.data?[index].docs![i]['ComAdmin'];
-                                                                                      _primeController.text = docsdata.data?[index].docs![i]['Prime']; _synController.text = docsdata.data?[index].docs![i]['Synthese'];
-                                                                                      cred = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(docsdata.data?[index].docs![i]['Creation'])));
-                                                                                    });
-                                                                                    showDialog(context: context, builder: (BuildContext context){
-                                                                                      return folderform(Colors.white, MainApp.warning, 'MODIF DOSSIER', editFolderBtn);
-                                                                                    });
-                                                                                  },
-                                                                                  child: const Icon(Icons.edit,),
-                                                                                ), const SizedBox(width: 10,),
-                                                                                FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                                                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                                  onPressed: () {
-                                                                                    setState(() { });
-                                                                                    Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
-                                                                                      id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
-                                                                                      showDialog(context: context, builder: (context){
-                                                                                        return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');
-                                                                                      });
-                                                                                    });
-                                                                                  },
-                                                                                  child: const Icon(Icons.delete,),
-                                                                                ),
-                                                                              ]
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                  ),
+                                                                  SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                                    child: Container(height: 81, 
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                      child: Card( 
+                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                        child: Column(
+                                                                          children: [ 
+                                                                            const SizedBox(height: 5.0,), Text('Total prime(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                            const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                            SizedBox(height: 20, child: Text("$tp €", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    );
-                                                                  }
-                                                                  if(docsdata.data![index].docs!.length - 1 == i){ 
-                                                                    if(z > 0) array.add(const Divider(color:MainApp.dark,),);
-                                                                  }
-                                                                  return Padding(padding: const EdgeInsets.only(left: 10.0, right: 10.0), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: array,),);
-                                                                },
-                                                              ),
+                                                                    ),
+                                                                  ),
+                                                                  SpGridItem(xs: 12, sm: 6, md: 4, lg: 3, 
+                                                                    child: Container(height: 81, 
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                      child: Card( 
+                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                        child: Column(
+                                                                          children: [ 
+                                                                            const SizedBox(height: 5.0,), Text('Dossier(s) Terminé(s) / Mois', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                            const SizedBox(height: 1.5,), const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                            SizedBox(height: 20, child: Text("$tdt / 15", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold,),),),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
+                                                                    child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
+                                                                      child: Card( 
+                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                        shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                                                        child: Column(
+                                                                          children: [  
+                                                                            ListTile(dense: true, visualDensity: const VisualDensity(horizontal: -4, vertical: -4), 
+                                                                              title: Text('Satut dossier(s)', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),
+                                                                              trailing: const Row(mainAxisSize: MainAxisSize.min, 
+                                                                                children: [
+                                                                                  /*TextButton(onPressed: (){ setState(() { sp = spw; }); }, child: Text('S', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                                  TextButton(onPressed: (){ setState(() { sp = spm; }); }, child: Text('M', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),
+                                                                                  TextButton(onPressed: (){ setState(() { sp = spy; }); }, child: Text('A', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold,),),),*/
+                                                                                ],
+                                                                              )
+                                                                            ),
+                                                                            const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
+                                                                            SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                                              child: Padding(padding: const EdgeInsets.all(10),
+                                                                                child: PieChart(
+                                                                                  dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), animationDuration: const Duration(milliseconds: 100),
+                                                                                  chartLegendSpacing: 32, colorList: const [MainApp.navcolor1, MainApp.navcolor3, MainApp.navcolor2, MainApp.textwr],
+                                                                                  initialAngleInDegree: 0, chartType: ChartType.disc, centerText: "", 
+                                                                                  legendOptions: LegendOptions(showLegendsInRow: true, showLegends: true, legendTextStyle: MainApp.styleall.copyWith(fontSize: 12,),
+                                                                                    legendPosition: LegendPosition.bottom, legendShape: BoxShape.rectangle,
+                                                                                  ),
+                                                                                  chartValuesOptions: const ChartValuesOptions(showChartValueBackground: true, showChartValues: true, showChartValuesInPercentage: false),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  sp
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        }else{
+                                                          return Center(
+                                                            child: Text("Aucune(s) donnée(s) trouvée(s)", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
                                                             ),
-                                                          ],
-                                                          //trailing: Text('${docsdata.data![index].docs!.length}  Dossier(s)', style: MainApp.styleall.copyWith(fontSize: 11,),),
-                                                        ),
-                                                      );
+                                                          );
+                                                        }
+                                                      } else {
+                                                        return const Center(child: CircularProgressIndicator());
+                                                      }
                                                     },
-                                                  );
-                                                }else{
-                                                  return Center(
-                                                    child: Text("Aucuns dossiers trouvés", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
-                                                    ),
-                                                  );
-                                                }
-                                              } else {
-                                                return const Center(child: CircularProgressIndicator());
-                                              }
-                                            },
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
+                                            ]
                                           ),
                                         ),
                                       ),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
-                                    ]
+                                      const SizedBox(height: 8,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: footerligne,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 8,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: footerligne,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8,),
-                            ],
-                          ),
-                        ),
-                        /*4th
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const SizedBox(height: 8,),
-                              Flex(
-                                direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: headerbox,
-                              ),
-                              const Divider(indent: 5.0, endIndent: 5.0,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: MediaQuery.of(context).size.height - 240,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                /*2nd*/ 
+                                SingleChildScrollView(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      const SizedBox(height: 15.0,),
-                                      Text('Paramètres', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
-                                    ]
+                                      const SizedBox(height: 8,),
+                                      Flex(
+                                        direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: headerbox,
+                                      ),
+                                      const Divider(indent: 5.0, endIndent: 5.0,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: MediaQuery.of(context).size.height - 240,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              const SizedBox(height: 15.0,),
+                                              Padding(padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: searchuserField,),
+                                              const SizedBox(height: 3.0,),
+                                              Text("$rel résultat(s) de la recherche", style: MainApp.styleall.copyWith(fontSize: 10, fontWeight: FontWeight.bold),),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
+                                                  child: FutureBuilder(
+                                                    future: futuredata,
+                                                    builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> users) {
+                                                      if (users.hasData) {
+                                                        if(users.data!.isNotEmpty) {
+                                                          sfudata = users.data!;
+                                                          return ListView.builder(itemCount: users.data?.length, shrinkWrap: true,
+                                                            itemBuilder: (BuildContext context, int index) {
+                                                              return Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: MainApp.bg, elevation: 5,
+                                                                child: ListTile(
+                                                                  leading: const Icon(ZondIcons.user_solid_circle, color: MainApp.textwr, size: 50, ), //Image.asset('assets/user.png', fit:BoxFit.cover,),
+                                                                  title: Text('${users.data?[index].Nom}  ${users.data?[index].Prenom}  ${users.data?[index].Email}', style: MainApp.styleall.copyWith(fontSize: 13,),),
+                                                                  subtitle: Text('${users.data?[index].Adresse} / +${users.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${users.data?[index].Tel.split("nsn: ")[1].substring(0, users.data![index].Tel.split("nsn: ")[1].length - 1)}', 
+                                                                    style: MainApp.styleall.copyWith(fontSize: 11,),),
+                                                                  trailing: Row(mainAxisSize: MainAxisSize.min,
+                                                                    children: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? [
+                                                                      FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                        shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                        onPressed: () {
+                                                                          setState((){ 
+                                                                            if(users.data?[index].Ste != '0'){ _statutController.text = "Entreprise"; en = true; prt = false; }
+                                                                            if(users.data?[index].Psr != '0'){ _statutController.text = "Particulier"; en = false; prt = true; }
+                                                                          });
+                                                                          Userdatamodel.getOneUser(users.data![index].id!).then((val) {
+                                                                            id = val.id!; docts = val.docs!; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
+                                                                            _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
+                                                                            destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
+                                                                            _loginController.text = val.Login; _passwordController.text = ""; _cpasswordController.text = ""; lt = val.Livetime; cre = val.Creation;
+                                                                            if(val.Ste != '0'){  
+                                                                              _nomsteController.text = val.Ste; _fctsteController.text = val.Fonction; _siretsteController.text = val.Siret;
+                                                                              _psrController.text = ""; _preController.text = ""; _claController.text = "";
+                                                                            }
+                                                                            if(val.Psr != '0'){
+                                                                              _nomsteController.text = ""; _fctsteController.text = ""; _siretsteController.text = "";
+                                                                              _psrController.text = val.Psr; _preController.text = val.Precaire; _claController.text = val.Classique;
+                                                                            } 
+                                                                          });
+                                                                          showDialog(context: context, builder: (BuildContext context){
+                                                                            return userform(Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
+                                                                          });
+                                                                        },
+                                                                        child: const Icon(Icons.edit,),
+                                                                      ), const SizedBox(width: 10,), 
+                                                                      FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                        shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                        onPressed: () {
+                                                                          Userdatamodel.getOneUser(users.data![index].id!).then((val) {
+                                                                            id = val.id!; docts = val.docs!;
+                                                                            showDialog(context: context, builder: (context){
+                                                                              return userdel(Colors.white, MainApp.danger, 'SUPPR UTILISATEUR', delUserBtn, 'Voulez-vous supprimer ${val.Login} ?');
+                                                                            });
+                                                                          });
+                                                                        },
+                                                                        child: const Icon(Icons.delete,),
+                                                                      ),
+                                                                    ] : [],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        }else{
+                                                          return Center(
+                                                            child: Text("Aucun(e)s utilisateur(rise)s trouvé(e)s", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
+                                                            ),
+                                                          );
+                                                        }
+                                                      } else {
+                                                        return const Center(child: CircularProgressIndicator());
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
+                                            ]
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: footerligne,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 8,),
-                              Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
-                                  shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: footerligne,
+                                /*3rd*/
+                                SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      const SizedBox(height: 8,),
+                                      Flex(
+                                        direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: headerbox,
+                                      ),
+                                      const Divider(indent: 5.0, endIndent: 5.0,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: MediaQuery.of(context).size.height - 240,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              const SizedBox(height: 15.0,),
+                                              Padding(padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: searchfolderField,),
+                                              const SizedBox(height: 3.0,),
+                                              Text("$rel résultat(s) de la recherche", style: MainApp.styleall.copyWith(fontSize: 10, fontWeight: FontWeight.bold),),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
+                                                  child: FutureBuilder(
+                                                    future: futuredata,
+                                                    builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> docsdata) {
+                                                      //docsdata.data?.removeWhere((w) => w.IdDoc == 0);
+                                                      if (docsdata.hasData) {
+                                                        if(docsdata.data!.isNotEmpty) {
+                                                          sfddata = docsdata.data!; int z = 0;
+                                                          return ListView.builder(itemCount: docsdata.data?.length, shrinkWrap: true,
+                                                            itemBuilder: (context, index){
+                                                              return Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
+                                                                shadowColor: Colors.transparent, color: MainApp.bg, elevation: 5,
+                                                                child: ExpansionTile(iconColor: MainApp.textwr, collapsedIconColor: MainApp.textwr, backgroundColor: MainApp.bg,
+                                                                  leading: const Icon(AntDesign.folder_open_fill, color: MainApp.textwr, size: 50, ), 
+                                                                  title: Text(docsdata.data?[index].Ste != '0' ? 
+                                                                    '${docsdata.data?[index].Ste} / ${docsdata.data?[index].Adresse} / +${docsdata.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${docsdata.data?[index].Tel.split("nsn: ")[1].substring(0, docsdata.data![index].Tel.split("nsn: ")[1].length - 1)}' : 
+                                                                    '${docsdata.data?[index].Psr} / ${docsdata.data?[index].Adresse} / +${docsdata.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${docsdata.data?[index].Tel.split("nsn: ")[1].substring(0, docsdata.data![index].Tel.split("nsn: ")[1].length - 1)}', 
+                                                                    style: MainApp.styleall.copyWith(fontSize: 13,)
+                                                                  ),
+                                                                  subtitle: Text('${docsdata.data![index].docs!.length}  Dossier(s)', style: MainApp.styleall.copyWith(fontSize: 11,),),
+                                                                  children: <Widget>[
+                                                                    Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1), side: const BorderSide(color: MainApp.bg, width: 1.2), ),
+                                                                      shadowColor: Colors.transparent, color: MainApp.gray, elevation: 5,
+                                                                      child: ListView.builder(padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                        itemCount: docsdata.data![index].docs!.length, shrinkWrap: true, itemBuilder: (BuildContext context, int i) {
+                                                                          List<Widget> array = <Widget>[];
+                                                                          if(docsdata.data![index].docs!.length > 0){
+                                                                            z++;
+                                                                            array.add(const Divider(color:MainApp.dark,),);
+                                                                            array.add(
+                                                                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: <Widget>[ 
+                                                                                  const Icon(AntDesign.file_pdf_outline, size: 50, color: MainApp.textwr,),
+                                                                                  Flexible(
+                                                                                    child: SizedBox(width: 300, height: 28,
+                                                                                      child: Text('  ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]}\n' 
+                                                                                        '  Prime : ${docsdata.data?[index].docs![i]['Prime']} €\n',
+                                                                                        style: MainApp.styleall.copyWith(fontSize: 13.0,), textAlign: TextAlign.center,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Flexible(
+                                                                                    child: SizedBox(width: 350, 
+                                                                                      child: Text('  Statut : ${(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == "0") ? "En cours" 
+                                                                                        : (docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == "0") ? "Complément" 
+                                                                                        : (docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == "0") ? "Instruction"
+                                                                                        : (docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == "1") ? "Décision" : "" }\n'
+                                                                                        '  Analyse Technique : ${docsdata.data?[index].docs![i]['AnaTech']}\n'
+                                                                                        '  Analyse Administrative : ${docsdata.data?[index].docs![i]['AnaAdmin']}\n'
+                                                                                        '  Com Technique : ${docsdata.data?[index].docs![i]['ComTech']}\n'
+                                                                                        '  Com Administrative : ${docsdata.data?[index].docs![i]['ComAdmin']}\n'
+                                                                                        '  Synthèse : ${docsdata.data?[index].docs![i]['Synthese']}', 
+                                                                                        style: MainApp.styleall.copyWith(fontSize: 12.5,), 
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, child: const SizedBox(width: 10,), ),
+                                                                                  Visibility(visible: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710, 
+                                                                                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        FloatingActionButton(tooltip: 'Consulter', foregroundColor: MainApp.success, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                          shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                          onPressed: () async {
+                                                                                            await showDialog(context: context, builder: (BuildContext context){
+                                                                                              return pdfviewer(Colors.white, MainApp.textwr, docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0], base64Decode(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]), 
+                                                                                                docsdata.data?[index].Ste != '0' ? "${docsdata.data?[index].Ste}_${docsdata.data?[index].docs![i]['IdDoc']}" : "${docsdata.data?[index].Psr}_${docsdata.data?[index].docs![i]['IdDoc']}");
+                                                                                            });
+                                                                                          },
+                                                                                          child: const Icon(AntDesign.eye_fill,),
+                                                                                        ), const SizedBox(width: 10,),
+                                                                                        FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                          shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                          onPressed: () { 
+                                                                                            setState(() { hsd = 162; });
+                                                                                            Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                              id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!; 
+                                                                                              _userController.text = val.name; _nomfichierController.text = docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0];
+                                                                                              pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]); pdffile.add(docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[1]);
+                                                                                              if(docsdata.data?[index].docs![i]['StatutDoc']['Complement'] == '0'){ _statutdocController.text = "En cours"; 
+                                                                                              } else if(docsdata.data?[index].docs![i]['StatutDoc']['Instruction'] == '0'){ _statutdocController.text = "Complément"; 
+                                                                                              } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '0'){ _statutdocController.text = "Instruction"; 
+                                                                                              } else if(docsdata.data?[index].docs![i]['StatutDoc']['Decision'] == '1'){ _statutdocController.text = "Décision"; }
+                                                                                              _anatechController.text = docsdata.data?[index].docs![i]['AnaTech']; _anaadController.text = docsdata.data?[index].docs![i]['AnaAdmin'];
+                                                                                              _comtechController.text = docsdata.data?[index].docs![i]['ComTech']; _comadController.text = docsdata.data?[index].docs![i]['ComAdmin'];
+                                                                                              _primeController.text = docsdata.data?[index].docs![i]['Prime']; _synController.text = docsdata.data?[index].docs![i]['Synthese'];
+                                                                                              cred = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(docsdata.data?[index].docs![i]['Creation'])));
+                                                                                            });
+                                                                                            showDialog(context: context, builder: (BuildContext context){
+                                                                                              return folderform(Colors.white, MainApp.warning, 'MODIF DOSSIER', editFolderBtn);
+                                                                                            });
+                                                                                          },
+                                                                                          child: const Icon(Icons.edit,),
+                                                                                        ), const SizedBox(width: 10,),
+                                                                                        FloatingActionButton(tooltip: 'Supprimer', foregroundColor: MainApp.danger, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                                                                          shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                                                                          onPressed: () {
+                                                                                            setState(() { });
+                                                                                            Userdatamodel.getOneUser(docsdata.data![index].id!).then((val) {
+                                                                                              id = val.id!; iddoc = BigInt.parse(docsdata.data?[index].docs![i]['IdDoc']); //docts = val.docs!;
+                                                                                              showDialog(context: context, builder: (context){
+                                                                                                return folderdel(Colors.white, MainApp.danger, 'SUPPR DOSSIER', delFolderBtn, 'Voulez-vous supprimer ${docsdata.data?[index].docs![i]['Msg'].split(" ~ ")[0]} ?');
+                                                                                              });
+                                                                                            });
+                                                                                          },
+                                                                                          child: const Icon(Icons.delete,),
+                                                                                        ),
+                                                                                      ]
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            );
+                                                                          }
+                                                                          if(docsdata.data![index].docs!.length - 1 == i){ 
+                                                                            if(z > 0) array.add(const Divider(color:MainApp.dark,),);
+                                                                          }
+                                                                          return Padding(padding: const EdgeInsets.only(left: 10.0, right: 10.0), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: array,),);
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                  //trailing: Text('${docsdata.data![index].docs!.length}  Dossier(s)', style: MainApp.styleall.copyWith(fontSize: 11,),),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        }else{
+                                                          return Center(
+                                                            child: Text("Aucuns dossiers trouvés", style: MainApp.styleall.copyWith(fontSize: 35, fontWeight: FontWeight.bold),
+                                                            ),
+                                                          );
+                                                        }
+                                                      } else {
+                                                        return const Center(child: CircularProgressIndicator());
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
+                                            ]
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: footerligne,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 8,),
-                            ],
+                                /*4th
+                                SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      const SizedBox(height: 8,),
+                                      Flex(
+                                        direction: MediaQuery.of(context).size.width >= 1300 ? Axis.horizontal : Axis.vertical,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: headerbox,
+                                      ),
+                                      const Divider(indent: 5.0, endIndent: 5.0,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: MediaQuery.of(context).size.height - 240,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center, //mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              const SizedBox(height: 15.0,),
+                                              Text('Paramètres', style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: MainApp.textwr),),
+                                              const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
+                                            ]
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                      Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
+                                        height: 50, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
+                                          shadowColor: Colors.transparent, color: Colors.white, elevation: 5,
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: footerligne,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8,),
+                                    ],
+                                  ),
+                                ),*/
+                              ],
+                            ),
                           ),
-                        ),*/
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ),
+      )
     );
   }
 }

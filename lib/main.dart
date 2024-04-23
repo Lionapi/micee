@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart'; // https://github.com/bitsdojo/bitsdojo_window/tree/master/bitsdojo_window
 import 'package:micee/views/Splashscreen.dart';
 import 'package:micee/views/Login.dart';
 import 'package:micee/views/Register.dart';
@@ -18,6 +19,14 @@ Future main() async {
   await GetStorage.init();
 
   runApp(const MainApp());
+
+  doWhenWindowReady(() {
+    final initialSize = Size(WidgetsBinding.instance.window.physicalSize.width, WidgetsBinding.instance.window.physicalSize.height);
+    appWindow.minSize = initialSize; appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center; appWindow.title = "MiCee"; 
+    //appWindow.maximize();
+    appWindow.show();
+  });
 }
 
 class MainApp extends StatelessWidget {
@@ -58,6 +67,22 @@ class MainApp extends StatelessWidget {
   gray = Color(0xB3FFFFFF), dark = Color(0xFF262626), bg = Color(0xFFE6E9EE), bg1 = Color(0xFF042B59),
   bg2 = Color(0xFF043875), bg3 = Color(0xFF0553B1), badgecol = Color(0xffec4a79), 
   textwr = Color(0xff3a8ac5), navcolor1 = Color(0xFFA5D6A7), navcolor2 = Color(0xFF00695C), navcolor3 = Color(0xFF2E7D32);
+
+  // win buttons colors
+  static final buttonColors = WindowButtonColors(
+    iconNormal: Colors.white,
+    mouseOver: navcolor3,
+    mouseDown: navcolor3,
+    iconMouseOver: Colors.white,
+    iconMouseDown: Colors.white
+  );
+
+  static final closeButtonColors = WindowButtonColors(
+    mouseOver: danger,
+    mouseDown: danger,
+    iconNormal: Colors.white,
+    iconMouseOver: Colors.white
+  );
 
   // Custom msgbox
   static AlertDialog msg (Color bg, ico, Color c, String s) {
@@ -322,9 +347,61 @@ class MainApp extends StatelessWidget {
             Locale("fr", "FR"), Locale('en', 'US'),
           ],
           locale: const Locale('fr'),
-          //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          /*home: Scaffold(
+            body: WindowBorder(
+              color: Colors.white, width: 1.5,
+              child: const CenterSide(),
+            ),
+          ),*/
         );
       }
+    );
+  }
+}
+
+class CenterSide extends StatelessWidget {
+  const CenterSide({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight, end: Alignment.bottomLeft,
+          colors: [MainApp.navcolor2, MainApp.navcolor3],
+          stops: [0, 2], tileMode: TileMode.clamp,
+        ),
+      ),
+      child: WindowTitleBarBox(
+        child: Row(
+          children: [Expanded(child: MoveWindow()), const WindowButtons()],
+        ),
+      ),
+    );
+  }
+}
+
+class WindowButtons extends StatefulWidget {
+  const WindowButtons({super.key});
+
+  @override
+  State<WindowButtons> createState() => _WindowButtonsState();
+}
+
+class _WindowButtonsState extends State<WindowButtons> {
+  void maximizeOrRestore() {
+    setState(() {
+      appWindow.maximizeOrRestore();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MinimizeWindowButton(colors: MainApp.buttonColors),
+        appWindow.isMaximized ? RestoreWindowButton(colors: MainApp.buttonColors, onPressed: maximizeOrRestore,) : MaximizeWindowButton(colors: MainApp.buttonColors, onPressed: maximizeOrRestore,),
+        CloseWindowButton(colors: MainApp.closeButtonColors),
+      ],
     );
   }
 }

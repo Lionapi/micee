@@ -36,6 +36,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^25.1.39
   mysql_client: ^0.0.27
   flutter_launcher_icons: ^0.13.1
+  bitsdojo_window: ^0.1.6
 
 dev_dependencies:
   flutter_test:
