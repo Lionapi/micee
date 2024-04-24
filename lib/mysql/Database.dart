@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:flutter/services.dart';
 
 class DBconnexionSql {
   // DB param
@@ -21,7 +22,8 @@ class DBconnexionSql {
 
   /// initializes a connection to database
   Future<void> _getConnexion() async {
-    final xmldoc = xml.XmlDocument.parse(File('assets/files/database.xml').readAsStringSync());
+    String dbxmlconf = await rootBundle.loadString('assets/files/database.xml');
+    final xmldoc = xml.XmlDocument.parse(dbxmlconf);
     final bdcon = xmldoc.findElements("configuration");
     for(final bd in bdcon){
       host = bd.findElements("Host").first.innerText;
@@ -52,6 +54,7 @@ class DBconnexionSql {
 
   /// save params
   Future<File> saveparam(String ht, int pt, String un, String pw, String db, String cn) async {
+    //String dbxmlconf = await rootBundle.loadString('assets/files/database.xml');
     return await File('assets/files/database.xml').writeAsString(
       "<?xml version='1.0' encoding='UTF-8'?>\n"
         "<configuration>\n"
@@ -67,7 +70,8 @@ class DBconnexionSql {
 
   /// get params
   Future<List<String>> getparam() async {
-    final xmldoc = xml.XmlDocument.parse(File('assets/files/database.xml').readAsStringSync());
+    String dbxmlconf = await rootBundle.loadString('assets/files/database.xml');
+    final xmldoc = xml.XmlDocument.parse(dbxmlconf);
     final bdcon = xmldoc.findElements("configuration");
     List<String> datas = [];
     for(final bd in bdcon){
