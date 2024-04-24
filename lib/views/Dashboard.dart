@@ -1848,7 +1848,7 @@ class DashboardPageState extends State<DashboardPage> {
                 ),
                 child: Center(
                   child: SingleChildScrollView(
-                    child: SizedBox(height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width,
+                    child: SizedBox(height: MediaQuery.of(context).size.height - 35, width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -1990,7 +1990,7 @@ class DashboardPageState extends State<DashboardPage> {
                                       ),
                                       const Divider(indent: 5.0, endIndent: 5.0,),
                                       Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                        height: MediaQuery.of(context).size.height - 240,
+                                        height: MediaQuery.of(context).size.height - 275,
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
                                         child: Card(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
@@ -2003,7 +2003,7 @@ class DashboardPageState extends State<DashboardPage> {
                                               const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
                                               Padding(
                                                 padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                                child: SizedBox(height: MediaQuery.of(context).size.height - 329.5, width: MediaQuery.of(context).size.width - 18,
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 353.5, width: MediaQuery.of(context).size.width - 18,
                                                   child: FutureBuilder(
                                                     future: futuredata,
                                                     builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> datas) {
@@ -2057,7 +2057,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                           }
                                                           SpGridItem sgpi (String txt, List<int> ydata, List<String> xdata) {
                                                             return SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
-                                                              child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                              child: Container(height: MediaQuery.of(context).size.height - 445, width: MediaQuery.of(context).size.width,
                                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                                 child: Card( 
                                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
@@ -2082,7 +2082,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                           )
                                                                         ),
                                                                         const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                        SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                                        SizedBox(height: MediaQuery.of(context).size.height - 506, 
                                                                           child: Padding(padding: const EdgeInsets.all(10),
                                                                             child: Chart(
                                                                               state: ChartState<void>(
@@ -2188,7 +2188,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                     ),
                                                                   ),
                                                                   SpGridItem(xs: 12, sm: 12, md: 12, lg: 6, 
-                                                                    child: Container(height: MediaQuery.of(context).size.height - 420, width: MediaQuery.of(context).size.width,
+                                                                    child: Container(height: MediaQuery.of(context).size.height - 445, width: MediaQuery.of(context).size.width,
                                                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: MainApp.bg,),
                                                                       child: Card( 
                                                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
@@ -2206,7 +2206,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                               )
                                                                             ),
                                                                             const Divider(indent: 5.0, color: MainApp.textwr, endIndent: 5.0,),
-                                                                            SizedBox(height: MediaQuery.of(context).size.height - 476, 
+                                                                            SizedBox(height: MediaQuery.of(context).size.height - 506, 
                                                                               child: Padding(padding: const EdgeInsets.all(10),
                                                                                 child: PieChart(
                                                                                   dataMap: statutdoc, chartRadius: math.min(MediaQuery.of(context).size.width / 3.2, 300), animationDuration: const Duration(milliseconds: 100),
@@ -2275,7 +2275,7 @@ class DashboardPageState extends State<DashboardPage> {
                                       ),
                                       const Divider(indent: 5.0, endIndent: 5.0,),
                                       Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                        height: MediaQuery.of(context).size.height - 240,
+                                        height: MediaQuery.of(context).size.height - 275,
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
                                         child: Card(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
@@ -2290,7 +2290,7 @@ class DashboardPageState extends State<DashboardPage> {
                                               const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),), 
                                               Padding(
                                                 padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                                child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 385, width: MediaQuery.of(context).size.width - 18,
                                                   child: FutureBuilder(
                                                     future: futuredata,
                                                     builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> users) {
@@ -2399,7 +2399,7 @@ class DashboardPageState extends State<DashboardPage> {
                                       ),
                                       const Divider(indent: 5.0, endIndent: 5.0,),
                                       Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                        height: MediaQuery.of(context).size.height - 240,
+                                        height: MediaQuery.of(context).size.height - 275,
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
                                         child: Card(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),
@@ -2414,7 +2414,7 @@ class DashboardPageState extends State<DashboardPage> {
                                               const Padding(padding: EdgeInsets.symmetric(vertical: 1, horizontal: 10), child: Divider(color: MainApp.textwr),),
                                               Padding(
                                                 padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                                                child: SizedBox(height: MediaQuery.of(context).size.height - 361, width: MediaQuery.of(context).size.width - 18,
+                                                child: SizedBox(height: MediaQuery.of(context).size.height - 385, width: MediaQuery.of(context).size.width - 18,
                                                   child: FutureBuilder(
                                                     future: futuredata,
                                                     builder: (BuildContext context, AsyncSnapshot<List<Utilisateur>> docsdata) {
@@ -2586,7 +2586,7 @@ class DashboardPageState extends State<DashboardPage> {
                                       ),
                                       const Divider(indent: 5.0, endIndent: 5.0,),
                                       Container(width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width >= 650 ? 280 : 80), 
-                                        height: MediaQuery.of(context).size.height - 240,
+                                        height: MediaQuery.of(context).size.height - 275,
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white,),
                                         child: Card(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.5), side: const BorderSide(color: MainApp.navcolor2, width: 1.2), ),

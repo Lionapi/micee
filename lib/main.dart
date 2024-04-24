@@ -373,7 +373,12 @@ class CenterSide extends StatelessWidget {
       ),
       child: WindowTitleBarBox(
         child: Row(
-          children: [Expanded(child: MoveWindow()), const WindowButtons()],
+          children: [
+            const SizedBox(width: 5.0,),
+            Image.asset("assets/micee-favicon-white.png", height: 25, width: 30, fit: BoxFit.contain), const SizedBox(width: 7.5,),
+            Text("MiCee", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),), 
+            Expanded(child: MoveWindow()), const WindowButtons()
+          ],
         ),
       ),
     );
