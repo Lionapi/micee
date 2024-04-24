@@ -115,8 +115,8 @@ class LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: OutlinedButton.icon( //ElevatedButton
-                        icon: const Icon(IonIcons.save, size: 15, color: MainApp.textwr),
-                        label: Text("SAUVEGARDER LE PARAMETRAGE", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: MainApp.textwr, fontWeight: FontWeight.bold, fontSize: 10.0),),
+                        icon: const Icon(LineAwesome.save, size: 15, color: MainApp.textwr),
+                        label: Text("ENREGISTRER LE PARAMETRAGE", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: MainApp.textwr, fontWeight: FontWeight.bold, fontSize: 10.0),),
                         onPressed: () async {
                           if(MainApp.hostController.text.trim().isNotEmpty && MainApp.portController.text.trim().isNotEmpty && MainApp.userController.text.trim().isNotEmpty && 
                             MainApp.passwordController.text.trim().isNotEmpty && MainApp.dbController.text.trim().isNotEmpty && MainApp.ceController.text.trim().isNotEmpty && 

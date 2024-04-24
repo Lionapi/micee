@@ -21,7 +21,7 @@ Future main() async {
   runApp(const MainApp());
 
   doWhenWindowReady(() {
-    final initialSize = Size(WidgetsBinding.instance.window.physicalSize.width, WidgetsBinding.instance.window.physicalSize.height);
+    final initialSize = Size(WidgetsBinding.instance.window.physicalSize.width + 150, WidgetsBinding.instance.window.physicalSize.height + 100);
     appWindow.minSize = initialSize; appWindow.size = initialSize;
     appWindow.alignment = Alignment.center; appWindow.title = "MiCee"; 
     //appWindow.maximize();

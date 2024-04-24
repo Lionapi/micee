@@ -42,6 +42,7 @@ class DashboardPageState extends State<DashboardPage> {
   final GlobalKey<FormState> _userdelform = GlobalKey<FormState>();
   final GlobalKey<FormState> _folderform = GlobalKey<FormState>();
   final GlobalKey<FormState> _folderdelform = GlobalKey<FormState>();
+  final GlobalKey<FormState> _settingform = GlobalKey<FormState>();
 
   late bool submitnom, submitprenom, submithbd, submitemail, submitaddress, submitlogin, submitpassword, submitcpassword, 
   submitstatut, submitnomste, submitfctste, submitsiretste, submitpsr, submitpre, submitcla,
@@ -1564,6 +1565,63 @@ class DashboardPageState extends State<DashboardPage> {
       );
     }
 
+    // 
+    final settingUserBtn = SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: OutlinedButton.icon( //ElevatedButton
+        icon: const Icon(LineAwesome.save, size: 15, color: Colors.white),
+        label: Text("ENREGISTRER", textAlign: TextAlign.center, style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0),),
+        onPressed: () async {
+          
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: MainApp.textwr, side: const BorderSide(color: MainApp.gray, width: 1.5,),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50.0)),),
+        ),
+      )
+    );
+
+    // Custom settings
+    AlertDialog settingform (Color bg, Color c,) {
+      return AlertDialog(
+        //title: Text(titre, style: const TextStyle(color: MyApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
+        //actions: [ MaterialButton(color: MyApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
+        //actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: bg,
+        content: SizedBox(
+          height: 472, width: 320,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
+            child: Form(
+              key: _settingform,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Big Text
+                  Text("PARAMETRES UTILISATEUR", style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+
+                  const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                  Text("${Sessiondata.read("Datas")[0]}", style: MainApp.styleall.copyWith(fontSize: 10,)),
+
+                  //hostField, const SizedBox(height: 15.0), portField, const SizedBox(height: 15.0), 
+
+                  //userField, const SizedBox(height: 15.0), passwordField, const SizedBox(height: 15.0), 
+                  
+                  /*dbField, const SizedBox(height: 15.0), ceField,*/ const SizedBox(height: 20.0),
+
+                  const Divider(color: MainApp.textwr), const SizedBox(height: 5.0,),
+
+                  settingUserBtn
+                ],
+              ),
+            ),
+          ),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: BorderSide(color: c, width: 1.2),),
+      );
+    }
+
     // headerboxes
     final headerbox = <Widget>[
       SpGrid(width: MediaQuery.of(context).size.width - 265, spacing: 10, runSpacing: 10, alignment: WrapAlignment.spaceAround,
@@ -1927,8 +1985,18 @@ class DashboardPageState extends State<DashboardPage> {
                                 title: 'Dashboard',
                                 onTap: (index, _) {sideMenu.changePage(index);},
                                 icon: const Icon(Icons.home),
-                                /*badgeContent: const Text('3', style: TextStyle(color: Colors.white),),
-                                badgeColor: MainApp.badgecol,*/
+                                /*
+                                badgeContent: const Text('3', style: TextStyle(color: Colors.white),),
+                                badgeColor: MainApp.badgecol,
+                                trailing: Container(
+                                  decoration: const BoxDecoration(
+                                    color: MainApp.badgecol, borderRadius: BorderRadius.all(Radius.circular(6))
+                                  ),
+                                  child: const Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+                                    child: Text('New', style: TextStyle(fontSize: 11, color: Colors.white),),
+                                  )
+                                ),
+                                */
                               ),
                               SideMenuItem(
                                 title: 'Utilisateurs',
@@ -1939,20 +2007,16 @@ class DashboardPageState extends State<DashboardPage> {
                                 title: 'Dossiers',
                                 onTap: (index, _) {sideMenu.changePage(index);},
                                 icon: const Icon(Icons.folder_copy_rounded),
-                                /*trailing: Container(
-                                  decoration: const BoxDecoration(
-                                    color: MainApp.badgecol, borderRadius: BorderRadius.all(Radius.circular(6))
-                                  ),
-                                  child: const Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-                                    child: Text('New', style: TextStyle(fontSize: 11, color: Colors.white),),
-                                  )
-                                ),*/
-                              ),/*
+                              ),
                               SideMenuItem(
                                 title: 'Paramètres',
-                                onTap: (index, _) {sideMenu.changePage(index);},
+                                onTap: (index, _) {
+                                  showDialog(context: context, builder: (BuildContext context){
+                                    return settingform(Colors.white, MainApp.textwr);
+                                  });
+                                },
                                 icon: const Icon(Icons.settings),
-                              ),*/
+                              ),
                               SideMenuItem(
                                 title: 'Déconnexion',
                                 onTap: (index, _) {Sessiondata.erase(); Sessiondata.write('IsLogged', 0); Navigator.pushNamed(context, MainApp.login);},
