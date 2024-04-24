@@ -55,12 +55,12 @@ class DBconnexionSql {
     return await File('assets/files/database.xml').writeAsString(
       "<?xml version='1.0' encoding='UTF-8'?>\n"
         "<configuration>\n"
-            "\t<Host>$ht</Host>\n"
-            "\t<Port>$pt</Port>\n"
-            "\t<User>$un</User>\n"
-            "\t<Pass>$pw</Pass>\n"
-            "\t<Database>$db</Database>\n"
-            "\t<Characterencoding>$cn</Characterencoding>\n"
+          "\t<Host>$ht</Host>\n"
+          "\t<Port>$pt</Port>\n"
+          "\t<User>$un</User>\n"
+          "\t<Pass>$pw</Pass>\n"
+          "\t<Database>$db</Database>\n"
+          "\t<Characterencoding>$cn</Characterencoding>\n"
         "</configuration>"
     );
   }
