@@ -184,7 +184,7 @@ class Userdatamodel {
       ud.addEntries({"id": r.assoc()['id']}.entries);
       ud.addEntries({"name": r.assoc()['name']}.entries);
       mapxmldata(r.assoc()['xmlcontent']); 
-      docdata(r.assoc()['xmlcontent']);
+      mapxmldocdata(r.assoc()['xmlcontent']);
       user.add(ud);
     }
 

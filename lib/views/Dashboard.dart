@@ -1098,13 +1098,13 @@ class DashboardPageState extends State<DashboardPage> {
                       if(_comadController.text.isNotEmpty) {
                         if(_primeController.text.isNotEmpty) {
                           if(_synController.text.isNotEmpty) {
-                            var i = MainApp.useroption.where((e) => e.split(' ~ ')[0].toLowerCase().contains(_userController.text.trim().toString().toLowerCase())).toString().split(" ~ ")[1].split(")")[0];
+                            var idu = MainApp.useroption.where((e) => e.split(' ~ ')[0].toLowerCase().contains(_userController.text.trim().toString().toLowerCase())).toString().split(" ~ ")[1].split(")")[0];
                             late int aa, bb, cc, dd;
                             if(_statutdocController.text == "En cours"){ aa = 1; bb = 0; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Complément") { aa = 1; bb = 1; cc = 0; dd = 0; 
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
-                            await Userdatamodel.getOneUser(BigInt.parse(i.toString())).then((val) {
+                            await Userdatamodel.getOneUser(BigInt.parse(idu.toString())).then((val) {
                               Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
                                 Userdatamodel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
