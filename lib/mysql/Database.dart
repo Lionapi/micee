@@ -23,7 +23,7 @@ class DBconnexionSql {
   /// initializes a connection to database
   Future<void> _getConnexion() async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory appDocDirFolder = Directory('${appDocDir.path}\\micee');
+    final Directory appDocDirFolder = Directory('${appDocDir.path}\\MiCee');
     final String dbxmlconf = await File('${appDocDirFolder.path}\\database.xml').readAsString();
     final xmldoc = xml.XmlDocument.parse(dbxmlconf);
     final bdcon = xmldoc.findElements("configuration");
@@ -57,7 +57,7 @@ class DBconnexionSql {
   /// save params
   Future<File> saveparam(String ht, int pt, String un, String pw, String db, String cn) async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory appDocDirFolder = Directory('${appDocDir.path}\\micee');
+    final Directory appDocDirFolder = Directory('${appDocDir.path}\\MiCee');
     return await File('${appDocDirFolder.path}\\database.xml').writeAsString(
       "<?xml version='1.0' encoding='UTF-8'?>\n"
         "<configuration>\n"
@@ -74,7 +74,7 @@ class DBconnexionSql {
   /// get params
   Future<List<String>> getparam() async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory appDocDirFolder = Directory('${appDocDir.path}\\micee');
+    final Directory appDocDirFolder = Directory('${appDocDir.path}\\MiCee');
     final String dbxmlconf = await File('${appDocDirFolder.path}\\database.xml').readAsString();
     final xmldoc = xml.XmlDocument.parse(dbxmlconf);
     final bdcon = xmldoc.findElements("configuration");

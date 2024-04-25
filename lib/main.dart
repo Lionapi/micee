@@ -26,7 +26,7 @@ Future main() async {
   //Get this App Document Directory
   final Directory _appDocDir = await getApplicationDocumentsDirectory();
   //App Document Directory + folder name
-  final Directory _appDocDirFolder = Directory('${_appDocDir.path}\\micee');
+  final Directory _appDocDirFolder = Directory('${_appDocDir.path}\\MiCee');
   //if folder doesn't exists
   if(! await _appDocDirFolder.exists()){ 
     await _appDocDirFolder.create(recursive: true);
