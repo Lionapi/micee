@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <configuration>
 	<Host>127.0.0.1</Host>
-	<Port>3309</Port>
-	<User>Franck-Lionel</User>
-	<Pass>Franck-Lionel007</Pass>
+	<Port>3306</Port>
+	<User>root</User>
+	<Pass></Pass>
 	<Database>micee</Database>
 	<Characterencoding>utf8_general_ci</Characterencoding>
 </configuration>

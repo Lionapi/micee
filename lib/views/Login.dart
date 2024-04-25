@@ -107,7 +107,7 @@ class LoginPageState extends State<LoginPage> {
             if(con == false){
               showDialog(context: context, builder: (context){
                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
-                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de donnée perdue.');
+                return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de données perdue.');
               });
               Future.delayed(const Duration(seconds: 5), () {
                 showDialog(context: context, builder: (BuildContext context){
@@ -161,13 +161,13 @@ class LoginPageState extends State<LoginPage> {
                               if(val == true){
                                 showDialog(context: context, builder: (context){
                                   Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
-                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.success, '  Connexion à la base de donnée réussie.');
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.success, '  Connexion à la base de données réussie.');
                                 });
                                 Future.delayed(const Duration(seconds: 4), () { Navigator.of(context).pop(true); });
                               } else {
                                 showDialog(context: context, builder: (context){
                                   Future.delayed(const Duration(seconds: 3), () { Navigator.of(context).pop(true); });
-                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de donnée échouée.');
+                                  return MainApp.msg(const Color.fromARGB(200, 0, 0, 0), IonIcons.information_circle, MainApp.danger, '  Connexion à la base de données échouée.');
                                 });
                               }
                             });
