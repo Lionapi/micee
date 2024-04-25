@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,14 +11,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart'; // https://github.com/bitsdojo/bitsdojo_window/tree/master/bitsdojo_window
+import 'package:path_provider/path_provider.dart';
 import 'package:micee/views/Splashscreen.dart';
 import 'package:micee/views/Login.dart';
 import 'package:micee/views/Register.dart';
 import 'package:micee/views/Dashboard.dart';
 import 'package:micee/views/Testpage.dart';
+import 'package:micee/mysql/database.dart';
 
 Future main() async {
   await GetStorage.init();
+
+  final DBconnexionSql DB = DBconnexionSql(); 
+  //Get this App Document Directory
+  final Directory _appDocDir = await getApplicationDocumentsDirectory();
+  //App Document Directory + folder name
+  final Directory _appDocDirFolder = Directory('${_appDocDir.path}\\micee');
+  //if folder doesn't exists
+  if(! await _appDocDirFolder.exists()){ 
+    await _appDocDirFolder.create(recursive: true);
+    DB.saveparam('127.0.0.1', 3306, 'root', '', 'db_name', 'utf8_general_ci');
+  }
 
   runApp(const MainApp());
 
@@ -31,6 +46,8 @@ Future main() async {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+
+  // database directory
 
   // app url
   static String baseUrl = "http://192.168.1.53:81/api"; //"http://192.168.1.182:81/api"; //http://localhost:8080/app/v1
