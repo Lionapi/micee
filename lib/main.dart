@@ -35,13 +35,15 @@ Future main() async {
 
   runApp(const MainApp());
 
-  doWhenWindowReady(() {
-    final initialSize = Size(WidgetsBinding.instance.window.physicalSize.width + 150, WidgetsBinding.instance.window.physicalSize.height + 100);
-    appWindow.minSize = initialSize; appWindow.size = initialSize;
-    appWindow.alignment = Alignment.center; appWindow.title = "MiCee"; 
-    //appWindow.maximize();
-    appWindow.show();
-  });
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    doWhenWindowReady(() {
+      final initialSize = Size(WidgetsBinding.instance.window.physicalSize.width + 150, WidgetsBinding.instance.window.physicalSize.height + 100);
+      appWindow.minSize = initialSize; appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center; appWindow.title = "MiCee"; 
+      //appWindow.maximize();
+      appWindow.show();
+    });
+  }
 }
 
 class MainApp extends StatelessWidget {
@@ -380,25 +382,31 @@ class CenterSide extends StatelessWidget {
   const CenterSide({super.key});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight, end: Alignment.bottomLeft,
-          colors: [MainApp.navcolor2, MainApp.navcolor3],
-          stops: [0, 2], tileMode: TileMode.clamp,
+    Widget w;
+    if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+      w = Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight, end: Alignment.bottomLeft,
+            colors: [MainApp.navcolor2, MainApp.navcolor3],
+            stops: [0, 2], tileMode: TileMode.clamp,
+          ),
         ),
-      ),
-      child: WindowTitleBarBox(
-        child: Row(
-          children: [
-            const SizedBox(width: 5.0,),
-            Image.asset("assets/micee-favicon-white.png", height: 25, width: 30, fit: BoxFit.contain), const SizedBox(width: 7.5,),
-            Text("MiCee", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),), 
-            Expanded(child: MoveWindow()), const WindowButtons()
-          ],
+        child: WindowTitleBarBox(
+          child: Row(
+            children: [
+              const SizedBox(width: 5.0,),
+              Image.asset("assets/micee-favicon-white.png", height: 25, width: 30, fit: BoxFit.contain), const SizedBox(width: 7.5,),
+              Text("MiCee", style: MainApp.styleall.copyWith(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),), 
+              Expanded(child: MoveWindow()), const WindowButtons()
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      w = const SizedBox();
+    }
+    return w;
   }
 }
 
