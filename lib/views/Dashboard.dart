@@ -542,7 +542,7 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } 
-                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), _nomController.text, 
+                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), "man_1", _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
@@ -637,8 +637,8 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } //val.docs.length == 0 ? 0 : val.id!,
-                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, _nomController.text, 
-                          _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
+                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, "man_1", 
+                          _nomController.text, _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, 
                           docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', ''), DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(lt)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(cre)), 
@@ -1105,7 +1105,7 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
                             await Userdatamodel.getOneUser(BigInt.parse(idu.toString())).then((val) {
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
                                 Userdatamodel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
@@ -1218,7 +1218,7 @@ class DashboardPageState extends State<DashboardPage> {
                                 "${Userdatamodel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
                               val.docs[(iddoc - BigInt.parse(1.toString())).toInt()] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
                                 val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
@@ -1320,7 +1320,7 @@ class DashboardPageState extends State<DashboardPage> {
                 datadoc.add(xml.XmlDocument.parse(xmlstr).findElements("Doc").first);
               }
             }
-            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, val.Nom, val.Prenom, val.Login, val.Motdepasse,
+            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
               val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
               datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
@@ -1928,10 +1928,33 @@ class DashboardPageState extends State<DashboardPage> {
                             title: Column(
                               children: [
                                 const SizedBox(height: 8.0,),
-                                ConstrainedBox(
+                                Container( 
+                                  padding: const EdgeInsets.all(3), alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    //gradient: const LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [MainApp.navcolor2, MainApp.navcolor3], stops: [0, 2], tileMode: TileMode.clamp,),
+                                    border: Border.all(color: Colors.white, width: 2.5,),
+                                    shape: BoxShape.circle, color: MainApp.gray
+                                  ),  
+                                  child: ClipOval( 
+                                    child: SizedBox.fromSize(
+                                      size: const Size.fromRadius(50), child: Image.asset('assets/${Sessiondata.read("Datas")[0]["Img"]}', fit:BoxFit.cover, height: 100, width: 100,),
+                                    )
+                                  )
+                                ),
+                                const SizedBox(height: 5.0,),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
+                                    child: Padding(padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                      child: Text('${Sessiondata.read("Datas")[0]["Nom"]}  ${Sessiondata.read("Datas")[0]["Prenom"]}', style: MainApp.styleall.copyWith(color: MainApp.gray, fontSize: 15, fontWeight: FontWeight.bold),),
+                                    ),
+                                  ),
+                                ),
+                                /*ConstrainedBox(
                                   constraints: const BoxConstraints(maxHeight: 161, maxWidth: 211,),
                                   child: Image.asset("assets/micee-high-resolution-logo-white-transparent.png", fit: BoxFit.contain),
-                                ),
+                                ),*/
                                 const Divider(indent: 8.0, endIndent: 8.0,),
                                 Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 2.5),
                                   child: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? DropdownButtonHideUnderline(
@@ -2366,7 +2389,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                               return Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide(color: MainApp.textwr, width: 1.2), ),
                                                                 shadowColor: Colors.transparent, color: MainApp.bg, elevation: 5,
                                                                 child: ListTile(
-                                                                  leading: const Icon(ZondIcons.user_solid_circle, color: MainApp.textwr, size: 50, ), //Image.asset('assets/user.png', fit:BoxFit.cover,),
+                                                                  leading: Image.asset('assets/${users.data?[index].Img}', fit:BoxFit.cover,), //const Icon(ZondIcons.user_solid_circle, color: MainApp.textwr, size: 50, ), 
                                                                   title: Text('${users.data?[index].Nom}  ${users.data?[index].Prenom}  ${users.data?[index].Email}', style: MainApp.styleall.copyWith(fontSize: 13,),),
                                                                   subtitle: Text('${users.data?[index].Adresse} / +${users.data?[index].Tel.split("countryCode: ")[1].split(",")[0]} ${users.data?[index].Tel.split("nsn: ")[1].substring(0, users.data![index].Tel.split("nsn: ")[1].length - 1)}', 
                                                                     style: MainApp.styleall.copyWith(fontSize: 11,),),

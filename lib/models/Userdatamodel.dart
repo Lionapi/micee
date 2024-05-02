@@ -16,11 +16,11 @@ class Userdatamodel {
   static Map<String, dynamic> ud = {};
   static String datadoc =  "<Doc><IdDoc>0</IdDoc><Msg>...</Msg><StatutDoc><Encours>0</Encours><Complement>0</Complement><Instruction>0</Instruction><Decision>0</Decision></StatutDoc><AnaTech>0</AnaTech><AnaAdmin>0</AnaAdmin><ComTech>0</ComTech><ComAdmin>0</ComAdmin><Prime>0</Prime><Synthese>0</Synthese></Doc>";
 
-  static String formaterxmldata(BigInt id, String nom, String prenom, String login, String mdp, String ad, String tel, String mail,
+  static String formaterxmldata(BigInt id, String img, String nom, String prenom, String login, String mdp, String ad, String tel, String mail,
     BigInt admin, String ste, String fct, String sir, String psr, String pre, String cla, String dd, DateTime dn, DateTime lt, DateTime cre, DateTime mdf, BigInt is2k, BigInt idr) {
     return "<?xml version='1.0' encoding='UTF-8'?>"
       "<utilisateur>"
-        "<IdUser>$id</IdUser><Nom>$nom</Nom><Prenom>$prenom</Prenom><Login>$login</Login><Motdepasse>${Rc.encryptAESQr(mdp, 'MiCee', '01122024')}</Motdepasse><Adresse>$ad</Adresse><Tel>$tel</Tel><Email>$mail</Email>"
+        "<IdUser>$id</IdUser><Img>$img</Img><Nom>$nom</Nom><Prenom>$prenom</Prenom><Login>$login</Login><Motdepasse>${Rc.encryptAESQr(mdp, 'MiCee', '01122024')}</Motdepasse><Adresse>$ad</Adresse><Tel>$tel</Tel><Email>$mail</Email>"
         "<Statut>"
           "<Admin>$admin</Admin>"
           "<Entreprise><Ste>$ste</Ste><Fonction>$fct</Fonction><Siret>$sir</Siret></Entreprise>"
@@ -50,6 +50,7 @@ class Userdatamodel {
     final user = xmldoc.findElements("utilisateur");
     for (final u in user) {
       ud.addEntries({"IdUser": u.findElements("IdUser").first.innerText}.entries);
+      ud.addEntries({"Img": u.findElements("Img").first.innerText}.entries);
       ud.addEntries({"Nom": u.findElements("Nom").first.innerText}.entries);
       ud.addEntries({"Prenom": u.findElements("Prenom").first.innerText}.entries);
       ud.addEntries({"Login": u.findElements("Login").first.innerText}.entries);
@@ -225,7 +226,7 @@ class Userdatamodel {
   // Search a user from collection
   static Future<List<Utilisateur>> searchData (List<Utilisateur> lu, String s) async {
     return lu.where((u) => u.name.toLowerCase().contains(s.toLowerCase()) || u.Nom.toLowerCase().contains(s.toLowerCase())
-      //|| u.id.toString().contains(s) || u.IdUser.toString().contains(s) || u.Motdepasse.toLowerCase().contains(s.toLowerCase()) || u.Admin.toString().contains(s)
+      //|| u.id.toString().contains(s) || u.Img.toString().contains(s) || u.IdUser.toString().contains(s) || u.Motdepasse.toLowerCase().contains(s.toLowerCase()) || u.Admin.toString().contains(s)
       || u.Prenom.toLowerCase().contains(s.toLowerCase()) || u.Login.toLowerCase().contains(s.toLowerCase())
       || u.Adresse.toLowerCase().contains(s.toLowerCase()) || u.Tel.toLowerCase().contains(s.toLowerCase())
       || u.Email.toLowerCase().contains(s.toLowerCase()) || u.Ste.toLowerCase().contains(s.toLowerCase())
