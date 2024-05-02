@@ -542,7 +542,7 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } 
-                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), "man_1", _nomController.text, 
+                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), "man_5.png", _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
@@ -637,7 +637,7 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } //val.docs.length == 0 ? 0 : val.id!,
-                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, "man_1", 
+                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, "man_5.png", 
                           _nomController.text, _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, 
                           docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', ''), DateTime.parse(_hbdController.text), 
@@ -1105,7 +1105,7 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
                             await Userdatamodel.getOneUser(BigInt.parse(idu.toString())).then((val) {
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
                                 Userdatamodel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
@@ -1218,7 +1218,7 @@ class DashboardPageState extends State<DashboardPage> {
                                 "${Userdatamodel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
                               val.docs[(iddoc - BigInt.parse(1.toString())).toInt()] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
                                 val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
@@ -1320,7 +1320,7 @@ class DashboardPageState extends State<DashboardPage> {
                 datadoc.add(xml.XmlDocument.parse(xmlstr).findElements("Doc").first);
               }
             }
-            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, "man_1", val.Nom, val.Prenom, val.Login, val.Motdepasse,
+            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
               val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
               datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
