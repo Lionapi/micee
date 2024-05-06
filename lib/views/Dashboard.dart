@@ -27,6 +27,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
 import 'package:charts_painter/chart.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:select_card/select_card.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -1532,7 +1533,8 @@ class DashboardPageState extends State<DashboardPage> {
                         splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 1.5,),
                       IconButton(onPressed: (){ pdfc.zoomLevel -= 1; }, icon: const Icon(Icons.zoom_out), color: MainApp.textwr, tooltip: "Zoom -",
                         splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,), const SizedBox(width: 10.0,),
-                      IconButton(onPressed: () async { 
+                      IconButton(
+                        onPressed: () async { 
                           if(kIsWeb){
                             download(Stream.fromIterable(data), '$pdffilename.pdf');
                           } else {
@@ -1547,7 +1549,8 @@ class DashboardPageState extends State<DashboardPage> {
                             });
                           }
                         }, icon: const Icon(Icons.file_download_outlined), color: MainApp.textwr, tooltip: "Télécharger",
-                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,)
+                        splashRadius: 16.0, highlightColor: MainApp.unique, hoverColor: MainApp.bg,
+                      )
                     ], 
                   ), const SizedBox(height: 5.0,),
 
@@ -2100,6 +2103,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                           double tp = 0, ec = 0, cc = 0, it = 0, de = 0; Map <String, double> statutdoc = {}; 
                                                           List<String> axiswval = []; List<String> axismval = []; List<String> axisyval = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
                                                           List<int> weekdata = [0, 0, 0, 0, 0, 0, 0]; List<int> monthdata = List<int>.filled(ld, 0, growable: false); List<int> yeardata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; 
+                                                          String yyyy = DateFormat('yyyy').format(DateTime.now()); List<String> mm = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
                                                           for(var i = 0; i < datas.data!.length; i++){ 
                                                             td += datas.data![i].docs!.length as int;
                                                             for(var x = 0; x < datas.data![i].docs!.length; x++){ // statut
@@ -2113,17 +2117,17 @@ class DashboardPageState extends State<DashboardPage> {
                                                               if(datas.data![i].docs![x]['StatutDoc']['Encours'] == '1' && datas.data![i].docs![x]['StatutDoc']['Complement'] == '1' && 
                                                                 datas.data![i].docs![x]['StatutDoc']['Instruction'] == '1' && datas.data![i].docs![x]['StatutDoc']['Decision'] == '1'){ de += 1; tdt += 1; }
                                                               for(var y = 1; y<=7; y++){ // week
-                                                                if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                                if(DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('yyyy-MM-dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
                                                                   weekdata[y - 1] += 1; 
                                                                 }
-                                                              }
+                                                              }                                                              
                                                               for(var y = 1; y<=ld; y++){ // month
-                                                                if(DateFormat('dd').format(DateTime.now().subtract(Duration(days: MainApp.adays[DateFormat('EEEE').format(DateTime.now())]! - y))) == DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
+                                                                if(DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, y)) == DateFormat('yyyy-MM-dd').format(DateTime.parse(datas.data![i].docs![x]['Creation'])) ){ 
                                                                   monthdata[int.parse(DateFormat('dd').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) - 1] += 1; 
                                                                 }
-                                                              }
-                                                              for(var y = 0; y<=12; y++){ // year
-                                                                if(int.parse(DateFormat('MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))) == y + 1){ yeardata[y] += 1; }
+                                                              } 
+                                                              for(var y = 0; y<12; y++){ // year
+                                                                if(DateFormat('yyyy-MM').format(DateTime.parse('$yyyy-${mm[y]}-01')) == DateFormat('yyyy-MM').format(DateTime.parse(datas.data![i].docs![x]['Creation']))){ yeardata[y] += 1; }
                                                               }
                                                             }
                                                           }
