@@ -280,17 +280,10 @@ class LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 // Logo
-                                Container( 
-                                  padding: const EdgeInsets.all(3), alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    //gradient: const LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [MainApp.navcolor2, MainApp.navcolor3], stops: [0, 2], tileMode: TileMode.clamp,),
-                                    border: Border.all(color: MainApp.textwr, width: 2.5,),
-                                    shape: BoxShape.circle, color: MainApp.gray
-                                  ),  
-                                  child: ClipOval( 
-                                    child: SizedBox.fromSize(
-                                      size: const Size.fromRadius(50), child: Image.asset('assets/user.png', fit:BoxFit.cover, height: 100, width: 100,),
-                                    )
+                                const SizedBox(width: 100, height: 100,
+                                  child: CircleAvatar(
+                                    backgroundColor: MainApp.textwr, radius: 50,
+                                    child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/user.png',), radius: 48,),
                                   )
                                 ),
                                 const SizedBox(height: 10,),

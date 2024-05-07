@@ -12,8 +12,7 @@ class TestPage extends StatefulWidget {
 }
 
 class TestPageState extends State<TestPage> {
-  //final AudioPlayer player = AudioPlayer(); 
-  int selectedpage = 0;
+  String profile = "man_1";
 
   @override
   void initState() {
@@ -47,75 +46,43 @@ class TestPageState extends State<TestPage> {
       //resizeToAvoidBottomInset: false,
       //backgroundColor: const Color.fromARGB(255, 33, 116, 185),
       body: WindowBorder(
-        color: Colors.white, width: 1.5,
+        color: Colors.white,
+        width: 1.5,
         child: Column(
-          children: [const CenterSide(), 
+          children: [
+            const CenterSide(),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topRight, end: Alignment.bottomLeft,
-                    colors: [MainApp.bg, MainApp.bg2],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [MainApp.navcolor2, MainApp.navcolor3],
                     stops: [0, 2],
                     tileMode: TileMode.clamp,
                   ),
                 ),
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Row(
-                    children: <Widget>[
-                      NavigationRail(
-                        selectedIndex: selectedpage, groupAlignment: 0, 
-                        backgroundColor: MainApp.navcolor3,
-                        onDestinationSelected: (int index) { setState(() { selectedpage = index ; }); },
-                        labelType: NavigationRailLabelType.all,
-                        /*
-                        leading: FloatingActionButton(
-                          elevation: 0, child: const Icon(Icons.add),
-                          onPressed: () { }, 
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: CircleAvatar(
+                      backgroundColor: MainApp.textwr, radius: 50,
+                      child: SizedBox(width: 100, height: 100,
+                        child: CircleAvatar(
+                          backgroundColor: MainApp.textwr, radius: 50,
+                          child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/$profile.png',), radius: 48,
+                            child: Align(alignment: Alignment.bottomRight,
+                              child: CircleAvatar(backgroundColor: Colors.white, radius: 16,
+                                child: FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.dark, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                  onPressed: () { setState(() { profile = "wman_1"; });},
+                                  child: const Icon(Icons.edit,),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        */
-                        destinations: const <NavigationRailDestination>[
-                          NavigationRailDestination(
-                            icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: Text('Dashboard'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.supervisor_account_outlined), selectedIcon: Icon(Icons.supervisor_account), label: Text('Users'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.file_copy_outlined), selectedIcon: Icon(Icons.file_copy_rounded), label: Text('Files'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.download_outlined), selectedIcon: Icon(Icons.download_rounded), label: Text('Download'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: Text('Settings'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.exit_to_app_outlined), selectedIcon: Icon(Icons.exit_to_app_rounded), label: Text('Déconnexion'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Badge(child: Icon(Icons.bookmark_border)),
-                            selectedIcon: Badge(child: Icon(Icons.book)),
-                            label: Text('Second'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Badge(label: Text('4'), child: Icon(Icons.star_border),),
-                            selectedIcon: Badge(label: Text('4'), child: Icon(Icons.star),),
-                            label: Text('Third'),
-                          ),
-                        ],
-                        /*
-                        trailing: IconButton( icon: const Icon(Icons.more_horiz_rounded),
-                          onPressed: () { },
-                        ),
-                        */
                       ),
-                      const VerticalDivider(thickness: 1.5, width: 1.5),
-                      const Expanded(
-                        child: Column(),
-                      ),
-                    ]
+                    ),
                   ),
                 ),
               ),

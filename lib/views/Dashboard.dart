@@ -27,7 +27,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
 import 'package:charts_painter/chart.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:select_card/select_card.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -66,7 +65,7 @@ class DashboardPageState extends State<DashboardPage> {
   //final Userdatamodel UserModel = Userdatamodel();
   late Future<List<Utilisateur>> futuredata, ncdata, nddata, fddata; 
   late List<Utilisateur> sfudata, sfddata;
-  String? selectedValue; final List<String> selectoption = <String>['Entreprise', 'Particulier'], pdffile = [];
+  String? selectedValue; late String profile; final List<String> selectoption = <String>['Entreprise', 'Particulier'], pdffile = [];
   FilePickerResult? filePickerResult;
   late BigInt id, iddoc; late int rel, pc, pn; late double hsd; late dynamic docts;
   late bool en, prt;
@@ -121,7 +120,7 @@ class DashboardPageState extends State<DashboardPage> {
       Navigator.pushReplacementNamed(context, MainApp.login);
     } else {
       Future.delayed(Duration.zero,(){ sideMenu.addListener((index) { pageController.jumpToPage(index); }); });
-      futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; rel = 0; docts = null; hsd = 40.5;
+      futuredata = Userdatamodel.getAllUsers(); ncdata = futuredata; nddata = futuredata; fddata = futuredata; profile = "default.png"; rel = 0; docts = null; hsd = 40.5;
       _searchuserController = TextEditingController(); _searchfolderController = TextEditingController();
       en = false; prt = false;
     }
@@ -145,9 +144,10 @@ class DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     void resetuserform(){
-      _nomController.text = ""; _prenomController.text = ""; _hbdController.text = ""; _emailController.text = ""; _addressController.text = ""; _phoneController.value = PhoneNumber.parse('+33');
-      _loginController.text = ""; _passwordController.text = ""; _cpasswordController.text = ""; _statutController.text = ""; _nomsteController.text = ""; _fctsteController.text = ""; 
-      _siretsteController.text = ""; _psrController.text = ""; _preController.text = ""; _claController.text = ""; en = false; prt = false;
+      profile = "default.png"; _nomController.text = ""; _prenomController.text = ""; _hbdController.text = ""; _emailController.text = ""; _addressController.text = ""; 
+      _phoneController.value = PhoneNumber.parse('+33'); _loginController.text = ""; _passwordController.text = ""; _cpasswordController.text = ""; 
+      _statutController.text = ""; _nomsteController.text = ""; _fctsteController.text = "";  _siretsteController.text = ""; _psrController.text = ""; 
+      _preController.text = ""; _claController.text = ""; en = false; prt = false;
     }
 
     void resetfolderform(){
@@ -528,7 +528,7 @@ class DashboardPageState extends State<DashboardPage> {
         icon: const Icon(LineAwesome.save, size: 15, color: Colors.white),
         label: Text("ENREGISTRER", textAlign: TextAlign.center, style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0,),),
         onPressed: () async {
-          if(submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
+          if(profile != "" && submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
             if(EmailValidator.validate(_emailController.text)){
               if(_phoneController.value.isValid(type: PhoneNumberType.mobile) || _phoneController.value.isValid(type: PhoneNumberType.fixedLine)){
                 if(MainApp.regexp.hasMatch(_passwordController.text.trim()) && MainApp.regexp.hasMatch(_cpasswordController.text.trim())){
@@ -543,7 +543,7 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } 
-                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), "man_5.png", _nomController.text, 
+                        await Userdatamodel.createUser(_loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(0.toString()), profile, _nomController.text, 
                           _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, '', DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second))), 
@@ -623,7 +623,7 @@ class DashboardPageState extends State<DashboardPage> {
         icon: const Icon(LineAwesome.edit_solid, size: 15, color: Colors.white),
         label: Text("MODIFIER", textAlign: TextAlign.center,  style: MainApp.styleall.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.0,),),
         onPressed: () async {
-          if(submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
+          if(profile != "" && submitnom && submitprenom && submithbd && submitemail && submitaddress && submitphone != null && submitstatut && submitlogin && submitpassword && submitcpassword && _userform.currentState!.validate()){
             if(EmailValidator.validate(_emailController.text)){
               if(_phoneController.value.isValid(type: PhoneNumberType.mobile) || _phoneController.value.isValid(type: PhoneNumberType.fixedLine)){
                 if(MainApp.regexp.hasMatch(_passwordController.text.trim()) && MainApp.regexp.hasMatch(_cpasswordController.text.trim())){
@@ -638,8 +638,8 @@ class DashboardPageState extends State<DashboardPage> {
                           ste = '0'; fct = '0'; sir = '0'; 
                           psr = _psrController.text.toString(); pre = _preController.text.toString(); cla = _claController.text.toString();
                         } //val.docs.length == 0 ? 0 : val.id!,
-                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, "man_5.png", 
-                          _nomController.text, _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
+                        await Userdatamodel.updateUser(id, _loginController.text.trim(), Userdatamodel.formaterxmldata(BigInt.parse(docts.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : id, 
+                          profile, _nomController.text, _prenomController.text, _loginController.text.trim(), _passwordController.text, _addressController.text, 
                           _phoneController.value.toString(), _emailController.text.trim(), BigInt.parse(0.toString()), ste, fct, sir, psr, pre, cla, 
                           docts.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(',', ''), DateTime.parse(_hbdController.text), 
                           DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(lt)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(cre)), 
@@ -744,7 +744,7 @@ class DashboardPageState extends State<DashboardPage> {
     );
 
     // Custom userform
-    AlertDialog userform (Color bg, Color c, String titre, SizedBox sb) {
+    AlertDialog userform (String img, Color bg, Color c, String titre, SizedBox sb) {
       return AlertDialog(
         //title: Text(titre, style: const TextStyle(color: MainApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
         //actions: [ MaterialButton(color: MainApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
@@ -752,7 +752,7 @@ class DashboardPageState extends State<DashboardPage> {
         backgroundColor: bg,
         content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return SizedBox(
-            height: _statutController.text.trim().isNotEmpty ? 609 : 467, width: 450, 
+            height: _statutController.text.trim().isNotEmpty ? 709 : 582, width: 450, 
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.5, horizontal: 20),
               child: Form(
@@ -764,6 +764,24 @@ class DashboardPageState extends State<DashboardPage> {
                     Text(titre, style: MainApp.styleall.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
 
                     const Divider(color: MainApp.textwr), const SizedBox(height: 20.0,),
+
+                    SizedBox(
+                      width: 100, height: 100,
+                      child: CircleAvatar(
+                        backgroundColor: MainApp.textwr, radius: 50,
+                        child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/$img',), radius: 48,
+                          child: Align(alignment: Alignment.bottomRight,
+                            child: CircleAvatar(backgroundColor: Colors.white, radius: 16,
+                              child: FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.textwr, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                onPressed: () { setState(() { img = "wman_1.png"; }); },
+                                child: const Icon(Icons.edit,),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ), const SizedBox(height: 15.0), // Profile
 
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, // Nom & Prénom 
                       children: [Flexible( child: nomField), const SizedBox(width: 8,), Flexible(child: prenomField),]
@@ -1106,7 +1124,7 @@ class DashboardPageState extends State<DashboardPage> {
                             } else if(_statutdocController.text == "Instruction"){ aa = 1; bb = 1; cc = 1; dd = 0; 
                             } else if(_statutdocController.text == "Décision"){ aa = 1; bb = 1; cc = 1; dd = 1; }
                             await Userdatamodel.getOneUser(BigInt.parse(idu.toString())).then((val) {
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Img, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '') + 
                                 Userdatamodel.docforxmldata(BigInt.parse((val.docs.length + 1).toString()), "${pdffile[0]} ~ ${pdffile[1]}", aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())),
@@ -1219,7 +1237,7 @@ class DashboardPageState extends State<DashboardPage> {
                                 "${Userdatamodel.docforxmldata(iddoc, '${pdffile[0]} ~ ${pdffile[1]}', aa, bb, cc, dd, _anatechController.text, _anaadController.text, _comtechController.text, 
                                 _comadController.text, double.parse(_primeController.text), _synController.text, cred, DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())))}";
                               val.docs[(iddoc - BigInt.parse(1.toString())).toInt()] = xml.XmlDocument.parse(datadoc).findElements("Doc").first;
-                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
+                              Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(val.id!, val.Img, val.Nom, val.Prenom, val.Login, val.Motdepasse,
                                 val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
                                 val.docs.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
                                 DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
@@ -1321,8 +1339,8 @@ class DashboardPageState extends State<DashboardPage> {
                 datadoc.add(xml.XmlDocument.parse(xmlstr).findElements("Doc").first);
               }
             }
-            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, "man_5.png", val.Nom, val.Prenom, val.Login, val.Motdepasse,
-              val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
+            Userdatamodel.updateUser(val.id!, val.name, Userdatamodel.formaterxmldata(BigInt.parse(val.docs.length.toString()) == BigInt.parse(0.toString()) ? BigInt.parse(0.toString()) : val.id!, 
+              val.Img, val.Nom, val.Prenom, val.Login, val.Motdepasse, val.Adresse, val.Tel, val.Email, BigInt.parse(0.toString()), val.Ste, val.Fonction, val.Siret, val.Psr, val.Precaire, val.Classique, 
               datadoc.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', ''), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Datenaiss)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Livetime)), DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(val.Creation)), 
               DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())), BigInt.parse(0.toString()), val.IdRef)).then((value){
@@ -1979,7 +1997,7 @@ class DashboardPageState extends State<DashboardPage> {
                                         resetuserform(); resetfolderform();
                                         if(value == 'Utilisateur'){
                                           showDialog(context: context, builder: (BuildContext context){
-                                            return userform(Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
+                                            return userform(profile, Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
                                           });
                                         }
                                         if(value == 'Dossier'){
@@ -2407,7 +2425,7 @@ class DashboardPageState extends State<DashboardPage> {
                                                                             if(users.data?[index].Psr != '0'){ _statutController.text = "Particulier"; en = false; prt = true; }
                                                                           });
                                                                           Userdatamodel.getOneUser(users.data![index].id!).then((val) {
-                                                                            id = val.id!; docts = val.docs!; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
+                                                                            id = val.id!; docts = val.docs!; profile = val.Img; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
                                                                             _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
                                                                             destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
                                                                             _loginController.text = val.Login; _passwordController.text = ""; _cpasswordController.text = ""; lt = val.Livetime; cre = val.Creation;
@@ -2419,9 +2437,9 @@ class DashboardPageState extends State<DashboardPage> {
                                                                               _nomsteController.text = ""; _fctsteController.text = ""; _siretsteController.text = "";
                                                                               _psrController.text = val.Psr; _preController.text = val.Precaire; _claController.text = val.Classique;
                                                                             } 
-                                                                          });
+                                                                          });  
                                                                           showDialog(context: context, builder: (BuildContext context){
-                                                                            return userform(Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
+                                                                            return userform(profile, Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
                                                                           });
                                                                         },
                                                                         child: const Icon(Icons.edit,),
