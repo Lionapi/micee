@@ -3,6 +3,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:micee/main.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -72,11 +73,27 @@ class TestPageState extends State<TestPage> {
                           child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/$profile.png',), radius: 48,
                             child: Align(alignment: Alignment.bottomRight,
                               child: CircleAvatar(backgroundColor: Colors.white, radius: 16,
-                                child: FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.dark, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                child: PullDownButton(
+                                  itemBuilder: (context) => [
+                                    PullDownMenuHeader(
+                                      leading: Image.asset('assets/default.png',), title: 'Profil', subtitle: 'Utilisateur', icon: Icons.edit,
+                                      onTap: () {}, 
+                                    ),
+                                    // const PullDownMenuTitle(title: Text('Menu title')),
+                                    const PullDownMenuDivider.large(),
+                                    PullDownMenuItem(title: 'Boy', onTap: () { setState(() { profile = "man_1"; }); },),
+                                    PullDownMenuItem(title: 'Girl', onTap: () { setState(() { profile = "wman_1"; }); },),
+                                  ],
+                                  buttonBuilder: (context, showMenu) => FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.dark, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                    shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                    onPressed: showMenu, child: const Icon(Icons.edit,),
+                                  ),
+                                ),
+                                /*FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.dark, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
                                   shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
                                   onPressed: () { setState(() { profile = "wman_1"; });},
                                   child: const Icon(Icons.edit,),
-                                ),
+                                ),*/
                               ),
                             ),
                           ),

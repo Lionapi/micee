@@ -27,6 +27,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_grid/simple_grid.dart';
 import 'package:charts_painter/chart.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:micee/bo/Userdata.dart';
 import 'package:micee/models/Userdatamodel.dart';
 
@@ -744,7 +745,7 @@ class DashboardPageState extends State<DashboardPage> {
     );
 
     // Custom userform
-    AlertDialog userform (String img, Color bg, Color c, String titre, SizedBox sb) {
+    AlertDialog userform (Color bg, Color c, String titre, SizedBox sb) {
       return AlertDialog(
         //title: Text(titre, style: const TextStyle(color: MainApp.success, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, fontSize: 15.0)),
         //actions: [ MaterialButton(color: MainApp.success, onPressed: (){ Navigator.pop(context);}, child: const Text('OK', style: TextStyle(fontSize: 11.0)),) ],
@@ -769,13 +770,55 @@ class DashboardPageState extends State<DashboardPage> {
                       width: 100, height: 100,
                       child: CircleAvatar(
                         backgroundColor: MainApp.textwr, radius: 50,
-                        child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/$img',), radius: 48,
+                        child: CircleAvatar(backgroundColor: MainApp.gray, backgroundImage: AssetImage('assets/$profile',), radius: 48,
                           child: Align(alignment: Alignment.bottomRight,
                             child: CircleAvatar(backgroundColor: Colors.white, radius: 16,
-                              child: FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.textwr, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
-                                shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                onPressed: () { setState(() { img = "wman_1.png"; }); },
-                                child: const Icon(Icons.edit,),
+                              child: PullDownButton(
+                                itemBuilder: (context) => [
+                                  PullDownMenuHeader( leading: Image.asset('assets/default.png',), title: 'Profil', subtitle: 'Utilisateur', icon: Icons.edit, onTap: () { setState(() { profile = "default.png"; }); }, ),
+                                  // const PullDownMenuTitle(title: Text('Menu title')),
+                                  const PullDownMenuDivider.large(),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Boy 1', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_1.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 2', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_2.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 3', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_3.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 4', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_4.png"; }); },),
+                                  ]),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Girl 1', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_1.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 2', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_2.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 3', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_3.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 4', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_4.png"; }); },),
+                                  ]),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Boy 5', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_5.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 6', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_6.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 7', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_7.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 8', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_8.png"; }); },),
+                                  ]),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Girl 5', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_5.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 6', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_6.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 7', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_7.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 8', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_8.png"; }); },),
+                                  ]),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Boy 9', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_9.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 10', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_10.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 11', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_11.png"; }); },),
+                                    PullDownMenuItem(title: 'Boy 12', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "man_12.png"; }); },),
+                                  ]),
+                                  PullDownMenuActionsRow.small(items: [
+                                    PullDownMenuItem(title: 'Girl 9', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_9.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 10', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_10.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 11', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_11.png"; }); },),
+                                    PullDownMenuItem(title: 'Girl 12', icon: LineAwesome.user_circle, onTap: () { setState(() { profile = "wman_12.png"; }); },),
+                                  ]),
+                                ],
+                                buttonBuilder: (context, showMenu) => FloatingActionButton(tooltip: 'Changer', foregroundColor: MainApp.textwr, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
+                                  shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
+                                  onPressed: showMenu, child: const Icon(Icons.edit,),
+                                ),
                               ),
                             ),
                           ),
@@ -1997,7 +2040,7 @@ class DashboardPageState extends State<DashboardPage> {
                                         resetuserform(); resetfolderform();
                                         if(value == 'Utilisateur'){
                                           showDialog(context: context, builder: (BuildContext context){
-                                            return userform(profile, Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
+                                            return userform(Colors.white, MainApp.success, 'AJOUT UTILISATEUR', addUserBtn);
                                           });
                                         }
                                         if(value == 'Dossier'){
@@ -2419,12 +2462,12 @@ class DashboardPageState extends State<DashboardPage> {
                                                                     children: MediaQuery.of(context).size.height >= 897 && MediaQuery.of(context).size.width >= 710 ? [
                                                                       FloatingActionButton(tooltip: 'Modifier', foregroundColor: MainApp.warning, backgroundColor: MainApp.gray, hoverColor: Colors.black12, mini: true,
                                                                         shape: RoundedRectangleBorder(side: const BorderSide(width: 1.25, color: Colors.black12), borderRadius: BorderRadius.circular(100)),
-                                                                        onPressed: () {
+                                                                        onPressed: () async {
                                                                           setState((){ 
                                                                             if(users.data?[index].Ste != '0'){ _statutController.text = "Entreprise"; en = true; prt = false; }
                                                                             if(users.data?[index].Psr != '0'){ _statutController.text = "Particulier"; en = false; prt = true; }
                                                                           });
-                                                                          Userdatamodel.getOneUser(users.data![index].id!).then((val) {
+                                                                          await Userdatamodel.getOneUser(users.data![index].id!).then((val) { 
                                                                             id = val.id!; docts = val.docs!; profile = val.Img; _nomController.text = val.Nom; _prenomController.text = val.Prenom; _hbdController.text = DateFormat('yyyy-MM-dd').format(val.Datenaiss);
                                                                             _emailController.text = val.Email; _addressController.text = val.Adresse; _phoneController.value = PhoneNumber.parse(val.Tel.split('nsn: ')[1].substring(0, val.Tel.split('nsn: ')[1].length - 1), 
                                                                             destinationCountry: IsoCode.fromJson(val.Tel.split('isoCode: ')[1].split(",")[0].split(".")[1]));
@@ -2437,9 +2480,10 @@ class DashboardPageState extends State<DashboardPage> {
                                                                               _nomsteController.text = ""; _fctsteController.text = ""; _siretsteController.text = "";
                                                                               _psrController.text = val.Psr; _preController.text = val.Precaire; _claController.text = val.Classique;
                                                                             } 
-                                                                          });  
-                                                                          showDialog(context: context, builder: (BuildContext context){
-                                                                            return userform(profile, Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
+                                                                          }); 
+                                                                          // ignore: use_build_context_synchronously
+                                                                          await showDialog(context: context, builder: (BuildContext context){
+                                                                            return userform(Colors.white, MainApp.warning, 'MODIF UTILISATEUR', editUserBtn);
                                                                           });
                                                                         },
                                                                         child: const Icon(Icons.edit,),
